@@ -1,0 +1,67 @@
+{
+  "metadata": {
+    "projectType": "xwalk"
+  },
+  "templates": [
+    {
+      "name": "home",
+      "urls": [
+        "https://credera.com/en-us"
+      ],
+      "representativeUrl": "https://credera.com/en-us",
+      "description": "Credera homepage: hero, service columns, marquee, case studies, partners, industries, insights, and closing CTA banner",
+      "urlPattern": "/*",
+      "blocks": [
+        {
+          "name": "hero-home",
+          "instances": [
+            "div[class*='hero-section__HeroSectionWrapper-sc-3sq6vd-11']"
+          ]
+        },
+        {
+          "name": "columns-services",
+          "instances": [
+            "div[class*='service-area-section__ServiceSectionWrapper-sc-12cthmn-0']"
+          ]
+        },
+        {
+          "name": "marquee",
+          "instances": [
+            "div[class*='ticker-section__TickerSectionWrapper-sc-1z011le-0']"
+          ]
+        },
+        {
+          "name": "cards-case-study",
+          "instances": [
+            "a[class*='video-background__CaseStudyContent-sc-2dfmhx-14']",
+            "div[class*='case-study-section__CaseStudySectionWrapper-sc-khm5cf-0']"
+          ]
+        },
+        {
+          "name": "cards-partner",
+          "instances": [
+            "div[class*='partner-section__PartnerSectionWrapper-sc-gmccoy-2']"
+          ]
+        },
+        {
+          "name": "cards-industry",
+          "instances": [
+            "div[class*='industry-section__IndustrySectionWrapper-sc-zjmgb9-2']"
+          ]
+        },
+        {
+          "name": "cards-insight",
+          "instances": [
+            "div[class*='insights-section__InsightsSectionWrapper-sc-1wde3jh-0']"
+          ]
+        },
+        {
+          "name": "hero-cta",
+          "instances": [
+            "div[class*='footer-cta__FooterCtaWrapper-sc-1dcaamq-0']"
+          ]
+        }
+      ]
+    }
+  ]
+}

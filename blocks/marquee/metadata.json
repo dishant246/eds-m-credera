@@ -1,0 +1,39 @@
+{
+  "variantName": "marquee",
+  "baseBlock": "marquee",
+  "version": "1.0.0",
+  "created": "2026-08-27T00:00:00.000Z",
+  "sourceContext": {
+    "originUrl": "https://credera.com/en-us",
+    "originPage": "Credera home page",
+    "blockPosition": "middle"
+  },
+  "visualCharacteristics": {
+    "colorScheme": "light",
+    "density": "spacious",
+    "purpose": "marquee",
+    "imagePattern": "icon"
+  },
+  "contentPattern": {
+    "structure": "single phrase with optional inline icon, auto-scrolled horizontally and repeated",
+    "buttonCount": 0,
+    "imageCount": 0
+  },
+  "reuseGuidance": {
+    "suitableFor": [
+      "animated horizontally-scrolling text ribbons / statement banners",
+      "repeating tagline strips"
+    ],
+    "notSuitableFor": [
+      "static headings (use default content)",
+      "content that must be fully readable without motion"
+    ]
+  },
+  "usage": {
+    "pagesUsing": ["/en-us"],
+    "reuseCount": 1,
+    "lastUsed": "2026-08-27T00:00:00.000Z"
+  },
+  "isNewBlock": true,
+  "note": "Net-new custom block with no vanilla base in the block collection. Created from scratch to represent the auto-scrolling text ribbon."
+}

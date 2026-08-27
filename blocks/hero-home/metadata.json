@@ -1,0 +1,37 @@
+{
+  "variantName": "hero-home",
+  "baseBlock": "hero",
+  "version": "1.0.0",
+  "created": "2026-08-27T00:00:00.000Z",
+  "sourceContext": {
+    "originUrl": "https://credera.com/en-us",
+    "originPage": "Credera home page",
+    "blockPosition": "top"
+  },
+  "visualCharacteristics": {
+    "colorScheme": "light",
+    "density": "spacious",
+    "purpose": "hero",
+    "imagePattern": "large"
+  },
+  "contentPattern": {
+    "structure": "eyebrow + heading + subheading + CTA + background media",
+    "buttonCount": 1,
+    "imageCount": 1
+  },
+  "reuseGuidance": {
+    "suitableFor": [
+      "home page hero with background video/image",
+      "landing page intro banners with headline and CTA"
+    ],
+    "notSuitableFor": [
+      "closing CTA banners without background media",
+      "text-only content sections"
+    ]
+  },
+  "usage": {
+    "pagesUsing": ["/en-us"],
+    "reuseCount": 1,
+    "lastUsed": "2026-08-27T00:00:00.000Z"
+  }
+}

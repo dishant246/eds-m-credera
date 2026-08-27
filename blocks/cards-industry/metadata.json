@@ -1,0 +1,37 @@
+{
+  "variantName": "cards-industry",
+  "baseBlock": "cards",
+  "version": "1.0.0",
+  "created": "2026-08-27T00:00:00.000Z",
+  "sourceContext": {
+    "originUrl": "https://credera.com/en-us",
+    "originPage": "Credera home page",
+    "blockPosition": "middle"
+  },
+  "visualCharacteristics": {
+    "colorScheme": "light",
+    "density": "compact",
+    "purpose": "industry",
+    "imagePattern": "icon"
+  },
+  "contentPattern": {
+    "structure": "icon + label link, rendered as a stacked list separated by rules",
+    "buttonCount": 0,
+    "imageCount": 1
+  },
+  "reuseGuidance": {
+    "suitableFor": [
+      "industry/category navigation lists with icon + label",
+      "stacked link lists of uniform items"
+    ],
+    "notSuitableFor": [
+      "image-led content teasers (use cards-case-study/cards-insight)",
+      "colored partner promo panels (use cards-partner)"
+    ]
+  },
+  "usage": {
+    "pagesUsing": ["/en-us"],
+    "reuseCount": 1,
+    "lastUsed": "2026-08-27T00:00:00.000Z"
+  }
+}
