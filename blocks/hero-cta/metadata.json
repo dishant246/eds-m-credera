@@ -1,0 +1,37 @@
+{
+  "variantName": "hero-cta",
+  "baseBlock": "hero",
+  "version": "1.0.0",
+  "created": "2026-08-27T00:00:00.000Z",
+  "sourceContext": {
+    "originUrl": "https://credera.com/en-us",
+    "originPage": "Credera home page",
+    "blockPosition": "bottom"
+  },
+  "visualCharacteristics": {
+    "colorScheme": "accent",
+    "density": "spacious",
+    "purpose": "cta",
+    "imagePattern": "noimg"
+  },
+  "contentPattern": {
+    "structure": "heading + subheading + CTA",
+    "buttonCount": 1,
+    "imageCount": 0
+  },
+  "reuseGuidance": {
+    "suitableFor": [
+      "closing 'contact us' call-to-action banners on a solid accent background",
+      "mid/bottom-of-page CTA banners without background media"
+    ],
+    "notSuitableFor": [
+      "top-of-page heroes with background image/video",
+      "content grids or card layouts"
+    ]
+  },
+  "usage": {
+    "pagesUsing": ["/en-us"],
+    "reuseCount": 1,
+    "lastUsed": "2026-08-27T00:00:00.000Z"
+  }
+}

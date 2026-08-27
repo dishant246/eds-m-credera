@@ -1,0 +1,16 @@
+{
+  "type": "xwalk",
+  "sites": {
+    "eds-m-credera": {
+      "previewOrg": "dishant246",
+      "previewSite": "eds-m-credera",
+      "contentHostUrl": "author-p10903-e844381.adobeaemcloud.com",
+      "aemSitePath": "/content/eds-m-credera",
+      "aemAssetsFolderPath": "/content/dam/eds-m-credera",
+      "aemSiteName": "eds-m-credera",
+      "aemSiteTitle": "eds-m-credera",
+      "baseUrl": "https://credera.com/en-us",
+      "libraryUrl": "https://main--sta-xwalk-boilerplate--aemysites.aem.page/tools/sidekick/library.json"
+    }
+  }
+}

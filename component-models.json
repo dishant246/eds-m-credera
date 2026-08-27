@@ -161,6 +161,101 @@
     ]
   },
   {
+    "id": "card",
+    "fields": [
+      {
+        "component": "reference",
+        "valueType": "string",
+        "name": "image",
+        "label": "Image",
+        "multi": false
+      },
+      {
+        "component": "richtext",
+        "name": "text",
+        "value": "",
+        "label": "Text",
+        "valueType": "string"
+      }
+    ]
+  },
+  {
+    "id": "card",
+    "fields": [
+      {
+        "component": "reference",
+        "valueType": "string",
+        "name": "image",
+        "label": "Image",
+        "multi": false
+      },
+      {
+        "component": "richtext",
+        "name": "text",
+        "value": "",
+        "label": "Text",
+        "valueType": "string"
+      }
+    ]
+  },
+  {
+    "id": "card",
+    "fields": [
+      {
+        "component": "reference",
+        "valueType": "string",
+        "name": "image",
+        "label": "Image",
+        "multi": false
+      },
+      {
+        "component": "richtext",
+        "name": "text",
+        "value": "",
+        "label": "Text",
+        "valueType": "string"
+      }
+    ]
+  },
+  {
+    "id": "card",
+    "fields": [
+      {
+        "component": "reference",
+        "valueType": "string",
+        "name": "image",
+        "label": "Image",
+        "multi": false
+      },
+      {
+        "component": "richtext",
+        "name": "text",
+        "value": "",
+        "label": "Text",
+        "valueType": "string"
+      }
+    ]
+  },
+  {
+    "id": "columns-services",
+    "fields": [
+      {
+        "component": "text",
+        "valueType": "number",
+        "name": "columns",
+        "value": "",
+        "label": "Columns"
+      },
+      {
+        "component": "text",
+        "valueType": "number",
+        "name": "rows",
+        "value": "",
+        "label": "Rows"
+      }
+    ]
+  },
+  {
     "id": "columns",
     "fields": [
       {
@@ -190,6 +285,58 @@
     ]
   },
   {
+    "id": "hero-cta",
+    "fields": [
+      {
+        "component": "reference",
+        "valueType": "string",
+        "name": "image",
+        "label": "Image",
+        "multi": false
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "imageAlt",
+        "label": "Alt",
+        "value": ""
+      },
+      {
+        "component": "richtext",
+        "name": "text",
+        "value": "",
+        "label": "Text",
+        "valueType": "string"
+      }
+    ]
+  },
+  {
+    "id": "hero-home",
+    "fields": [
+      {
+        "component": "reference",
+        "valueType": "string",
+        "name": "image",
+        "label": "Image",
+        "multi": false
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "imageAlt",
+        "label": "Alt",
+        "value": ""
+      },
+      {
+        "component": "richtext",
+        "name": "text",
+        "value": "",
+        "label": "Text",
+        "valueType": "string"
+      }
+    ]
+  },
+  {
     "id": "hero",
     "fields": [
       {
@@ -206,6 +353,18 @@
         "label": "Alt",
         "value": ""
       },
+      {
+        "component": "richtext",
+        "name": "text",
+        "value": "",
+        "label": "Text",
+        "valueType": "string"
+      }
+    ]
+  },
+  {
+    "id": "marquee",
+    "fields": [
       {
         "component": "richtext",
         "name": "text",

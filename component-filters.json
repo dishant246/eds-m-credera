@@ -19,9 +19,48 @@
     ]
   },
   {
+    "id": "cards-case-study",
+    "components": [
+      "card"
+    ]
+  },
+  {
+    "id": "cards-industry",
+    "components": [
+      "card"
+    ]
+  },
+  {
+    "id": "cards-insight",
+    "components": [
+      "card"
+    ]
+  },
+  {
+    "id": "cards-partner",
+    "components": [
+      "card"
+    ]
+  },
+  {
     "id": "cards",
     "components": [
       "card"
+    ]
+  },
+  {
+    "id": "columns-services",
+    "components": [
+      "column"
+    ]
+  },
+  {
+    "id": "column",
+    "components": [
+      "text",
+      "image",
+      "button",
+      "title"
     ]
   },
   {

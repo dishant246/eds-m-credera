@@ -1,0 +1,37 @@
+{
+  "variantName": "cards-partner",
+  "baseBlock": "cards",
+  "version": "1.0.0",
+  "created": "2026-08-27T00:00:00.000Z",
+  "sourceContext": {
+    "originUrl": "https://credera.com/en-us",
+    "originPage": "Credera home page",
+    "blockPosition": "middle"
+  },
+  "visualCharacteristics": {
+    "colorScheme": "colored",
+    "density": "spacious",
+    "purpose": "partner",
+    "imagePattern": "noimg"
+  },
+  "contentPattern": {
+    "structure": "colored panel with partner name heading + arrow + description + link",
+    "buttonCount": 0,
+    "imageCount": 0
+  },
+  "reuseGuidance": {
+    "suitableFor": [
+      "partner/vendor promo panels on colored backgrounds",
+      "sets of 3 distinct branded promo cards with heading + description + link"
+    ],
+    "notSuitableFor": [
+      "image-led content teasers (use cards-case-study/cards-insight)",
+      "side-by-side informational layouts (use columns)"
+    ]
+  },
+  "usage": {
+    "pagesUsing": ["/en-us"],
+    "reuseCount": 1,
+    "lastUsed": "2026-08-27T00:00:00.000Z"
+  }
+}
