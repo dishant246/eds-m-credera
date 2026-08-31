@@ -1,6 +1,24 @@
 import { createOptimizedPicture } from '../../scripts/aem.js';
 import { moveInstrumentation } from '../../scripts/scripts.js';
 
+/**
+ * Only AEM-managed images (relative paths / media_ assets served by the EDS
+ * pipeline) can be optimized via createOptimizedPicture. External CDN images
+ * (e.g. Contentful) and inline data: URIs must be left as-is, otherwise the
+ * helper rewrites their src into a broken `?width=&format=webply` URL and the
+ * image fails to load.
+ */
+function isOptimizable(src) {
+  if (!src) return false;
+  if (src.startsWith('data:')) return false;
+  if (src.startsWith('/') || src.startsWith('./')) return true;
+  try {
+    return new URL(src, window.location.href).origin === window.location.origin;
+  } catch (e) {
+    return false;
+  }
+}
+
 export default function decorate(block) {
   /* change to ul, li */
   const ul = document.createElement('ul');
@@ -15,6 +33,7 @@ export default function decorate(block) {
     ul.append(li);
   });
   ul.querySelectorAll('picture > img').forEach((img) => {
+    if (!isOptimizable(img.getAttribute('src'))) return;
     const optimizedPic = createOptimizedPicture(img.src, img.alt, false, [{ width: '750' }]);
     moveInstrumentation(img, optimizedPic.querySelector('img'));
     img.closest('picture').replaceWith(optimizedPic);
