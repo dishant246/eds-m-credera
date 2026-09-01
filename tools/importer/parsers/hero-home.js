@@ -22,8 +22,16 @@ export default function parse(element, { document }) {
   }
 
   // --- Extract body copy (single clean node preferred over line-reveal spans) ---
+  // The source highlights select words in brand orange via <span> wrappers
+  // (e.g. "complexity", "success."). Preserve those as <strong> so the block
+  // CSS can re-apply the accent color; fall back to plain text otherwise.
   const bodyEl = element.querySelector('.hero-section__BodyText-sc-3sq6vd-9, [class*="BodyText-sc"]');
   const bodyText = bodyEl ? bodyEl.textContent.replace(/\s+/g, ' ').trim() : '';
+  const bodyAccents = bodyEl
+    ? Array.from(bodyEl.querySelectorAll('span'))
+      .map((s) => s.textContent.replace(/\s+/g, ' ').trim())
+      .filter(Boolean)
+    : [];
 
   // --- Extract CTA ---
   const ctaSource = element.querySelector('.hero-section__ButtonDiv-sc-3sq6vd-10 a, [class*="ButtonDiv"] a, a[class*="StyledLink"]');
@@ -53,7 +61,23 @@ export default function parse(element, { document }) {
 
   if (bodyText) {
     const p = document.createElement('p');
-    p.textContent = bodyText;
+    if (bodyAccents.length) {
+      // Rebuild the sentence, wrapping each accent phrase in <strong> so the
+      // brand-orange highlight survives import as rich text.
+      let remaining = bodyText;
+      bodyAccents.forEach((phrase) => {
+        const idx = remaining.indexOf(phrase);
+        if (idx === -1) return;
+        if (idx > 0) p.appendChild(document.createTextNode(remaining.slice(0, idx)));
+        const strong = document.createElement('strong');
+        strong.textContent = phrase;
+        p.appendChild(strong);
+        remaining = remaining.slice(idx + phrase.length);
+      });
+      if (remaining) p.appendChild(document.createTextNode(remaining));
+    } else {
+      p.textContent = bodyText;
+    }
     contentCell.push(p);
   }
 
