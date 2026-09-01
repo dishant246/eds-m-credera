@@ -29,13 +29,13 @@
   box-sizing: border-box;
 }
 
-/* Eyebrow */
+/* Eyebrow (mobile: 14px/700/lh16) */
 .hero-home .hero-home-eyebrow {
   margin: 0;
   color: var(--link-hover-color); /* brand orange rgb(255 83 44) */
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 700;
-  line-height: 1.2;
+  line-height: 16px;
   letter-spacing: 0.28px;
   text-transform: uppercase;
 }
@@ -44,24 +44,24 @@
   font-style: normal;
 }
 
-/* Main title */
+/* Main title (mobile: 36px/400/lh40) */
 .hero-home h1 {
   margin: 0;
   color: var(--text-color);
-  font-size: var(--heading-font-size-xxl); /* 40px mobile / 80px desktop */
+  font-size: 36px;
   font-weight: 400;
-  line-height: 1.075;
+  line-height: 40px;
   text-transform: uppercase;
 }
 
-/* Subheading */
+/* Subheading (mobile/tablet: 20px/500/lh28) */
 .hero-home .hero-home-content p:not(.hero-home-eyebrow, .hero-home-cta-wrapper) {
   margin: 0;
   max-width: 735px;
   color: var(--text-color);
-  font-size: var(--body-font-size-m); /* 20px */
-  font-weight: 400;
-  line-height: 1.6;
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 28px;
 }
 
 /* Accent words in the subheading (source wraps them in orange <span>;
@@ -120,14 +120,15 @@
     grid-column: 1 / -1;
     grid-row: 1;
     font-size: 20px;
-    line-height: 1.2;
+    line-height: 24px;
   }
 
   /* H1 spans the full content width so it wraps like the source (~3 lines) */
   .hero-home h1 {
     grid-column: 1 / -1;
     grid-row: 2;
-    line-height: 1.075; /* 86px at 80px */
+    font-size: 80px;
+    line-height: 86px;
   }
 
   /* Left column divider rule, aligned with the subheading row */
@@ -140,13 +141,13 @@
     border-top: 1px solid rgb(19 19 19 / 30%);
   }
 
-  /* Subheading: right column */
+  /* Subheading: right column (desktop: 40px/500/lh46) */
   .hero-home .hero-home-content p:not(.hero-home-eyebrow, .hero-home-cta-wrapper) {
     grid-column: 2;
     grid-row: 3;
     align-self: start;
-    font-size: 28px;
-    line-height: 1.4;
+    font-size: 40px;
+    line-height: 46px;
     max-width: none;
   }
 
