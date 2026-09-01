@@ -1,3 +1,7 @@
+/* Marquee: auto-scrolling text ribbon with spark icons.
+   Values extracted from source (credera.com/en-us ticker section). */
+
+/* Full-bleed ribbon: override the section content max-width. */
 .marquee-container .marquee-wrapper {
   max-width: unset;
   padding: 0;
@@ -5,40 +9,40 @@
 
 .marquee {
   overflow: hidden;
-  white-space: nowrap;
-  padding: 24px 0;
+  padding: 48px 0 28px; /* mobile: extracted 48px 0px 28px */
+  background-color: rgb(242 245 246); /* extracted --light-color */
+  color: var(--text-color); /* rgb(19 19 19) */
 }
 
 .marquee .marquee-track {
-  display: inline-flex;
+  display: flex;
   align-items: center;
-  gap: 48px;
+  width: max-content;
   will-change: transform;
-  animation: marquee-scroll 30s linear infinite;
+  animation: marquee-scroll 90s linear infinite; /* extracted 90s linear infinite */
 }
 
 .marquee .marquee-item {
-  display: inline-flex;
+  display: flex;
   align-items: center;
-  gap: 24px;
-  font-size: 2.5rem;
-  line-height: 1.1;
-  font-weight: 700;
+  margin-right: 40px; /* mobile: extracted 40px gap between units */
+  font-family: Literata, Georgia, "Times New Roman", serif; /* extracted: Literata36pt, serif */
+  font-size: 70px; /* mobile: extracted 70px */
+  font-weight: 300; /* extracted 300 */
+  line-height: 32px; /* mobile: extracted 32px */
+  white-space: nowrap;
 }
 
-.marquee .marquee-item img {
-  height: 1em;
-  width: auto;
+.marquee .marquee-spark {
+  flex: none;
+  width: 60px; /* mobile: extracted 60px */
+  height: 60px;
+  margin-right: 40px; /* space between icon and text mirrors unit gap */
 }
 
 @keyframes marquee-scroll {
-  from {
-    transform: translateX(0);
-  }
-
-  to {
-    transform: translateX(-50%);
-  }
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -48,7 +52,19 @@
 }
 
 @media (width >= 900px) {
+  .marquee {
+    padding: 80px 0 84px; /* desktop: extracted 80px 0px 84px */
+  }
+
   .marquee .marquee-item {
-    font-size: 4rem;
+    margin-right: 80px; /* desktop: extracted 80px */
+    font-size: 100px; /* desktop: extracted 100px */
+    line-height: 80px; /* desktop: extracted 80px */
+  }
+
+  .marquee .marquee-spark {
+    width: 80px; /* desktop: extracted 80px */
+    height: 80px;
+    margin-right: 80px;
   }
 }

@@ -1,37 +1,107 @@
+/* Block: hero-cta -- "Let's talk!" closing CTA banner on brand-orange full-bleed band.
+   Values extracted from source computed styles (credera.com/en-us footer CTA). */
+
+/* full-bleed: escape the section's 1200px max-width + padding */
 .hero-cta-container .hero-cta-wrapper {
-  max-width: unset;
+  max-width: none;
   padding: 0;
 }
 
 .hero-cta {
-  position: relative;
-  padding: 40px 24px;
-  min-height: 300px;
+  background-color: rgb(255 83 44);
+  color: var(--text-color);
 }
 
-.hero-cta h1 {
-  max-width: 1200px;
-  margin-left: auto;
-  margin-right: auto;
+/* first row holds decorative blobs in the source -- authored empty here, hide it */
+.hero-cta > div:first-child {
+  display: none;
+}
+
+/* content row: centered, capped like the source (max-width 1440) */
+.hero-cta > div:last-child {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+/* cell: mobile is a single stacked column */
+.hero-cta > div:last-child > div {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 24px;
+}
+
+.hero-cta h2 {
+  margin: 0;
   color: var(--background-color);
+  font-weight: 400;
+  font-size: 70px;
+  line-height: 68px;
 }
 
-.hero-cta picture {
-  position: absolute;
-  z-index: -1;
-  inset: 0;
-  object-fit: cover;
-  box-sizing: border-box;
+.hero-cta p {
+  margin: 0;
+  color: var(--text-color);
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 28px;
 }
 
-.hero-cta img {
-  object-fit: cover;
-  width: 100%;
-  height: 100%;
+/* CTA link -- outlined white pill (not decorated as .button in this block) */
+.hero-cta a:any-link {
+  display: inline-block;
+  margin-top: 8px;
+  border: 2px solid var(--background-color);
+  border-radius: 30px;
+  padding: 16px 28px;
+  background-color: transparent;
+  color: var(--background-color);
+  font-weight: 900;
+  font-size: 14px;
+  line-height: 1.25;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.hero-cta a:any-link:hover {
+  background-color: var(--background-color);
+  color: rgb(255 83 44);
+  text-decoration: none;
 }
 
 @media (width >= 900px) {
-  .hero-cta {
-    padding: 40px 32px;
+  .hero-cta > div:last-child {
+    padding: 120px 160px;
+  }
+
+  /* two-column layout: heading left, copy + CTA right */
+  .hero-cta > div:last-child > div {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    column-gap: 120px;
+    align-items: start;
+  }
+
+  .hero-cta h2 {
+    grid-column: 1;
+    grid-row: 1 / 3;
+    font-size: 100px;
+  }
+
+  .hero-cta p {
+    grid-column: 2;
+    font-size: 24px;
+  }
+
+  .hero-cta p:first-of-type {
+    grid-row: 1;
+  }
+
+  .hero-cta a:any-link {
+    margin-top: 24px;
   }
 }

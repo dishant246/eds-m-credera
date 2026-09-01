@@ -1,27 +1,87 @@
+/* Block: cards-case-study -- case-study card grid (image + title + category) */
+
 .cards-case-study > ul {
   list-style: none;
   margin: 0;
   padding: 0;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(257px, 1fr));
-  gap: 24px;
+  grid-template-columns: 1fr;
+  gap: 2px;
 }
 
 .cards-case-study > ul > li {
-  border: 1px solid #dadada;
-  background-color: var(--background-color);
+  display: flex;
+  flex-direction: column;
+  background-color: transparent;
+  color: var(--text-color);
 }
 
-.cards-case-study .cards-case-study-card-body {
-  margin: 16px;
-}
-
+/* image */
 .cards-case-study .cards-case-study-card-image {
   line-height: 0;
 }
 
-.cards-case-study > ul > li img {
+.cards-case-study .cards-case-study-card-image picture {
+  display: block;
+}
+
+.cards-case-study .cards-case-study-card-image img {
+  display: block;
   width: 100%;
-  aspect-ratio: 4 / 3;
+  aspect-ratio: 16 / 9;
   object-fit: cover;
+}
+
+/* text body */
+.cards-case-study .cards-case-study-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 24px 24px 8px;
+}
+
+.cards-case-study .cards-case-study-card-body h3 {
+  margin: 0;
+  font-family: var(--heading-font-family);
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 28px;
+  color: var(--text-color);
+}
+
+/* category tag */
+.cards-case-study .cards-case-study-card-body p {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.2;
+  text-transform: uppercase;
+  color: var(--text-color);
+}
+
+/* "Read on" link (featured / footer) */
+.cards-case-study .cards-case-study-card-body a:any-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 14px;
+  font-weight: 900;
+  text-transform: uppercase;
+  color: var(--text-color);
+  text-decoration: none;
+}
+
+.cards-case-study .cards-case-study-card-body a:hover {
+  color: var(--brand-orange);
+  text-decoration: none;
+}
+
+@media (width >= 900px) {
+  .cards-case-study > ul {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .cards-case-study .cards-case-study-card-body {
+    padding: 28px 40px 8px;
+  }
 }
