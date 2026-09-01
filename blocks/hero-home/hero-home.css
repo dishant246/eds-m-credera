@@ -19,7 +19,7 @@
   display: none;
 }
 
-/* Content column */
+/* Content column (mobile: single stacked column) */
 .hero-home .hero-home-content > div {
   display: flex;
   flex-direction: column;
@@ -64,7 +64,14 @@
   line-height: 1.6;
 }
 
-/* CTA pill */
+/* Accent words in the subheading (source wraps them in orange <span>;
+   parser preserves them as <strong>) */
+.hero-home .hero-home-content p strong {
+  color: var(--link-hover-color); /* brand orange */
+  font-weight: inherit;
+}
+
+/* CTA pill -- orange at rest, dark on hover (matches source) */
 .hero-home .hero-home-cta-wrapper {
   margin: 0;
 }
@@ -74,9 +81,9 @@
   align-items: center;
   justify-content: center;
   padding: 16px 28px;
-  border: 2px solid var(--text-color);
+  border: 2px solid var(--brand-orange);
   border-radius: 30px;
-  background-color: var(--text-color);
+  background-color: var(--brand-orange); /* rgb(255 83 44) */
   color: var(--background-color);
   font-size: 14px;
   font-weight: 900;
@@ -85,12 +92,13 @@
   text-transform: uppercase;
   text-decoration: none;
   white-space: nowrap;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
 }
 
 .hero-home a.hero-home-cta:any-link:hover,
 .hero-home a.hero-home-cta:any-link:focus-visible {
-  border-color: var(--link-hover-color);
-  background-color: var(--link-hover-color);
+  border-color: var(--text-color);
+  background-color: var(--text-color); /* dark on hover */
   color: var(--background-color);
 }
 
@@ -99,16 +107,45 @@
     padding: 80px 80px 40px;
   }
 
+  /* Desktop: eyebrow full-width on top, then a two-column row:
+     left = H1 + divider, right = subheading + CTA */
   .hero-home .hero-home-content > div {
-    gap: 24px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px 80px;
+    align-items: start;
   }
 
   .hero-home .hero-home-eyebrow {
+    grid-column: 1 / -1;
+    grid-row: 1;
     font-size: 20px;
     line-height: 1.2;
   }
 
+  /* H1 in the left column, spanning both content rows; divider rule beneath */
   .hero-home h1 {
+    grid-column: 1;
+    grid-row: 2 / 4;
     line-height: 1.075; /* 86px at 80px */
+    padding-bottom: 40px;
+    border-bottom: 1px solid rgb(19 19 19 / 30%);
+  }
+
+  /* Subheading: right column, first content row */
+  .hero-home .hero-home-content p:not(.hero-home-eyebrow, .hero-home-cta-wrapper) {
+    grid-column: 2;
+    grid-row: 2;
+    align-self: end;
+    font-size: 28px;
+    line-height: 1.4;
+    max-width: none;
+  }
+
+  /* CTA: right column, beneath the subheading */
+  .hero-home .hero-home-cta-wrapper {
+    grid-column: 2;
+    grid-row: 3;
+    align-self: start;
   }
 }
