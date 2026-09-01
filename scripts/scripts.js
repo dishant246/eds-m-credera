@@ -58,12 +58,69 @@ async function loadFonts() {
 }
 
 /**
+ * Auto-block for the hero background video band.
+ *
+ * The importer turns the source `<video>` into a fallback `<a>` linking to the
+ * .mp4, sitting next to the "Transformation Sticker" image. This rebuilds that
+ * default-content pattern into a real looping, muted, autoplay video with the
+ * circular sticker overlaid on the top-right corner (as on the source site).
+ * @param {Element} main The container element
+ */
+function buildHeroVideo(main) {
+  const videoLink = main.querySelector('a[href$=".mp4"], a[href*=".mp4?"]');
+  if (!videoLink) return;
+
+  const wrapper = videoLink.closest('.default-content-wrapper') || videoLink.closest('div');
+  if (!wrapper || wrapper.dataset.heroVideo === 'done') return;
+
+  const videoP = videoLink.closest('p') || videoLink.parentElement;
+  // The sticker is the picture/img sharing this wrapper (optional).
+  const stickerImg = wrapper.querySelector('picture img, img');
+  const stickerP = stickerImg ? (stickerImg.closest('p') || stickerImg.parentElement) : null;
+
+  // Build the video element.
+  const video = document.createElement('video');
+  video.setAttribute('loop', '');
+  video.setAttribute('muted', '');
+  video.setAttribute('playsinline', '');
+  video.setAttribute('autoplay', '');
+  video.setAttribute('preload', 'auto');
+  video.muted = true;
+  const source = document.createElement('source');
+  const src = videoLink.getAttribute('href');
+  source.setAttribute('src', src.startsWith('//') ? `https:${src}` : src);
+  source.setAttribute('type', 'video/mp4');
+  video.append(source);
+
+  // Assemble the band inside the existing default-content paragraph so EDS
+  // section/block decoration doesn't mistake it for a block. The video fills
+  // the frame; the sticker overlays the top-right corner.
+  const frame = document.createElement('div');
+  frame.className = 'hero-video-frame';
+  frame.append(video);
+
+  const host = videoP || wrapper;
+  host.classList.add('hero-video-band');
+  host.textContent = '';
+  host.append(frame);
+
+  if (stickerImg) {
+    const sticker = stickerImg.closest('picture') || stickerImg;
+    sticker.classList.add('hero-video-sticker');
+    host.append(sticker);
+    if (stickerP && stickerP !== host && !stickerP.textContent.trim()) stickerP.remove();
+  }
+
+  wrapper.dataset.heroVideo = 'done';
+}
+
+/**
  * Builds all synthetic blocks in a container element.
  * @param {Element} main The container element
  */
-function buildAutoBlocks() {
+function buildAutoBlocks(main) {
   try {
-    // TODO: add auto block, if needed
+    buildHeroVideo(main);
   } catch (error) {
     // eslint-disable-next-line no-console
     console.error('Auto Blocking failed', error);
