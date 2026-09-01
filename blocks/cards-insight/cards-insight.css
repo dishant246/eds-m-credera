@@ -1,27 +1,129 @@
+/* Block: cards-insight -- values extracted from credera.com/en-us computed styles */
+
+/* Light band echoing the source InsightsSectionWrapper (rgb 242 245 246) */
+.cards-insight {
+  background-color: var(--section-light-bg, rgb(242 245 246));
+  padding: 40px 0;
+}
+
 .cards-insight > ul {
   list-style: none;
   margin: 0;
   padding: 0;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(257px, 1fr));
+  grid-template-columns: 1fr;
   gap: 24px;
 }
 
 .cards-insight > ul > li {
-  border: 1px solid #dadada;
-  background-color: var(--background-color);
+  display: flex;
+  flex-direction: column;
+  background-color: transparent;
 }
 
-.cards-insight .cards-insight-card-body {
-  margin: 16px;
-}
-
+/* Portrait image, cropped -- source ratio 1038/1161, object-fit cover */
 .cards-insight .cards-insight-card-image {
+  overflow: hidden;
   line-height: 0;
 }
 
-.cards-insight > ul > li img {
+.cards-insight .cards-insight-card-image p {
+  margin: 0;
+  line-height: 0;
+}
+
+.cards-insight .cards-insight-card-image img {
   width: 100%;
-  aspect-ratio: 4 / 3;
+  aspect-ratio: 1038 / 1161;
   object-fit: cover;
+  display: block;
+}
+
+/* Card body: title on its own row, category + read-on share the footer row */
+.cards-insight .cards-insight-card-body {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 24px 12px;
+  align-items: center;
+  padding: 16px 0 8px;
+}
+
+.cards-insight .cards-insight-card-body h3 {
+  grid-column: 1 / -1;
+  margin: 0;
+  font-family: var(--heading-font-family);
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 28px;
+  color: var(--text-color);
+}
+
+/* First body paragraph = category tag */
+.cards-insight .cards-insight-card-body p {
+  margin: 0;
+}
+
+.cards-insight .cards-insight-card-body p:not(:has(a)) {
+  grid-column: 1;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: normal;
+  text-transform: uppercase;
+  color: var(--text-color);
+}
+
+/* Read-on paragraph = link + arrow, right-aligned in footer row */
+.cards-insight .cards-insight-card-body p:has(a) {
+  grid-column: 2;
+  justify-self: end;
+}
+
+.cards-insight .cards-insight-card-body p:has(a) a:any-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 14px;
+  font-weight: 900;
+  line-height: normal;
+  text-transform: uppercase;
+  color: var(--text-color);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.cards-insight .cards-insight-card-body p:has(a) a:any-link::after {
+  content: "";
+  width: 20px;
+  height: 20px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%23131313' stroke-width='2' stroke-linecap='square'%3E%3Cpath d='M4 12h15M13 6l7 6-7 6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: center;
+  transition: transform 0.2s ease;
+}
+
+.cards-insight .cards-insight-card-body p:has(a) a:hover {
+  color: var(--text-color);
+  text-decoration: none;
+}
+
+.cards-insight .cards-insight-card-body p:has(a) a:hover::after {
+  transform: translateX(4px);
+}
+
+/* tablet: two across */
+@media (width >= 600px) {
+  .cards-insight > ul {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* desktop: four across, matching the source gallery */
+@media (width >= 900px) {
+  .cards-insight {
+    padding: 64px 0 40px;
+  }
+
+  .cards-insight > ul {
+    grid-template-columns: repeat(4, 1fr);
+  }
 }

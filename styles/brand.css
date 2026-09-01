@@ -1,0 +1,31 @@
+:root {
+  /* Fonts */
+  --heading-font-family: "DM Sans", sans-serif;
+  --body-font-family: "DM Sans", sans-serif;
+
+  /* Colors */
+  --background-color: #fff;
+  --text-color: rgb(19 19 19);
+  --link-color: rgb(19 19 19);
+  --link-hover-color: rgb(255 83 44);
+  --brand-orange: rgb(255 83 44);
+  --section-light-bg: rgb(242 245 246);
+  --section-dark-bg: rgb(19 19 19);
+
+  /* Spacing */
+  --section-padding: 80px;
+  --nav-height: 73px;
+  --content-max-width: 1440px;
+
+  /* Heading sizes (desktop) */
+  --heading-size-xxl: 80px;
+  --heading-size-xl: 52px;
+  --heading-size-l: 28px;
+  --heading-size-m: 24px;
+  --heading-size-s: 20px;
+  --heading-size-xs: 18px;
+
+  /* Button */
+  --button-radius: 30px;
+  --button-padding: 16px 28px;
+}

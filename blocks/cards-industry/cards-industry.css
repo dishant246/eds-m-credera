@@ -1,27 +1,107 @@
+/* Block: cards-industry -- large stacked industry list with divider rows.
+   Values extracted from source computed styles (credera.com/en-us). */
+
+.cards-industry {
+  background-color: var(--light-color);
+  color: var(--text-color);
+}
+
 .cards-industry > ul {
   list-style: none;
   margin: 0;
   padding: 0;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(257px, 1fr));
-  gap: 24px;
+  display: flex;
+  flex-direction: column;
+  border-bottom: 1px solid var(--dark-color);
 }
 
 .cards-industry > ul > li {
-  border: 1px solid #dadada;
-  background-color: var(--background-color);
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  min-height: 76px;
+  padding: 16px;
+  border-top: 1px solid var(--dark-color);
+  background-color: transparent;
 }
 
-.cards-industry .cards-industry-card-body {
-  margin: 16px;
-}
-
+/* icon cell -- hidden by default, revealed on row hover */
 .cards-industry .cards-industry-card-image {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 0;
+  overflow: hidden;
+  line-height: 0;
+  transition: width 0.3s ease;
+}
+
+.cards-industry .cards-industry-card-image p {
+  margin: 0;
   line-height: 0;
 }
 
-.cards-industry > ul > li img {
-  width: 100%;
-  aspect-ratio: 4 / 3;
-  object-fit: cover;
+.cards-industry .cards-industry-card-image picture,
+.cards-industry .cards-industry-card-image img {
+  display: block;
+  height: 44px;
+  width: auto;
+  max-width: none;
+  object-fit: contain;
+}
+
+/* label cell */
+.cards-industry .cards-industry-card-body {
+  margin: 0;
+}
+
+.cards-industry .cards-industry-card-body h3 {
+  margin: 0;
+  font-family: Literata, Georgia, "Times New Roman", serif;
+  font-size: 32px;
+  font-weight: 300;
+  line-height: 1.15;
+  letter-spacing: normal;
+  text-align: center;
+  color: var(--text-color);
+}
+
+.cards-industry .cards-industry-card-body h3 a:any-link {
+  color: var(--text-color);
+  font: inherit;
+  text-decoration: none;
+}
+
+/* label stays dark, no underline on hover (source behavior) */
+.cards-industry .cards-industry-card-body h3 a:hover {
+  color: var(--text-color);
+  text-decoration: none;
+}
+
+/* reveal icon when hovering the row */
+.cards-industry > ul > li:hover .cards-industry-card-image {
+  width: 60px;
+}
+
+@media (width >= 900px) {
+  .cards-industry > ul > li {
+    min-height: 120px;
+    padding: 16px;
+  }
+
+  .cards-industry .cards-industry-card-body h3 {
+    font-size: 60px;
+    line-height: 46px;
+  }
+
+  .cards-industry .cards-industry-card-image picture,
+  .cards-industry .cards-industry-card-image img {
+    height: 72px;
+  }
+
+  .cards-industry > ul > li:hover .cards-industry-card-image {
+    width: 96px;
+  }
 }

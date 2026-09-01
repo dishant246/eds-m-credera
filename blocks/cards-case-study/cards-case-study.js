@@ -19,25 +19,53 @@ function isOptimizable(src) {
   }
 }
 
+/**
+ * Build case-study cards from the authored rows.
+ *
+ * The imported content is flat: each card's image, title and category arrive as
+ * separate rows (e.g. [image][title][category] repeating). To render the source
+ * two-up card grid, consecutive rows are grouped into a single card <li>: a new
+ * card begins at every row that carries an image; text rows are folded into the
+ * current card's body. This grouping is purely structural — the image-handling
+ * logic below (isOptimizable guard) is unchanged.
+ */
 export default function decorate(block) {
-  /* change to ul, li */
   const ul = document.createElement('ul');
+  let li = null;
+  let body = null;
+
   [...block.children].forEach((row) => {
-    const li = document.createElement('li');
-    moveInstrumentation(row, li);
-    while (row.firstElementChild) li.append(row.firstElementChild);
-    [...li.children].forEach((div) => {
-      if (div.children.length === 1 && div.querySelector('picture')) div.className = 'cards-case-study-card-image';
-      else div.className = 'cards-case-study-card-body';
+    const hasPicture = !!row.querySelector('picture');
+    if (hasPicture || !li) {
+      li = document.createElement('li');
+      moveInstrumentation(row, li);
+      ul.append(li);
+      body = null;
+    }
+    [...row.children].forEach((cell) => {
+      if (cell.querySelector('picture')) {
+        const imageDiv = document.createElement('div');
+        imageDiv.className = 'cards-case-study-card-image';
+        while (cell.firstChild) imageDiv.append(cell.firstChild);
+        li.append(imageDiv);
+      } else if (cell.textContent.trim() || cell.children.length) {
+        if (!body) {
+          body = document.createElement('div');
+          body.className = 'cards-case-study-card-body';
+          li.append(body);
+        }
+        while (cell.firstChild) body.append(cell.firstChild);
+      }
     });
-    ul.append(li);
   });
+
   ul.querySelectorAll('picture > img').forEach((img) => {
     if (!isOptimizable(img.getAttribute('src'))) return;
     const optimizedPic = createOptimizedPicture(img.src, img.alt, false, [{ width: '750' }]);
     moveInstrumentation(img, optimizedPic.querySelector('img'));
     img.closest('picture').replaceWith(optimizedPic);
   });
+
   block.textContent = '';
   block.append(ul);
 }

@@ -1,33 +1,124 @@
+/* Block: columns-services -- two full-bleed orange service panels */
+
+/* Full-bleed breakout: source spans the entire viewport width, but EDS nests
+   this block inside a max-width:1200px section container. */
+.columns-services-wrapper {
+  max-width: 100% !important;
+  padding: 0 !important;
+}
+
+/* Row: two panels side by side (stacked on mobile), 2px hairline gap */
 .columns-services > div {
   display: flex;
   flex-direction: column;
+  gap: 2px;
 }
 
-.columns-services img {
-  width: 100%;
-}
-
+/* Panel */
 .columns-services > div > div {
-  order: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 32px 24px;
+  background-color: rgb(255 83 44);
+  color: #fff;
 }
 
-.columns-services > div > .columns-services-img-col {
-  order: 0;
+/* Header row: heading + arrow icon */
+.columns-services .columns-services-header {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+  margin: 0;
 }
 
-.columns-services > div > .columns-services-img-col img {
-  display: block;
+.columns-services .columns-services-header h1,
+.columns-services .columns-services-header h2,
+.columns-services .columns-services-header h3,
+.columns-services .columns-services-header h4,
+.columns-services .columns-services-header h5,
+.columns-services .columns-services-header h6 {
+  margin: 0;
+  color: #fff;
+  font-family: var(--heading-font-family);
+  font-size: 32px;
+  font-weight: 400;
+  line-height: 38px;
+}
+
+.columns-services .columns-services-arrow {
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  color: #fff;
+}
+
+/* Chip list */
+.columns-services ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.columns-services ul li {
+  margin: 0;
+}
+
+.columns-services ul li a {
+  display: inline-flex;
+  align-items: center;
+  padding: 12px 32px;
+  border: 1px solid rgb(19 19 19);
+  border-radius: 30px;
+  color: rgb(19 19 19);
+  font-size: 16px;
+  font-weight: 500;
+  line-height: normal;
+  letter-spacing: 0.2px;
+  text-decoration: none;
+}
+
+.columns-services ul li a:hover {
+  background-color: rgb(19 19 19);
+  color: #fff;
+  text-decoration: none;
 }
 
 @media (width >= 900px) {
   .columns-services > div {
-    align-items: center;
-    flex-direction: unset;
-    gap: 24px;
+    flex-direction: row;
   }
 
   .columns-services > div > div {
     flex: 1;
-    order: unset;
+    padding: 48px;
+    min-height: 556px;
+  }
+
+  .columns-services .columns-services-header h1,
+  .columns-services .columns-services-header h2,
+  .columns-services .columns-services-header h3,
+  .columns-services .columns-services-header h4,
+  .columns-services .columns-services-header h5,
+  .columns-services .columns-services-header h6 {
+    max-width: 506px;
+    font-size: 52px;
+    line-height: 58px;
+  }
+
+  .columns-services .columns-services-arrow {
+    width: 53px;
+    height: 52px;
+  }
+
+  .columns-services ul li a {
+    padding: 8px 32px;
+    font-size: 20px;
   }
 }

@@ -1,27 +1,91 @@
+/* Partners in Performance: three side-by-side colored panels.
+   Source: credera.com/en-us partner section.
+   Decorated DOM: .cards-partner > ul > li (panel) > .cards-partner-card-body
+   The imported image cells are empty and are hidden. The text cell holds
+   the partner name (h3 > a) and description (p). The arrow glyph is not in
+   the authored content, so it is injected via a background image. */
+
 .cards-partner > ul {
   list-style: none;
   margin: 0;
   padding: 0;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(257px, 1fr));
-  gap: 24px;
+  grid-template-columns: 1fr;
+  gap: 2px;
 }
 
 .cards-partner > ul > li {
-  border: 1px solid #dadada;
-  background-color: var(--background-color);
+  display: flex;
+  flex-direction: column;
+  min-height: 340px;
+  padding: 48px 40px 40px;
+  color: rgb(255 255 255);
 }
 
+/* per-panel brand colors (source computed backgrounds) */
+.cards-partner > ul > li:nth-child(3n + 1) { background-color: rgb(99 47 60); }
+.cards-partner > ul > li:nth-child(3n + 2) { background-color: rgb(59 111 255); }
+.cards-partner > ul > li:nth-child(3n + 3) { background-color: rgb(6 38 80); }
+
+/* text cell fills the panel: heading row pinned top, paragraph pinned bottom */
 .cards-partner .cards-partner-card-body {
-  margin: 16px;
+  margin: 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 24px;
 }
 
-.cards-partner .cards-partner-card-image {
-  line-height: 0;
+/* empty image cell imported as an empty card body */
+.cards-partner .cards-partner-card-body:empty {
+  display: none;
 }
 
-.cards-partner > ul > li img {
-  width: 100%;
-  aspect-ratio: 4 / 3;
-  object-fit: cover;
+/* heading row: partner name + arrow glyph */
+.cards-partner .cards-partner-card-body h3 {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  margin: 0;
+  font-family: var(--heading-font-family);
+  font-size: var(--heading-font-size-xl);
+  font-weight: 400;
+  line-height: 1.115;
+  color: rgb(255 255 255);
+}
+
+.cards-partner .cards-partner-card-body h3 a:any-link {
+  color: rgb(255 255 255);
+  text-decoration: none;
+}
+
+.cards-partner .cards-partner-card-body h3::after {
+  content: "";
+  flex: 0 0 auto;
+  width: 88px;
+  height: 88px;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="89" height="88" viewBox="0 0 89 88" fill="none"><path d="M15.4883 44.1885L74.1549 44.1885" stroke="%23FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M52.1562 22.4365L74.1562 44.1865L52.1563 65.9365" stroke="%23FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>');
+}
+
+.cards-partner .cards-partner-card-body p {
+  margin: 0;
+  font-size: var(--body-font-size-m);
+  font-weight: 500;
+  line-height: 1.4;
+  color: rgb(255 255 255);
+}
+
+@media (width >= 900px) {
+  .cards-partner > ul {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .cards-partner > ul > li {
+    min-height: 500px;
+  }
 }
