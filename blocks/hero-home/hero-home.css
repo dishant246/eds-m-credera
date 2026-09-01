@@ -107,8 +107,8 @@
     padding: 80px 80px 40px;
   }
 
-  /* Desktop: eyebrow full-width on top, then a two-column row:
-     left = H1 + divider, right = subheading + CTA */
+  /* Desktop: eyebrow + full-width H1 on top, then a two-column row:
+     left = horizontal divider rule, right = subheading + CTA */
   .hero-home .hero-home-content > div {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -123,20 +123,28 @@
     line-height: 1.2;
   }
 
-  /* H1 in the left column, spanning both content rows; divider rule beneath */
+  /* H1 spans the full content width so it wraps like the source (~3 lines) */
   .hero-home h1 {
-    grid-column: 1;
-    grid-row: 2 / 4;
+    grid-column: 1 / -1;
+    grid-row: 2;
     line-height: 1.075; /* 86px at 80px */
-    padding-bottom: 40px;
-    border-bottom: 1px solid rgb(19 19 19 / 30%);
   }
 
-  /* Subheading: right column, first content row */
+  /* Left column divider rule, aligned with the subheading row */
+  .hero-home .hero-home-content > div::before {
+    content: "";
+    grid-column: 1;
+    grid-row: 3 / span 2;
+    align-self: start;
+    width: 100%;
+    border-top: 1px solid rgb(19 19 19 / 30%);
+  }
+
+  /* Subheading: right column */
   .hero-home .hero-home-content p:not(.hero-home-eyebrow, .hero-home-cta-wrapper) {
     grid-column: 2;
-    grid-row: 2;
-    align-self: end;
+    grid-row: 3;
+    align-self: start;
     font-size: 28px;
     line-height: 1.4;
     max-width: none;
@@ -145,7 +153,8 @@
   /* CTA: right column, beneath the subheading */
   .hero-home .hero-home-cta-wrapper {
     grid-column: 2;
-    grid-row: 3;
+    grid-row: 4;
     align-self: start;
+    margin-top: 8px;
   }
 }
