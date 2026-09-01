@@ -364,15 +364,20 @@ main a.button:any-link {
   white-space: normal;
 }
 
-/* hero background video band (auto-blocked from default content in scripts.js) */
+/* hero background video band (auto-blocked from default content in scripts.js).
+   Full-bleed: the source video spans the entire viewport width at every
+   breakpoint, so break out of the section's max-width/padding. */
 main .hero-video-band {
   position: relative;
-  margin: 0 0 76px;
+  width: 100vw;
+  margin-left: 50%;
+  margin-bottom: 76px;
+  transform: translateX(-50%);
 }
 
 main .hero-video-frame {
   width: 100%;
-  aspect-ratio: 780 / 289;
+  aspect-ratio: 1440 / 534; /* 2.695 - matches source at all viewports */
   overflow: hidden;
 }
 
