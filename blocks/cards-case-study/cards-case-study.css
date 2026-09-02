@@ -1,5 +1,12 @@
 /* Block: cards-case-study -- case-study card grid (image + title + category) */
 
+/* Full-bleed: the two-up case-study grid spans the whole viewport width on the
+   source, so break out of the section's max-width/padding. */
+.cards-case-study-wrapper {
+  max-width: 100% !important;
+  padding: 0 !important;
+}
+
 .cards-case-study > ul {
   list-style: none;
   margin: 0;

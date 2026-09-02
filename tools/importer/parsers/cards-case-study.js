@@ -4,34 +4,119 @@
  * Parser for cards-case-study. Base: cards.
  * Source: https://credera.com/en-us (Meaningful Results — case studies)
  * Two instance shapes handled:
- *   1) Featured card: the matched element IS a single case-study anchor
- *      (video-background__CaseStudyContent) — title only (+ category if present).
+ *   1) Featured card: the matched element IS a case-study anchor
+ *      (video-background__CaseStudyContent). In the SOURCE this is a single
+ *      composed card, but the anchor illegally nests another anchor (the
+ *      "Read on" link), so the importer's HTML parser splits it into TWO
+ *      fragment anchors (title-only, then category-only) and hoists the footer
+ *      (category + Read-on) out as a sibling. The POSTER IMAGE also lives
+ *      OUTSIDE the anchor, in a sibling video-background__VideoSectionWrapper.
+ *      This parser therefore composes the featured card at the SCOPE level:
+ *      it walks up to the wrapper that contains the poster, then gathers the
+ *      poster + title + category + Read-on from the whole scope into ONE card,
+ *      and removes the leftover footer so nothing renders loose. Subsequent
+ *      stray fragment invocations (no title / detached scope) are dropped.
  *   2) Grid section: a wrapper containing multiple case-study-block anchors,
- *      each with image, title, category, and a "Read on" link.
+ *      each with image (case-study-block__CaseStudyImage), title, category, and
+ *      a "Read on" link — each anchor is a well-formed single card.
  * Structure (xwalk cards container): each card = one row with 2 cells:
- *   cell 1 = image (field:image + collapsed field:imageAlt),
- *   cell 2 = text (field:text: title heading + category + linked CTA).
- * Card model fields: image (reference), text (richtext).
+ *   cell 1 = image (field:image), cell 2 = text (field:text: title heading +
+ *   category + linked CTA).
+ * Card model fields: image (richtext), text (richtext).
  */
 export default function parse(element, { document }) {
-  // Collect card anchors. If the matched element is itself a card anchor
-  // (featured instance), use it directly; otherwise find card anchors inside.
-  let cards;
-  const selfIsCard = element.matches
-    && element.matches('a[class*="CaseStudyContent"], a[class*="CaseStudyWrapper"]');
-  if (selfIsCard) {
-    cards = [element];
-  } else {
-    cards = Array.from(
-      element.querySelectorAll('a[class*="CaseStudyWrapper"], a[class*="CaseStudyContent"]'),
-    );
+  const clean = (el) => (el ? el.textContent.replace(/\s+/g, ' ').trim() : '');
+
+  // Build a 2-cell card row [imageCell, textCell] from raw parts.
+  const buildCardRow = (img, titleText, categoryText, ctaHref, ctaLabel) => {
+    let imageCell = '';
+    if (img && img.getAttribute('src')) {
+      const image = document.createElement('img');
+      image.setAttribute('src', img.getAttribute('src'));
+      if (img.getAttribute('alt')) image.setAttribute('alt', img.getAttribute('alt'));
+      imageCell = [document.createComment(' field:image '), image];
+    }
+    const textCell = [document.createComment(' field:text ')];
+    if (titleText) {
+      const h3 = document.createElement('h3');
+      h3.textContent = titleText;
+      textCell.push(h3);
+    }
+    if (categoryText) {
+      const p = document.createElement('p');
+      p.textContent = categoryText;
+      textCell.push(p);
+    }
+    if (ctaHref && ctaLabel) {
+      const p = document.createElement('p');
+      const a = document.createElement('a');
+      a.setAttribute('href', ctaHref);
+      a.textContent = ctaLabel;
+      p.appendChild(a);
+      textCell.push(p);
+    }
+    if (textCell.length > 1 || Array.isArray(imageCell)) {
+      return [imageCell, textCell.length > 1 ? textCell : ''];
+    }
+    return null;
+  };
+
+  const isFeaturedAnchor = element.matches
+    && element.matches('a[class*="CaseStudyContent"]');
+
+  // ---- Featured card (composed at scope level) ----
+  if (isFeaturedAnchor) {
+    // Walk up to the wrapper that also contains the poster image.
+    let scope = element.parentElement;
+    while (scope && !scope.querySelector('img[class*="PosterImage"]')) {
+      scope = scope.parentElement;
+    }
+    const titleEl = scope && scope.querySelector('[class*="CaseStudyTitle"]');
+    // A stray fragment (category-only anchor, or a detached scope after the
+    // composed card was already built) — drop it so it doesn't render loose.
+    if (!scope || !titleEl) {
+      element.remove();
+      return;
+    }
+
+    const img = scope.querySelector('img[class*="PosterImage"], [class*="VideoContainer"] img');
+    const categoryEl = scope.querySelector('[class*="CaseStudyCategory"]');
+    const linkEl = scope.querySelector('a[class*="CaseStudyLink"]');
+    const cardHref = element.getAttribute('href') || '';
+    const ctaHref = (linkEl && linkEl.getAttribute('href')) || cardHref;
+    const ctaLabel = linkEl ? clean(linkEl) : '';
+
+    const row = buildCardRow(img, clean(titleEl), clean(categoryEl), ctaHref, ctaLabel);
+    if (!row) {
+      element.replaceWith(...element.childNodes);
+      return;
+    }
+
+    const block = WebImporter.Blocks.createBlock(document, {
+      name: 'cards-case-study',
+      cells: [row],
+    });
+    element.replaceWith(block);
+
+    // Remove the hoisted footer (category + Read-on) so those fragments — and
+    // the second fragment anchor nested inside it — don't render as loose
+    // content or trigger a duplicate block.
+    const footer = scope.querySelector('[class*="CaseStudyFooter"]');
+    if (footer) footer.remove();
+    return;
   }
 
-  const cells = [];
+  // ---- Grid section (one well-formed anchor per card) ----
+  const cards = Array.from(
+    element.querySelectorAll('a[class*="CaseStudyWrapper"], a[class*="CaseStudyContent"]'),
+  );
 
+  const cells = [];
   cards.forEach((card) => {
     const href = card.getAttribute('href') || '';
-    const img = card.querySelector('img[class*="CaseStudyImage"], [class*="ImageWrapper"] img, img');
+    const img = card.querySelector(
+      'img[class*="CaseStudyImage"], [class*="ImageContainer"] img, [class*="ImageWrapper"] img',
+    );
     const titleEl = card.querySelector('[class*="CaseStudyTitle"], h1, h2, h3, h4');
 
     // Category: a leaf node containing "/" (e.g. "Pharmaceuticals / Artificial Intelligence")
@@ -45,44 +130,12 @@ export default function parse(element, { document }) {
       }
     }
 
-    // "Read on" style CTA (inner link) — fall back to the card href
     const innerLink = card.querySelector('a[class*="CaseStudyLink"]');
     const ctaHref = (innerLink && innerLink.getAttribute('href')) || href;
-    const ctaLabel = innerLink ? innerLink.textContent.replace(/\s+/g, ' ').trim() : '';
+    const ctaLabel = innerLink ? clean(innerLink) : '';
 
-    // Image cell (field:image; alt collapses into imageAlt attribute)
-    let imageCell = '';
-    if (img && img.getAttribute('src')) {
-      const image = document.createElement('img');
-      image.setAttribute('src', img.getAttribute('src'));
-      if (img.getAttribute('alt')) image.setAttribute('alt', img.getAttribute('alt'));
-      imageCell = [document.createComment(' field:image '), image];
-    }
-
-    // Text cell
-    const textCell = [document.createComment(' field:text ')];
-    if (titleEl && titleEl.textContent.trim()) {
-      const h3 = document.createElement('h3');
-      h3.textContent = titleEl.textContent.replace(/\s+/g, ' ').trim();
-      textCell.push(h3);
-    }
-    if (category) {
-      const p = document.createElement('p');
-      p.textContent = category;
-      textCell.push(p);
-    }
-    if (ctaHref && ctaLabel) {
-      const p = document.createElement('p');
-      const a = document.createElement('a');
-      a.setAttribute('href', ctaHref);
-      a.textContent = ctaLabel;
-      p.appendChild(a);
-      textCell.push(p);
-    }
-
-    if (textCell.length > 1 || Array.isArray(imageCell)) {
-      cells.push([imageCell, textCell.length > 1 ? textCell : '']);
-    }
+    const row = buildCardRow(img, clean(titleEl), category, ctaHref, ctaLabel);
+    if (row) cells.push(row);
   });
 
   // Empty-block guard
