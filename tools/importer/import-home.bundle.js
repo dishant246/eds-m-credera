@@ -178,19 +178,79 @@ var CustomImportScript = (() => {
 
   // tools/importer/parsers/cards-case-study.js
   function parse4(element, { document }) {
-    let cards;
-    const selfIsCard = element.matches && element.matches('a[class*="CaseStudyContent"], a[class*="CaseStudyWrapper"]');
-    if (selfIsCard) {
-      cards = [element];
-    } else {
-      cards = Array.from(
-        element.querySelectorAll('a[class*="CaseStudyWrapper"], a[class*="CaseStudyContent"]')
-      );
+    const clean = (el) => el ? el.textContent.replace(/\s+/g, " ").trim() : "";
+    const buildCardRow = (img, titleText, categoryText, ctaHref, ctaLabel) => {
+      let imageCell = "";
+      if (img && img.getAttribute("src")) {
+        const image = document.createElement("img");
+        image.setAttribute("src", img.getAttribute("src"));
+        if (img.getAttribute("alt")) image.setAttribute("alt", img.getAttribute("alt"));
+        imageCell = [document.createComment(" field:image "), image];
+      }
+      const textCell = [document.createComment(" field:text ")];
+      if (titleText) {
+        const h3 = document.createElement("h3");
+        h3.textContent = titleText;
+        textCell.push(h3);
+      }
+      if (categoryText) {
+        const p = document.createElement("p");
+        p.textContent = categoryText;
+        textCell.push(p);
+      }
+      if (ctaHref && ctaLabel) {
+        const p = document.createElement("p");
+        const a = document.createElement("a");
+        a.setAttribute("href", ctaHref);
+        a.textContent = ctaLabel;
+        p.appendChild(a);
+        textCell.push(p);
+      }
+      if (textCell.length > 1 || Array.isArray(imageCell)) {
+        return [imageCell, textCell.length > 1 ? textCell : ""];
+      }
+      return null;
+    };
+    const isFeaturedAnchor = element.matches && element.matches('a[class*="CaseStudyContent"]');
+    if (isFeaturedAnchor) {
+      let scope = element.parentElement;
+      while (scope && !scope.querySelector('img[class*="PosterImage"]')) {
+        scope = scope.parentElement;
+      }
+      const titleEl = scope && scope.querySelector('[class*="CaseStudyTitle"]');
+      if (!scope || !titleEl) {
+        element.remove();
+        return;
+      }
+      const img = scope.querySelector('img[class*="PosterImage"], [class*="VideoContainer"] img');
+      const categoryEl = scope.querySelector('[class*="CaseStudyCategory"]');
+      const linkEl = scope.querySelector('a[class*="CaseStudyLink"]');
+      const cardHref = element.getAttribute("href") || "";
+      const ctaHref = linkEl && linkEl.getAttribute("href") || cardHref;
+      const ctaLabel = linkEl ? clean(linkEl) : "";
+      const row = buildCardRow(img, clean(titleEl), clean(categoryEl), ctaHref, ctaLabel);
+      if (!row) {
+        element.replaceWith(...element.childNodes);
+        return;
+      }
+      const block2 = WebImporter.Blocks.createBlock(document, {
+        name: "cards-case-study",
+        cells: [row]
+      });
+      element.replaceWith(block2);
+      const footer = scope.querySelector('[class*="CaseStudyFooter"]');
+      if (footer) footer.remove();
+      return;
     }
+    const cards = Array.from(
+      element.querySelectorAll('a[class*="CaseStudyWrapper"], a[class*="CaseStudyContent"]')
+    );
     const cells = [];
     cards.forEach((card) => {
       const href = card.getAttribute("href") || "";
-      const img = card.querySelector('img[class*="CaseStudyImage"], [class*="ImageWrapper"] img, img');
+      const img = card.querySelector(
+        'img[class*="CaseStudyImage"], [class*="ImageContainer"] img, [class*="ImageWrapper"] img'
+      );
       const titleEl = card.querySelector('[class*="CaseStudyTitle"], h1, h2, h3, h4');
       let category = "";
       const candidates = card.querySelectorAll('[class*="Category"], [class*="Tag"], div, span, p');
@@ -203,36 +263,9 @@ var CustomImportScript = (() => {
       }
       const innerLink = card.querySelector('a[class*="CaseStudyLink"]');
       const ctaHref = innerLink && innerLink.getAttribute("href") || href;
-      const ctaLabel = innerLink ? innerLink.textContent.replace(/\s+/g, " ").trim() : "";
-      let imageCell = "";
-      if (img && img.getAttribute("src")) {
-        const image = document.createElement("img");
-        image.setAttribute("src", img.getAttribute("src"));
-        if (img.getAttribute("alt")) image.setAttribute("alt", img.getAttribute("alt"));
-        imageCell = [document.createComment(" field:image "), image];
-      }
-      const textCell = [document.createComment(" field:text ")];
-      if (titleEl && titleEl.textContent.trim()) {
-        const h3 = document.createElement("h3");
-        h3.textContent = titleEl.textContent.replace(/\s+/g, " ").trim();
-        textCell.push(h3);
-      }
-      if (category) {
-        const p = document.createElement("p");
-        p.textContent = category;
-        textCell.push(p);
-      }
-      if (ctaHref && ctaLabel) {
-        const p = document.createElement("p");
-        const a = document.createElement("a");
-        a.setAttribute("href", ctaHref);
-        a.textContent = ctaLabel;
-        p.appendChild(a);
-        textCell.push(p);
-      }
-      if (textCell.length > 1 || Array.isArray(imageCell)) {
-        cells.push([imageCell, textCell.length > 1 ? textCell : ""]);
-      }
+      const ctaLabel = innerLink ? clean(innerLink) : "";
+      const row = buildCardRow(img, clean(titleEl), category, ctaHref, ctaLabel);
+      if (row) cells.push(row);
     });
     if (cells.length === 0) {
       element.replaceWith(...element.childNodes);
