@@ -1,12 +1,12 @@
 /* eslint-disable */
 /* global WebImporter */
 /**
- * Parser for service-areas. Base: block variant (block/v1/block + item).
+ * Parser for service-panels. Base: block variant (block/v1/block + item).
  * Source: https://credera.com/en-us (service areas)
  * Structure (xwalk block container): one ROW per service panel, each row is a
  * single cell holding the panel content (heading + list of service links) as
  * rich text. Using the generic block component (not the columns component)
- * preserves the `service-areas` class through JCR authoring so the variant
+ * preserves the `service-panels` class through JCR authoring so the variant
  * CSS/JS binds on AEM.
  * Note: the source markup nests anchors irregularly, so titles and their
  * button groups are extracted as parallel lists and zipped by index.
@@ -62,6 +62,6 @@ export default function parse(element, { document }) {
     return;
   }
 
-  const block = WebImporter.Blocks.createBlock(document, { name: 'service-areas', cells });
+  const block = WebImporter.Blocks.createBlock(document, { name: 'service-panels', cells });
   element.replaceWith(block);
 }

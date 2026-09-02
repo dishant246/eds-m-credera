@@ -64,7 +64,7 @@
     ]
   },
   {
-    "id": "service-areas",
+    "id": "service-panels",
     "components": [
       "service-panel"
     ]
