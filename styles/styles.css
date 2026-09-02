@@ -464,13 +464,17 @@ main a.section-header-cta:any-link:focus-visible {
   color: #fff;
 }
 
-/* featured video poster (auto-blocked in scripts.js): 16:9 poster image with
-   a round orange "Play Video" button centered over it, like the source. */
+/* featured video poster (auto-blocked in scripts.js): full-bleed 16:9 poster
+   image with a round orange "Play Video" button centered over it, like the
+   source (spans the whole viewport width at every breakpoint). */
 main .video-poster {
   position: relative;
-  margin: 0 0 48px;
+  width: 100vw;
+  margin-left: 50%;
+  margin-bottom: 48px;
   aspect-ratio: 16 / 9;
   overflow: hidden;
+  transform: translateX(-50%);
 }
 
 main .video-poster picture,
