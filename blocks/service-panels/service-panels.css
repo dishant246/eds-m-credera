@@ -1,21 +1,21 @@
-/* Block: columns-services -- two full-bleed orange service panels */
+/* Block: service-areas -- two full-bleed orange service panels */
 
 /* Full-bleed breakout: source spans the entire viewport width, but EDS nests
    this block inside a max-width:1200px section container. */
-.columns-services-wrapper {
+.service-areas-wrapper {
   max-width: 100% !important;
   padding: 0 !important;
 }
 
 /* Row of panels side by side (stacked on mobile), 2px hairline gap */
-.columns-services {
+.service-areas {
   display: flex;
   flex-direction: column;
   gap: 2px;
 }
 
 /* Panel */
-.columns-services .columns-services-panel {
+.service-areas .service-areas-panel {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -26,7 +26,7 @@
 }
 
 /* Header row: heading + arrow icon */
-.columns-services .columns-services-header {
+.service-areas .service-areas-header {
   display: flex;
   flex-direction: row;
   align-items: flex-start;
@@ -35,12 +35,12 @@
   margin: 0;
 }
 
-.columns-services .columns-services-header h1,
-.columns-services .columns-services-header h2,
-.columns-services .columns-services-header h3,
-.columns-services .columns-services-header h4,
-.columns-services .columns-services-header h5,
-.columns-services .columns-services-header h6 {
+.service-areas .service-areas-header h1,
+.service-areas .service-areas-header h2,
+.service-areas .service-areas-header h3,
+.service-areas .service-areas-header h4,
+.service-areas .service-areas-header h5,
+.service-areas .service-areas-header h6 {
   margin: 0;
   color: #fff;
   font-family: var(--heading-font-family);
@@ -49,7 +49,7 @@
   line-height: 38px;
 }
 
-.columns-services .columns-services-arrow {
+.service-areas .service-areas-arrow {
   flex-shrink: 0;
   width: 44px;
   height: 44px;
@@ -57,7 +57,7 @@
 }
 
 /* Chip list */
-.columns-services ul {
+.service-areas ul {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
@@ -66,11 +66,11 @@
   list-style: none;
 }
 
-.columns-services ul li {
+.service-areas ul li {
   margin: 0;
 }
 
-.columns-services ul li a {
+.service-areas ul li a {
   display: inline-flex;
   align-items: center;
   padding: 12px 32px;
@@ -84,40 +84,40 @@
   text-decoration: none;
 }
 
-.columns-services ul li a:hover {
+.service-areas ul li a:hover {
   background-color: rgb(19 19 19);
   color: #fff;
   text-decoration: none;
 }
 
 @media (width >= 900px) {
-  .columns-services {
+  .service-areas {
     flex-direction: row;
   }
 
-  .columns-services .columns-services-panel {
+  .service-areas .service-areas-panel {
     flex: 1;
     padding: 48px;
     min-height: 556px;
   }
 
-  .columns-services .columns-services-header h1,
-  .columns-services .columns-services-header h2,
-  .columns-services .columns-services-header h3,
-  .columns-services .columns-services-header h4,
-  .columns-services .columns-services-header h5,
-  .columns-services .columns-services-header h6 {
+  .service-areas .service-areas-header h1,
+  .service-areas .service-areas-header h2,
+  .service-areas .service-areas-header h3,
+  .service-areas .service-areas-header h4,
+  .service-areas .service-areas-header h5,
+  .service-areas .service-areas-header h6 {
     max-width: 506px;
     font-size: 52px;
     line-height: 58px;
   }
 
-  .columns-services .columns-services-arrow {
+  .service-areas .service-areas-arrow {
     width: 53px;
     height: 52px;
   }
 
-  .columns-services ul li a {
+  .service-areas ul li a {
     padding: 8px 32px;
     font-size: 20px;
   }

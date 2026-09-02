@@ -108,7 +108,7 @@ var CustomImportScript = (() => {
     element.replaceWith(block);
   }
 
-  // tools/importer/parsers/columns-services.js
+  // tools/importer/parsers/service-areas.js
   function parse2(element, { document }) {
     const titleEls = Array.from(
       element.querySelectorAll('[class*="ServiceTitle"]')
@@ -151,7 +151,7 @@ var CustomImportScript = (() => {
       element.replaceWith(...element.childNodes);
       return;
     }
-    const block = WebImporter.Blocks.createBlock(document, { name: "columns-services", cells });
+    const block = WebImporter.Blocks.createBlock(document, { name: "service-areas", cells });
     element.replaceWith(block);
   }
 
@@ -467,7 +467,7 @@ var CustomImportScript = (() => {
   // tools/importer/import-home.js
   var parsers = {
     "hero-home": parse,
-    "columns-services": parse2,
+    "service-areas": parse2,
     "marquee": parse3,
     "cards-case-study": parse4,
     "cards-partner": parse5,
@@ -490,7 +490,7 @@ var CustomImportScript = (() => {
         instances: ["div[class*='hero-section__HeroSectionWrapper-sc-3sq6vd-11']"]
       },
       {
-        name: "columns-services",
+        name: "service-areas",
         instances: ["div[class*='service-area-section__ServiceSectionWrapper-sc-12cthmn-0']"]
       },
       {

@@ -49,12 +49,6 @@
     ]
   },
   {
-    "id": "columns-services",
-    "components": [
-      "service-panel"
-    ]
-  },
-  {
     "id": "columns",
     "components": [
       "column"
@@ -67,6 +61,12 @@
       "image",
       "button",
       "title"
+    ]
+  },
+  {
+    "id": "service-areas",
+    "components": [
+      "service-panel"
     ]
   }
 ]

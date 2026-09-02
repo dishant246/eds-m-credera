@@ -19,7 +19,7 @@
           ]
         },
         {
-          "name": "columns-services",
+          "name": "service-areas",
           "instances": [
             "div[class*='service-area-section__ServiceSectionWrapper-sc-12cthmn-0']"
           ]
