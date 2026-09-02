@@ -166,6 +166,23 @@ export default {
     WebImporter.rules.transformBackgroundImages(main, document);
     WebImporter.rules.adjustImageUrls(main, url, params.originalURL);
 
+    // 5b. Re-relativize repo-committed icons. adjustImageUrls absolutizes every
+    // image src against the source origin (https://credera.com/icons/...). For
+    // the industry icons — which are committed SVGs served from THIS site's
+    // /icons/ folder, not DAM-managed assets — that absolute URL is later
+    // rewritten by JCR packaging into a /content/dam/ path that was never
+    // uploaded, so AEM renders them as about:error. Restoring the root-relative
+    // /icons/... path keeps them as site assets (served by the repo on both
+    // localhost and AEM) and skips the DAM rewrite.
+    main.querySelectorAll('img[src], source[srcset]').forEach((el) => {
+      ['src', 'srcset'].forEach((attr) => {
+        const val = el.getAttribute(attr);
+        if (!val) return;
+        const m = val.match(/^https?:\/\/[^/]+(\/icons\/[^/?#]+\.svg)(?:[?#].*)?$/i);
+        if (m) el.setAttribute(attr, m[1]);
+      });
+    });
+
     // 6. Sanitized path (map root URL to /index)
     const rawPath = new URL(params.originalURL).pathname
       .replace(/\/$/, '')
