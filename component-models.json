@@ -237,21 +237,14 @@
     ]
   },
   {
-    "id": "columns-services",
+    "id": "service-panel",
     "fields": [
       {
-        "component": "text",
-        "valueType": "number",
-        "name": "columns",
+        "component": "richtext",
+        "name": "content",
         "value": "",
-        "label": "Columns"
-      },
-      {
-        "component": "text",
-        "valueType": "number",
-        "name": "rows",
-        "value": "",
-        "label": "Rows"
+        "label": "Content",
+        "valueType": "string"
       }
     ]
   },

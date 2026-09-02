@@ -116,7 +116,7 @@ var CustomImportScript = (() => {
     const buttonGroups = Array.from(
       element.querySelectorAll('[class*="ServiceButtons"]')
     );
-    const columns = [];
+    const cells = [];
     const count = Math.max(titleEls.length, buttonGroups.length);
     for (let i = 0; i < count; i += 1) {
       const cellContent = [];
@@ -145,13 +145,12 @@ var CustomImportScript = (() => {
         });
         if (ul.childNodes.length) cellContent.push(ul);
       }
-      if (cellContent.length) columns.push(cellContent);
+      if (cellContent.length) cells.push([cellContent]);
     }
-    if (columns.length === 0) {
+    if (cells.length === 0) {
       element.replaceWith(...element.childNodes);
       return;
     }
-    const cells = [columns];
     const block = WebImporter.Blocks.createBlock(document, { name: "columns-services", cells });
     element.replaceWith(block);
   }

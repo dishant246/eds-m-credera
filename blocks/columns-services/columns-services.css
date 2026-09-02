@@ -7,15 +7,15 @@
   padding: 0 !important;
 }
 
-/* Row: two panels side by side (stacked on mobile), 2px hairline gap */
-.columns-services > div {
+/* Row of panels side by side (stacked on mobile), 2px hairline gap */
+.columns-services {
   display: flex;
   flex-direction: column;
   gap: 2px;
 }
 
 /* Panel */
-.columns-services > div > div {
+.columns-services .columns-services-panel {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -91,11 +91,11 @@
 }
 
 @media (width >= 900px) {
-  .columns-services > div {
+  .columns-services {
     flex-direction: row;
   }
 
-  .columns-services > div > div {
+  .columns-services .columns-services-panel {
     flex: 1;
     padding: 48px;
     min-height: 556px;

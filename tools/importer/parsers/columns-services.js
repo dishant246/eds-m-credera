@@ -1,14 +1,15 @@
 /* eslint-disable */
 /* global WebImporter */
 /**
- * Parser for columns-services. Base: columns.
+ * Parser for columns-services. Base: block variant (block/v1/block + item).
  * Source: https://credera.com/en-us (service areas)
- * Structure (xwalk columns): first data row = N columns (one cell per column).
- * Columns blocks do NOT use field hints; cells contain default content only.
- * Each service area becomes one column: title + list of service links.
+ * Structure (xwalk block container): one ROW per service panel, each row is a
+ * single cell holding the panel content (heading + list of service links) as
+ * rich text. Using the generic block component (not the columns component)
+ * preserves the `columns-services` class through JCR authoring so the variant
+ * CSS/JS binds on AEM.
  * Note: the source markup nests anchors irregularly, so titles and their
  * button groups are extracted as parallel lists and zipped by index.
- * Instance selector targets the stable ServiceSectionWrapper component id.
  */
 export default function parse(element, { document }) {
   const titleEls = Array.from(
@@ -18,7 +19,7 @@ export default function parse(element, { document }) {
     element.querySelectorAll('[class*="ServiceButtons"]'),
   );
 
-  const columns = [];
+  const cells = [];
   const count = Math.max(titleEls.length, buttonGroups.length);
 
   for (let i = 0; i < count; i += 1) {
@@ -51,17 +52,15 @@ export default function parse(element, { document }) {
       if (ul.childNodes.length) cellContent.push(ul);
     }
 
-    if (cellContent.length) columns.push(cellContent);
+    // One row per panel: a single cell containing the panel content.
+    if (cellContent.length) cells.push([cellContent]);
   }
 
   // Empty-block guard
-  if (columns.length === 0) {
+  if (cells.length === 0) {
     element.replaceWith(...element.childNodes);
     return;
   }
-
-  // Single row with one cell per column
-  const cells = [columns];
 
   const block = WebImporter.Blocks.createBlock(document, { name: 'columns-services', cells });
   element.replaceWith(block);
