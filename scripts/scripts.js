@@ -115,6 +115,42 @@ function buildHeroVideo(main) {
 }
 
 /**
+ * Auto-block for section header rows: an eyebrow label paragraph directly
+ * followed by a paragraph whose only content is a "see all" call-to-action
+ * link. On the source these sit on one row (label left, CTA pill right).
+ * This wraps the two paragraphs in a flex header so they align on one row.
+ * @param {Element} main The container element
+ */
+function buildSectionHeaders(main) {
+  main.querySelectorAll('.default-content-wrapper').forEach((wrapper) => {
+    const paras = [...wrapper.children].filter((el) => el.tagName === 'P');
+    for (let i = 0; i < paras.length - 1; i += 1) {
+      const labelP = paras[i];
+      const ctaP = paras[i + 1];
+      // labelP must be plain text (no links/images); ctaP must be a lone link.
+      const labelIsText = labelP.textContent.trim()
+        && !labelP.querySelector('a, img, picture');
+      const ctaLink = ctaP.querySelector('a');
+      const ctaIsLoneLink = ctaLink
+        && ctaP.children.length === 1
+        && ctaP.textContent.trim() === ctaLink.textContent.trim();
+      if (!labelIsText || !ctaIsLoneLink || ctaP.previousElementSibling !== labelP) {
+        // eslint-disable-next-line no-continue
+        continue;
+      }
+
+      const header = document.createElement('div');
+      header.className = 'section-header';
+      labelP.classList.add('section-header-label');
+      ctaLink.classList.add('section-header-cta');
+      labelP.before(header);
+      header.append(labelP, ctaP);
+      break; // one header per wrapper
+    }
+  });
+}
+
+/**
  * Builds all synthetic blocks in a container element.
  * @param {Element} main The container element
  */
@@ -176,6 +212,9 @@ export function decorateMain(main) {
   buildAutoBlocks(main);
   decorateSections(main);
   decorateBlocks(main);
+  // section headers run after decorateBlocks so the wrapping div is not
+  // mistaken for a block (decorateBlocks scans .section > div > div)
+  buildSectionHeaders(main);
   decorateButtons(main);
 }
 

@@ -413,3 +413,53 @@ main .hero-video-band .hero-video-sticker img {
     margin-bottom: 48px;
   }
 }
+
+/* section header row (auto-blocked in scripts.js): eyebrow label on the left,
+   "see all" CTA pill on the right, on one row like the source. */
+main .section-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin: 36px 0 48px;
+}
+
+main .section-header .section-header-label {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.2;
+  text-transform: uppercase;
+  color: var(--text-color);
+}
+
+main .section-header p:has(.section-header-cta) {
+  margin: 0;
+}
+
+main a.section-header-cta:any-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px 28px;
+  border: 2px solid var(--brand-orange);
+  border-radius: 30px;
+  background-color: var(--brand-orange);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 900;
+  line-height: 1.25;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+main a.section-header-cta:any-link:hover,
+main a.section-header-cta:any-link:focus-visible {
+  border-color: var(--text-color);
+  background-color: var(--text-color);
+  color: #fff;
+}
