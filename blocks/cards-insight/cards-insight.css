@@ -6,19 +6,31 @@
   padding: 40px 0;
 }
 
+/* Horizontal scroll carousel: a flex row of fixed-width cards that overflows
+   and scrolls sideways, like the source insights gallery. */
 .cards-insight > ul {
   list-style: none;
   margin: 0;
-  padding: 0;
-  display: grid;
-  grid-template-columns: 1fr;
+  padding: 0 0 24px;
+  display: flex;
   gap: 24px;
+  overflow-x: auto;
+  scroll-snap-type: x proximity;
+  scrollbar-width: none; /* hidden native bar; custom track added in JS */
+}
+
+.cards-insight > ul::-webkit-scrollbar {
+  display: none;
 }
 
 .cards-insight > ul > li {
+  flex: 0 0 auto;
+  width: 78vw;
+  max-width: 320px;
   display: flex;
   flex-direction: column;
   background-color: transparent;
+  scroll-snap-align: start;
 }
 
 /* Portrait image, cropped -- source ratio 1038/1161, object-fit cover */
@@ -110,20 +122,35 @@
   transform: translateX(4px);
 }
 
-/* tablet: two across */
+/* tablet: wider fixed cards */
 @media (width >= 600px) {
-  .cards-insight > ul {
-    grid-template-columns: repeat(2, 1fr);
+  .cards-insight > ul > li {
+    width: 42vw;
+    max-width: 420px;
   }
 }
 
-/* desktop: four across, matching the source gallery */
+/* desktop: fixed 519px cards that scroll, matching the source gallery */
 @media (width >= 900px) {
   .cards-insight {
     padding: 64px 0 40px;
   }
 
-  .cards-insight > ul {
-    grid-template-columns: repeat(4, 1fr);
+  .cards-insight > ul > li {
+    width: 519px;
+    max-width: none;
   }
+}
+
+/* custom scrollbar (injected in JS): 4px track, orange thumb, like source */
+.cards-insight .cards-insight-scrollbar {
+  height: 4px;
+  margin-top: 24px;
+  background-color: rgb(228 235 237);
+  cursor: pointer;
+}
+
+.cards-insight .cards-insight-scrollbar-thumb {
+  height: 100%;
+  background-color: var(--brand-orange);
 }

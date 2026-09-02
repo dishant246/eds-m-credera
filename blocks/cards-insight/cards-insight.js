@@ -40,4 +40,57 @@ export default function decorate(block) {
   });
   block.textContent = '';
   block.append(ul);
+
+  // Custom scrollbar (source shows a light track with an orange thumb whose
+  // width/position track the horizontal scroll of the carousel).
+  const scrollbar = document.createElement('div');
+  scrollbar.className = 'cards-insight-scrollbar';
+  const thumb = document.createElement('div');
+  thumb.className = 'cards-insight-scrollbar-thumb';
+  scrollbar.append(thumb);
+  block.append(scrollbar);
+
+  const sync = () => {
+    const { scrollWidth, clientWidth, scrollLeft } = ul;
+    if (scrollWidth <= clientWidth) {
+      scrollbar.style.display = 'none';
+      return;
+    }
+    scrollbar.style.display = '';
+    const ratio = clientWidth / scrollWidth;
+    const thumbW = Math.max(ratio * scrollbar.clientWidth, 40);
+    const maxThumbX = scrollbar.clientWidth - thumbW;
+    const maxScroll = scrollWidth - clientWidth;
+    thumb.style.width = `${thumbW}px`;
+    thumb.style.transform = `translateX(${(scrollLeft / maxScroll) * maxThumbX}px)`;
+  };
+
+  ul.addEventListener('scroll', sync, { passive: true });
+  window.addEventListener('resize', sync);
+  // Re-sync as the carousel's size settles (images loading change scrollWidth).
+  if (typeof ResizeObserver !== 'undefined') {
+    const ro = new ResizeObserver(sync);
+    ro.observe(ul);
+  }
+  ul.querySelectorAll('img').forEach((img) => {
+    if (!img.complete) img.addEventListener('load', sync, { once: true });
+  });
+  requestAnimationFrame(sync);
+
+  // Click/drag on the track scrubs the carousel.
+  const scrubTo = (clientX) => {
+    const rect = scrollbar.getBoundingClientRect();
+    const pct = Math.min(Math.max((clientX - rect.left) / rect.width, 0), 1);
+    ul.scrollLeft = pct * (ul.scrollWidth - ul.clientWidth);
+  };
+  let dragging = false;
+  scrollbar.addEventListener('pointerdown', (e) => {
+    dragging = true;
+    scrollbar.setPointerCapture(e.pointerId);
+    scrubTo(e.clientX);
+  });
+  scrollbar.addEventListener('pointermove', (e) => {
+    if (dragging) scrubTo(e.clientX);
+  });
+  scrollbar.addEventListener('pointerup', () => { dragging = false; });
 }
