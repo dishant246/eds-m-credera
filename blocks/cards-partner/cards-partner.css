@@ -5,6 +5,13 @@
    the partner name (h3 > a) and description (p). The arrow glyph is not in
    the authored content, so it is injected via a background image. */
 
+/* Full-bleed: the partner strip spans the whole viewport width on the source,
+   so break out of the section's max-width/padding. */
+.cards-partner-wrapper {
+  max-width: 100% !important;
+  padding: 0 !important;
+}
+
 .cards-partner > ul {
   list-style: none;
   margin: 0;
