@@ -151,6 +151,36 @@ function buildSectionHeaders(main) {
 }
 
 /**
+ * Auto-block for the featured video poster: a paragraph holding a "Video
+ * poster" image directly followed by a "Play Video" text paragraph. On the
+ * source the poster is a 16:9 image with a round orange "Play Video" button
+ * centered over it. This overlays the button on the poster.
+ * @param {Element} main The container element
+ */
+function buildVideoPoster(main) {
+  main.querySelectorAll('.default-content-wrapper').forEach((wrapper) => {
+    const posterImg = wrapper.querySelector('img[alt*="Video poster" i]');
+    if (!posterImg) return;
+    const posterP = posterImg.closest('p');
+    if (!posterP || posterP.dataset.videoPoster === 'done') return;
+
+    // The "Play Video" label is the next paragraph (plain text, no links).
+    const labelP = posterP.nextElementSibling;
+    const hasLabel = labelP && labelP.tagName === 'P'
+      && /play video/i.test(labelP.textContent) && !labelP.querySelector('a, img');
+
+    posterP.classList.add('video-poster');
+    posterP.dataset.videoPoster = 'done';
+
+    const button = document.createElement('span');
+    button.className = 'video-poster-play';
+    button.textContent = hasLabel ? labelP.textContent.trim() : 'Play Video';
+    posterP.append(button);
+    if (hasLabel) labelP.remove();
+  });
+}
+
+/**
  * Builds all synthetic blocks in a container element.
  * @param {Element} main The container element
  */
@@ -215,6 +245,7 @@ export function decorateMain(main) {
   // section headers run after decorateBlocks so the wrapping div is not
   // mistaken for a block (decorateBlocks scans .section > div > div)
   buildSectionHeaders(main);
+  buildVideoPoster(main);
   decorateButtons(main);
 }
 
