@@ -19,7 +19,7 @@
           ]
         },
         {
-          "name": "service-areas",
+          "name": "service-panels",
           "instances": [
             "div[class*='service-area-section__ServiceSectionWrapper-sc-12cthmn-0']"
           ]

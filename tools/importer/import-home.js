@@ -3,7 +3,7 @@
 
 // PARSER IMPORTS
 import heroHomeParser from './parsers/hero-home.js';
-import serviceAreasParser from './parsers/service-areas.js';
+import servicePanelsParser from './parsers/service-panels.js';
 import marqueeParser from './parsers/marquee.js';
 import cardsCaseStudyParser from './parsers/cards-case-study.js';
 import cardsPartnerParser from './parsers/cards-partner.js';
@@ -17,7 +17,7 @@ import cleanupTransformer from './transformers/credera-cleanup.js';
 // PARSER REGISTRY
 const parsers = {
   'hero-home': heroHomeParser,
-  'service-areas': serviceAreasParser,
+  'service-panels': servicePanelsParser,
   'marquee': marqueeParser,
   'cards-case-study': cardsCaseStudyParser,
   'cards-partner': cardsPartnerParser,
@@ -44,7 +44,7 @@ const PAGE_TEMPLATE = {
       instances: ["div[class*='hero-section__HeroSectionWrapper-sc-3sq6vd-11']"],
     },
     {
-      name: 'service-areas',
+      name: 'service-panels',
       instances: ["div[class*='service-area-section__ServiceSectionWrapper-sc-12cthmn-0']"],
     },
     {
