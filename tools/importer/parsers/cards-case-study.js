@@ -79,14 +79,19 @@ export default function parse(element, { document }) {
       return;
     }
 
-    const img = scope.querySelector('img[class*="PosterImage"], [class*="VideoContainer"] img');
     const categoryEl = scope.querySelector('[class*="CaseStudyCategory"]');
     const linkEl = scope.querySelector('a[class*="CaseStudyLink"]');
     const cardHref = element.getAttribute('href') || '';
     const ctaHref = (linkEl && linkEl.getAttribute('href')) || cardHref;
     const ctaLabel = linkEl ? clean(linkEl) : '';
 
-    const row = buildCardRow(img, clean(titleEl), clean(categoryEl), ctaHref, ctaLabel);
+    // NOTE: the featured card is TEXT-ONLY. In the source the poster image
+    // (PosterImage) is the VIDEO poster rendered by the preceding video-poster
+    // section, and the AstraZeneca title/category/Read-on is a caption overlaid
+    // on that same video — it has no image of its own. Passing the poster here
+    // would duplicate the image (once in the video section, once in this card),
+    // so we build the featured card with no image.
+    const row = buildCardRow(null, clean(titleEl), clean(categoryEl), ctaHref, ctaLabel);
     if (!row) {
       element.replaceWith(...element.childNodes);
       return;
