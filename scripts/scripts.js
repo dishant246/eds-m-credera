@@ -151,10 +151,16 @@ function buildSectionHeaders(main) {
 }
 
 /**
+ * YouTube id of the featured case-study video (source plays it on click).
+ * Overridable per-poster via a `data-video` attribute on the poster paragraph.
+ */
+const FEATURED_VIDEO_ID = 'YtAu-eSbX_U';
+
+/**
  * Auto-block for the featured video poster: a paragraph holding a "Video
  * poster" image directly followed by a "Play Video" text paragraph. On the
  * source the poster is a 16:9 image with a round orange "Play Video" button
- * centered over it. This overlays the button on the poster.
+ * centered over it; clicking it swaps the poster for an autoplay YouTube embed.
  * @param {Element} main The container element
  */
 function buildVideoPoster(main) {
@@ -172,11 +178,28 @@ function buildVideoPoster(main) {
     posterP.classList.add('video-poster');
     posterP.dataset.videoPoster = 'done';
 
-    const button = document.createElement('span');
+    const videoId = posterP.dataset.video || FEATURED_VIDEO_ID;
+
+    const button = document.createElement('button');
+    button.type = 'button';
     button.className = 'video-poster-play';
     button.textContent = hasLabel ? labelP.textContent.trim() : 'Play Video';
+    button.setAttribute('aria-label', `${button.textContent}`);
     posterP.append(button);
     if (hasLabel) labelP.remove();
+
+    // On click, replace the poster + button with an autoplay YouTube embed.
+    button.addEventListener('click', () => {
+      const iframe = document.createElement('iframe');
+      iframe.className = 'video-poster-embed';
+      iframe.setAttribute('src', `https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&rel=0&modestbranding=1&controls=0`);
+      iframe.setAttribute('title', 'Video');
+      iframe.setAttribute('frameborder', '0');
+      iframe.setAttribute('allow', 'autoplay; encrypted-media; picture-in-picture');
+      iframe.setAttribute('allowfullscreen', '');
+      posterP.textContent = '';
+      posterP.append(iframe);
+    });
   });
 }
 
