@@ -340,34 +340,29 @@ header nav .nav-trigger[aria-expanded="true"] ~ .nav-panel {
   to { transform: translateX(0); }
 }
 
-/* Mobile back button (top of each sub-panel) */
+/* Mobile back button (top of each sub-panel) — arrow only */
 header nav .nav-panel-back {
   display: block;
-  width: 100%;
-  text-align: left;
+  width: 24px;
+  height: 24px;
   border: 0;
   background: none;
   cursor: pointer;
-  font-family: inherit;
-  font-size: 15px;
-  font-weight: 700;
-  color: var(--nav-text);
-  padding: 8px 0 8px 24px;
-  margin-bottom: 12px;
-  position: relative;
+  padding: 0;
+  margin-bottom: 16px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23131313' stroke-width='2'%3E%3Cpath d='M19 12H5M12 19l-7-7 7-7'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: left center;
 }
 
-header nav .nav-panel-back::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 50%;
-  width: 16px;
-  height: 16px;
-  transform: translateY(-50%);
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23131313' stroke-width='2'%3E%3Cpath d='M19 12H5M12 19l-7-7 7-7'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: center;
+/* Panel heading = the menu name (large title, matches source left column) */
+header nav .nav-panel-title {
+  margin: 0 0 12px;
+  font-family: var(--nav-font, "DM Sans", sans-serif);
+  font-weight: 400;
+  font-size: 32px;
+  line-height: 1.1;
+  color: var(--nav-text);
 }
 
 header nav .nav-panel p {
@@ -416,14 +411,14 @@ header nav .nav-panel > ul > li > a {
     display: flex;
     position: static;
     justify-content: flex-end;
-    padding: 0 40px;
+    padding: 0 80px;
     border-top: 0;
     border-bottom: 1px solid var(--nav-border);
   }
 
   header nav .nav-main {
     min-height: 98px;
-    padding: 0 40px;
+    padding: 0 80px;
     justify-content: space-between;
   }
 
@@ -439,7 +434,7 @@ header nav .nav-panel > ul > li > a {
 
   header nav .nav-sections > ul {
     flex-direction: row;
-    gap: 32px;
+    gap: 24px;
     align-items: center;
   }
 
@@ -471,22 +466,28 @@ header nav .nav-panel > ul > li > a {
   header nav .nav-trigger[aria-expanded="true"] ~ .nav-panel {
     display: grid;
     grid-template-columns: 1fr 2.4fr;
-    gap: 24px 40px;
-    align-items: start;
+    grid-auto-rows: min-content;
+    gap: 12px 40px;
+    align-content: start;
     animation: none;
   }
 
-  /* Intro block (description + overview link) stacks in the left column */
+  /* Intro block (title + description + overview link) stacks in left column */
+  header nav .nav-panel-title,
   header nav .nav-panel > p:not(:last-child) {
     grid-column: 1;
     max-width: 340px;
     margin: 0;
   }
 
+  header nav .nav-panel-title {
+    font-size: 40px;
+  }
+
   /* The category grid (the <ul>) sits in the right column, aligned to the top */
   header nav .nav-panel > ul {
     grid-column: 2;
-    grid-row: 1 / span 2;
+    grid-row: 1 / 4;
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 8px 48px;
@@ -502,7 +503,7 @@ header nav .nav-panel > ul > li > a {
   /* Promo block (last <p> with a link) spans full width at the bottom */
   header nav .nav-panel > p:last-child {
     grid-column: 1 / -1;
-    grid-row: 3;
+    grid-row: 4;
     max-width: none;
     background: var(--nav-orange);
     color: rgb(255 255 255);
