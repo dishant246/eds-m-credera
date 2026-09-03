@@ -196,12 +196,20 @@ export default async function decorate(block) {
       back.type = 'button';
       back.className = 'nav-panel-back';
       back.setAttribute('aria-label', 'Back to menu');
-      back.textContent = triggerLink ? triggerLink.textContent.trim() : 'Back';
       back.addEventListener('click', (e) => {
         e.stopPropagation();
         setDropOpen(li, false);
       });
       panel.prepend(back);
+      // Panel heading = the menu name (matches the source's large left-column
+      // title). Label is read from the trigger, so copy stays source-driven.
+      if (triggerLink) {
+        const heading = document.createElement('h2');
+        heading.className = 'nav-panel-title';
+        heading.textContent = triggerLink.textContent.trim();
+        // place after the back button, before the description
+        back.after(heading);
+      }
       li.append(panel);
 
       // hover opens on desktop
