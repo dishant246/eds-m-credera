@@ -34,19 +34,6 @@ export default function decorate(block) {
     });
     ul.append(li);
   });
-  // The industry icons are committed repo SVGs under /icons/. The importer
-  // rewrites their src to the source origin (https://credera.com/icons/...),
-  // which 404s. Normalize any /icons/ src back to a root-relative path so it
-  // resolves against the serving origin (localhost or the AEM site).
-  ul.querySelectorAll('picture > img').forEach((img) => {
-    const raw = img.getAttribute('src') || '';
-    const iconMatch = raw.match(/\/icons\/[^/?#]+\.svg$/i);
-    if (iconMatch) {
-      img.setAttribute('src', iconMatch[0]);
-      const src = img.closest('picture')?.querySelector('source');
-      if (src) src.setAttribute('srcset', iconMatch[0]);
-    }
-  });
   ul.querySelectorAll('picture > img').forEach((img) => {
     if (!isOptimizable(img.getAttribute('src'))) return;
     const optimizedPic = createOptimizedPicture(img.src, img.alt, false, [{ width: '750' }]);
