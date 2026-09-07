@@ -1,0 +1,20 @@
+{
+  "status": "success",
+  "url": "https://credera.com/en-us/insights/credera%e2%80%99s-mobile-expert-to-speak-at-the-7th-annual-demogala-showcase-and-innovation-conference",
+  "path": "en-us/insights/credera-s-mobile-expert-to-speak-at-the-7th-annual-demogala-showcase-and-innovation-conference",
+  "timestamp": "2026-09-07T19:24:38.339Z",
+  "title": "Home | Credera",
+  "template": "home",
+  "blocks": [
+    "hero-home",
+    "service-panels",
+    "marquee",
+    "cards-case-study",
+    "cards-case-study",
+    "cards-case-study",
+    "cards-partner",
+    "cards-industry",
+    "cards-insight",
+    "hero-cta"
+  ]
+}
