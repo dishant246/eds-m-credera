@@ -12,5 +12,8 @@
       "aemSiteTitle": "eds-m-credera",
       "baseUrl": "https://credera.com/en-us"
     }
-  }
+  },
+  "features": [
+    "site-planning"
+  ]
 }
