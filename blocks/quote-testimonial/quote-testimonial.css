@@ -1,0 +1,41 @@
+.quote-testimonial blockquote {
+  margin: 0 auto;
+  padding: 0 24px;
+  max-width: 900px;
+}
+
+@media (width >= 900px) {
+  .quote-testimonial blockquote {
+    padding: 0 32px;
+  }
+}
+
+.quote-testimonial blockquote .quote-testimonial-quotation {
+  font-size: 120%;
+}
+
+.quote-testimonial blockquote .quote-testimonial-quotation > :first-child {
+  text-indent: -0.5ch;
+}
+
+.quote-testimonial blockquote .quote-testimonial-quotation p:first-child::before,
+.quote-testimonial blockquote .quote-testimonial-quotation p:last-child::after {
+  line-height: 0;
+}
+
+.quote-testimonial blockquote .quote-testimonial-quotation p:first-child::before {
+  content: '“';
+}
+
+.quote-testimonial blockquote .quote-testimonial-quotation p:last-child::after {
+  content: '”';
+}
+
+.quote-testimonial blockquote .quote-testimonial-attribution {
+  text-align: right;
+}
+
+.quote-testimonial blockquote .quote-testimonial-attribution p:first-child::before {
+  content: '—';
+  padding-right: 0.5ch;
+}

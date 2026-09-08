@@ -1,0 +1,65 @@
+.accordion-values details {
+  border: 1px solid #dadada;
+}
+
+/* stylelint-disable-next-line no-descending-specificity */
+.accordion-values details + details {
+  margin-top: 24px;
+}
+
+.accordion-values details p {
+  margin-bottom: 0.8em;
+}
+
+.accordion-values details summary {
+  position: relative;
+  padding: 0 16px;
+  padding-right: 46px;
+  cursor: pointer;
+  list-style: none;
+  overflow: auto;
+  transition: background-color 0.2s;
+}
+
+.accordion-values details[open] summary {
+  background-color: var(--light-color);
+}
+
+.accordion-values details summary:focus,
+.accordion-values details summary:hover {
+  background-color: var(--light-color);
+}
+
+.accordion-values details summary::-webkit-details-marker {
+  display: none;
+}
+
+.accordion-values details summary::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  right: 18px;
+  transform: translateY(-50%) rotate(135deg);
+  width: 6px;
+  height: 6px;
+  border: 2px solid;
+  border-width: 2px 2px 0 0;
+  transition: transform 0.2s;
+}
+
+.accordion-values details[open] summary::after {
+  transform: translateY(-50%) rotate(-45deg);
+}
+
+.accordion-values details .accordion-values-item-body {
+  padding: 0 16px;
+}
+
+.accordion-values details:not([open]) .accordion-values-item-body {
+  display: none;
+}
+
+.accordion-values details[open] .accordion-values-item-body {
+  border-top: 1px solid #dadada;
+  background-color: var(--background-color);
+}

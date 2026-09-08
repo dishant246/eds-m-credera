@@ -285,11 +285,64 @@
         "https://credera.com/en-us/careers/credera-veterans-network",
         "https://credera.com/en-us/careers/credera-womens-network",
         "https://credera.com/en-us/careers/employee-resource-groups",
-        "https://credera.com/en-us/careers/open-pride-credera"
+        "https://credera.com/en-us/careers/open-pride-credera",
+        "https://credera.com/en-us/about-us"
       ],
       "coverageGaps": [],
       "description": "About-section overview page with intro heading and content blocks",
-      "blocks": []
+      "blocks": [
+        {
+          "name": "hero-home",
+          "instances": [
+            "main > div[class*=paper__PaperWrapper]:first-of-type [class*=paper__Content]"
+          ]
+        },
+        {
+          "name": "cards-culture",
+          "instances": [
+            "main [class*=quote-carousel-level-one__DesktopSlider]"
+          ]
+        },
+        {
+          "name": "columns-media",
+          "instances": [
+            "main > div[class*=animate-in__Fade]:nth-of-type(2)",
+            "main > div[class*=paper__PaperWrapper]:nth-of-type(5)",
+            "main > div[class*=paper__PaperWrapper]:nth-of-type(8)"
+          ]
+        },
+        {
+          "name": "quote-testimonial",
+          "instances": [
+            "#featuredContent"
+          ]
+        },
+        {
+          "name": "cards-case-study",
+          "instances": [
+            "main > div[class*=animate-in__Fade]:nth-of-type(7)"
+          ]
+        },
+        {
+          "name": "cards-award",
+          "instances": [
+            "main [class*=about-us-overview__IconsWrapper]"
+          ]
+        },
+        {
+          "name": "cards-office",
+          "instances": [
+            "main > div[class*=paper__PaperWrapper]:nth-of-type(11)"
+          ]
+        },
+        {
+          "name": "hero-cta",
+          "instances": [
+            "main > div[class*=footer-cta__FooterCtaWrapper]"
+          ]
+        }
+      ],
+      "representativeUrl": "https://credera.com/en-us/about-us"
     },
     {
       "name": "content-article",

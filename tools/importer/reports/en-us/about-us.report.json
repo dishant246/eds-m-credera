@@ -1,0 +1,20 @@
+{
+  "status": "success",
+  "url": "https://credera.com/en-us/about-us",
+  "path": "en-us/about-us",
+  "timestamp": "2026-09-08T16:00:22.990Z",
+  "title": "About Credera | Credera",
+  "template": "about-overview",
+  "blocks": [
+    "hero-home",
+    "cards-culture",
+    "columns-media",
+    "columns-media",
+    "columns-media",
+    "quote-testimonial",
+    "cards-case-study",
+    "cards-award",
+    "cards-office",
+    "hero-cta"
+  ]
+}

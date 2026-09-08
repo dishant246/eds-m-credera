@@ -19,7 +19,25 @@
     ]
   },
   {
+    "id": "accordion-values",
+    "components": [
+      "accordion-values-item"
+    ]
+  },
+  {
+    "id": "cards-award",
+    "components": [
+      "card"
+    ]
+  },
+  {
     "id": "cards-case-study",
+    "components": [
+      "card"
+    ]
+  },
+  {
+    "id": "cards-culture",
     "components": [
       "card"
     ]
@@ -37,6 +55,12 @@
     ]
   },
   {
+    "id": "cards-office",
+    "components": [
+      "card"
+    ]
+  },
+  {
     "id": "cards-partner",
     "components": [
       "card"
@@ -46,6 +70,21 @@
     "id": "cards",
     "components": [
       "card"
+    ]
+  },
+  {
+    "id": "columns-media",
+    "components": [
+      "column"
+    ]
+  },
+  {
+    "id": "column",
+    "components": [
+      "text",
+      "image",
+      "button",
+      "title"
     ]
   },
   {
