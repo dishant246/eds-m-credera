@@ -1,0 +1,57 @@
+/* cards-office: horizontally scrolling row of office cards
+   (icon illustration + name + address + "View Office" link).
+   Structural/functional CSS only. */
+
+.cards-office > ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: row;
+  gap: 24px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+}
+
+.cards-office > ul::-webkit-scrollbar {
+  display: none;
+}
+
+.cards-office > ul > li {
+  box-sizing: border-box;
+  flex: 0 0 auto;
+  width: 260px;
+  scroll-snap-align: start;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.cards-office .cards-office-card-image {
+  line-height: 0;
+}
+
+.cards-office .cards-office-card-image img,
+.cards-office .cards-office-card-image picture {
+  display: block;
+  width: auto;
+  height: 96px;
+  object-fit: contain;
+}
+
+.cards-office .cards-office-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.cards-office .cards-office-card-body > * {
+  margin: 0;
+}
+
+@media (width >= 900px) {
+  .cards-office > ul > li {
+    width: 300px;
+  }
+}

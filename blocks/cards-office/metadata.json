@@ -1,0 +1,44 @@
+{
+  "variantName": "cards-office",
+  "baseBlock": "cards",
+  "canonicalModel": "collection",
+  "version": "1.0.0",
+  "created": "2026-09-11T00:00:00.000Z",
+  "sourceContext": {
+    "originUrl": "https://credera.com/en-us/careers",
+    "originPage": "Careers",
+    "blockPosition": "bottom"
+  },
+  "visualCharacteristics": {
+    "colorScheme": "neutral",
+    "density": "compact",
+    "purpose": "directory",
+    "imagePattern": "oneimg-per-card"
+  },
+  "contentPattern": {
+    "structure": "container + repeating office cards (location icon + name + full address + 'View Office' link), horizontal scroll",
+    "buttonCount": 1,
+    "imageCount": 8
+  },
+  "options": [],
+  "memberVariantIds": [
+    "cards-office"
+  ],
+  "reuseGuidance": {
+    "suitableFor": [
+      "office/location directory cards with icon, address and link",
+      "horizontally scrolling location card rows"
+    ],
+    "notSuitableFor": [
+      "icon+label only industry lists (use cards-industry)",
+      "editorial teaser card grids (use cards-case-study)"
+    ]
+  },
+  "usage": {
+    "pagesUsing": [
+      "/en-us/careers"
+    ],
+    "reuseCount": 1,
+    "lastUsed": "2026-09-11T00:00:00.000Z"
+  }
+}

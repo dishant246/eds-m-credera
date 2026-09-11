@@ -1,0 +1,44 @@
+{
+  "variantName": "carousel-awards",
+  "baseBlock": "carousel",
+  "canonicalModel": "collection",
+  "version": "1.0.0",
+  "created": "2026-09-11T00:00:00.000Z",
+  "sourceContext": {
+    "originUrl": "https://credera.com/en-us/careers",
+    "originPage": "Careers",
+    "blockPosition": "mid"
+  },
+  "visualCharacteristics": {
+    "colorScheme": "neutral",
+    "density": "compact",
+    "purpose": "gallery",
+    "imagePattern": "multiimg"
+  },
+  "contentPattern": {
+    "structure": "container + repeating award-badge image items, horizontal scroll with prev/next",
+    "buttonCount": 0,
+    "imageCount": 8
+  },
+  "options": [],
+  "memberVariantIds": [
+    "carousel-awards"
+  ],
+  "reuseGuidance": {
+    "suitableFor": [
+      "award/recognition badge rotators",
+      "logo strips with prev/next navigation"
+    ],
+    "notSuitableFor": [
+      "full-bleed hero slide carousels with text overlays",
+      "single static image"
+    ]
+  },
+  "usage": {
+    "pagesUsing": [
+      "/en-us/careers"
+    ],
+    "reuseCount": 1,
+    "lastUsed": "2026-09-11T00:00:00.000Z"
+  }
+}

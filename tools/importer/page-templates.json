@@ -524,14 +524,142 @@
       "urls": [
         "https://credera.com/en-us/careers",
         "https://credera.com/en-us/careers/experienced-professionals",
-        "https://credera.com/en-us/careers/students",
-        "https://credera.com/en-us/pegaworld-2025-forrester-roundtable",
-        "https://credera.com/en-us/salesforce-dreamforce-2024",
-        "https://credera.com/en-us/salesforce-world-tour-2024"
+        "https://credera.com/en-us/careers/students"
       ],
       "coverageGaps": [],
       "description": "Careers overview page: intro, value props, and open-roles CTA",
-      "blocks": []
+      "blocks": [
+        {
+          "name": "hero-home",
+          "instances": [
+            "div[class*=\"careers__OverviewHeroSection\"]"
+          ]
+        },
+        {
+          "name": "columns-feature",
+          "instances": [
+            "div[class*=\"image-with-titleset__SectionContainer\"]:has(img)",
+            "#featuredContent"
+          ]
+        },
+        {
+          "name": "cards-insight",
+          "instances": [
+            "div[class*=\"video-carousel__CarouselContainer\"]"
+          ]
+        },
+        {
+          "name": "cards-case-study",
+          "instances": [
+            "div[class*=\"our-impact__OurImpactContainer\"]"
+          ]
+        },
+        {
+          "name": "carousel-awards",
+          "instances": [
+            "div[class*=\"award-carousel__CarouselContainer\"]"
+          ]
+        },
+        {
+          "name": "cards-office",
+          "instances": [
+            "div[class*=\"office-carousel__DesktopCarousel\"]"
+          ]
+        },
+        {
+          "name": "hero-cta",
+          "instances": [
+            "div[class*=\"footer-cta__FooterCtaWrapper\"]"
+          ]
+        }
+      ],
+      "representativeUrl": "https://credera.com/en-us/careers",
+      "sections": [
+        {
+          "id": "rc1",
+          "name": "hero",
+          "selector": [
+            ".paper__PaperWrapper-sc-1p638pi-0:nth-of-type(1)"
+          ],
+          "style": null,
+          "blocks": [
+            "hero-home"
+          ],
+          "defaultContent": []
+        },
+        {
+          "id": "rc2",
+          "name": "life-at-credera-feature",
+          "selector": [
+            ".animate-in__Fade-sc-16x0191-0.djnsbX:nth-of-type(2)"
+          ],
+          "style": null,
+          "blocks": [
+            "columns-feature"
+          ],
+          "defaultContent": []
+        },
+        {
+          "id": "rc3",
+          "name": "featured-content-callout",
+          "selector": [
+            "#featuredContent"
+          ],
+          "style": null,
+          "blocks": [
+            "columns-feature"
+          ],
+          "defaultContent": []
+        },
+        {
+          "id": "rc4",
+          "name": "video-gallery",
+          "selector": [
+            ".paper__PaperWrapper-sc-1p638pi-0:nth-of-type(5)"
+          ],
+          "style": null,
+          "blocks": [
+            "cards-insight"
+          ],
+          "defaultContent": []
+        },
+        {
+          "id": "rc5",
+          "name": "divider-spacer",
+          "selector": [
+            ".paper__PaperWrapper-sc-1p638pi-0:nth-of-type(6)"
+          ],
+          "style": null,
+          "blocks": [],
+          "defaultContent": []
+        },
+        {
+          "id": "rc6",
+          "name": "journey-teasers",
+          "selector": [
+            ".animate-in__Fade-sc-16x0191-0.djnsbX:nth-of-type(7)"
+          ],
+          "style": null,
+          "blocks": [
+            "cards-case-study"
+          ],
+          "defaultContent": []
+        },
+        {
+          "id": "rc7",
+          "name": "awards-offices-cta",
+          "selector": [
+            ".paper__PaperWrapper-sc-1p638pi-0:nth-of-type(8)"
+          ],
+          "style": null,
+          "blocks": [
+            "carousel-awards",
+            "cards-office",
+            "hero-cta"
+          ],
+          "defaultContent": []
+        }
+      ]
     },
     {
       "name": "careers-info",
