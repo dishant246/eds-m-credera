@@ -535,7 +535,15 @@ var CustomImportScript = (() => {
   function transform(hookName, element, payload) {
     if (hookName === TransformHook.beforeTransform) {
       WebImporter.DOMUtils.remove(element, [
-        "#onetrust-consent-sdk"
+        "#onetrust-consent-sdk",
+        // Responsive DUPLICATES: the careers page renders both a desktop AND a
+        // mobile variant of the office and awards carousels in the DOM (one hidden
+        // via CSS). The block parsers target the Desktop variants; the Mobile
+        // variants carry the same office/award content and would otherwise fall
+        // through as raw default content (duplicated office cards / award badges).
+        // Remove them before parsing so each block's content appears exactly once.
+        '[class*="office-carousel__MobileColumnContainer"]',
+        '[class*="award-carousel__MobileCarousel"]'
       ]);
     }
     if (hookName === TransformHook.afterTransform) {

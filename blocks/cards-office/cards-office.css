@@ -1,11 +1,13 @@
 /* cards-office: horizontally scrolling row of office cards
-   (icon illustration + name + address + "View Office" link).
-   Structural/functional CSS only. */
+   (location illustration + office name + address + optional phone + "View Office" link).
+   Visual values extracted from credera.com/en-us/careers (office cards carousel). */
 
 .cards-office > ul {
   list-style: none;
   margin: 0;
-  padding: 0;
+
+  /* vertical padding lets the soft card shadow breathe; no horizontal edge clipping */
+  padding: 24px 0;
   display: flex;
   flex-direction: row;
   gap: 24px;
@@ -21,37 +23,96 @@
 .cards-office > ul > li {
   box-sizing: border-box;
   flex: 0 0 auto;
-  width: 260px;
+  width: 280px;
+  min-height: 400px;
   scroll-snap-align: start;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  align-items: center;
+  padding: 32px 24px;
+  background-color: #fff;
+  box-shadow: rgb(58 58 58 / 6%) 0 0 80px 0;
 }
 
+/* office illustration */
 .cards-office .cards-office-card-image {
+  width: 100%;
   line-height: 0;
+}
+
+.cards-office .cards-office-card-image p {
+  margin: 0;
 }
 
 .cards-office .cards-office-card-image img,
 .cards-office .cards-office-card-image picture {
   display: block;
-  width: auto;
-  height: 96px;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 350 / 300;
   object-fit: contain;
 }
 
+/* text body: name, address, phone, view office */
 .cards-office .cards-office-card-body {
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 8px;
+  width: 100%;
+  text-align: center;
 }
 
 .cards-office .cards-office-card-body > * {
   margin: 0;
 }
 
+.cards-office .cards-office-card-body h4 {
+  font-size: 28px;
+  font-weight: 500;
+  line-height: 1.2;
+  color: var(--text-color);
+}
+
+.cards-office .cards-office-card-body p {
+  font-size: 16px;
+  line-height: 26px;
+  color: var(--text-color);
+}
+
+/* "View Office" link — bold uppercase-style CTA, reset any EDS button decoration */
+.cards-office .cards-office-card-body a,
+.cards-office .cards-office-card-body a.button:any-link {
+  display: inline-block;
+  margin-top: 4px;
+  padding: 0;
+  border: none;
+  border-radius: 0;
+  background: none;
+  color: var(--link-color);
+  font-size: 14px;
+  font-weight: 900;
+  letter-spacing: 0.02em;
+  line-height: 1.25;
+  text-decoration: none;
+  text-transform: none;
+  white-space: nowrap;
+}
+
+.cards-office .cards-office-card-body a:hover,
+.cards-office .cards-office-card-body a.button:any-link:hover {
+  color: var(--link-hover-color);
+  text-decoration: underline;
+}
+
 @media (width >= 900px) {
   .cards-office > ul > li {
-    width: 300px;
+    width: 335px;
+    padding: 40px 30px;
+  }
+
+  .cards-office .cards-office-card-body h4 {
+    font-size: 32px;
+    line-height: 44px;
   }
 }
