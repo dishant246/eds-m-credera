@@ -90,10 +90,21 @@ export default function decorate(block) {
 
   block.prepend(container);
 
-  // optimize badge images
+  // optimize badge images -- only images served through the EDS media pipeline
+  // (same-origin / `/media_*`). External badge assets (e.g. ctfassets.net) must be
+  // left untouched, since the optimizer would rewrite them to a 404 pipeline URL.
   block.querySelectorAll('picture > img').forEach((img) => {
-    const optimized = createOptimizedPicture(img.src, img.alt, false, [{ width: '400' }]);
-    img.closest('picture').replaceWith(optimized);
+    let sameOrigin = false;
+    try {
+      const url = new URL(img.src, window.location.href);
+      sameOrigin = url.origin === window.location.origin;
+    } catch (e) {
+      sameOrigin = false;
+    }
+    if (sameOrigin) {
+      const optimized = createOptimizedPicture(img.src, img.alt, false, [{ width: '400' }]);
+      img.closest('picture').replaceWith(optimized);
+    }
   });
 
   if (!isSingleSlide) {

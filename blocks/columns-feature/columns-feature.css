@@ -1,47 +1,144 @@
-/* columns-feature: side-by-side media + text feature row */
+/* columns-feature: side-by-side media + text feature row.
+   Values extracted from source computed styles (credera.com/en-us/careers). */
 
+/* --- Row layout ---
+   Mobile: single column with the image stacked on top of the text
+   (source renders column-reverse). */
 .columns-feature > div {
   display: flex;
-  flex-direction: column;
-  gap: 24px;
+  flex-direction: column-reverse;
+  align-items: center;
+  gap: 40px;
+}
+
+/* --- Media column --- */
+.columns-feature .columns-feature-media {
+  width: 100%;
+  order: 0;
+}
+
+.columns-feature .columns-feature-media picture {
+  display: block;
 }
 
 .columns-feature .columns-feature-media img {
   display: block;
   width: 100%;
   height: auto;
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
 }
 
-/* text column; stacks first on mobile (order: 0), media second */
+/* --- Text column --- */
 .columns-feature .columns-feature-text {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  width: 100%;
   order: 0;
 }
 
 .columns-feature .columns-feature-eyebrow {
+  margin: 0 0 8px;
+  font-family: var(--heading-font-family);
+  font-size: 16px;
+  font-weight: 900;
+  line-height: 26px;
   text-transform: uppercase;
-  letter-spacing: 0.06em;
-  font-size: 0.8rem;
-  margin: 0;
+  color: var(--text-color);
 }
 
-.columns-feature .columns-feature-media {
-  order: 1;
+/* the eyebrow is authored as emphasis; render it upright like the source */
+.columns-feature .columns-feature-eyebrow em {
+  font-style: normal;
+}
+
+.columns-feature .columns-feature-text h2 {
+  margin: 0 0 12px;
+  font-family: var(--heading-font-family);
+  font-size: 26px;
+  font-weight: 500;
+  line-height: 36px;
+  color: var(--text-color);
+}
+
+.columns-feature .columns-feature-text p {
+  margin: 0;
+  font-family: var(--body-font-family);
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 26px;
+  color: var(--text-color);
+}
+
+.columns-feature .columns-feature-text .columns-feature-eyebrow {
+  font-size: 16px;
+}
+
+/* "Learn more" link -- plain uppercase bold text link, not a pill button */
+.columns-feature .columns-feature-text p:last-child {
+  margin-top: 20px;
+}
+
+.columns-feature .columns-feature-text a,
+main .columns-feature .columns-feature-text a.button:any-link {
+  display: inline-flex;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: none;
+  font-family: var(--heading-font-family);
+  font-size: 14px;
+  font-weight: 900;
+  letter-spacing: normal;
+  line-height: 1.25;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--text-color);
+  white-space: normal;
+}
+
+.columns-feature .columns-feature-text a:hover,
+main .columns-feature .columns-feature-text a.button:any-link:hover {
+  color: var(--link-hover-color);
+  text-decoration: none;
 }
 
 @media (width >= 900px) {
+  /* Desktop: text left, image right, vertically centered. */
   .columns-feature > div {
     flex-direction: row;
     align-items: center;
-    gap: 48px;
+    justify-content: space-between;
+    gap: 60px;
   }
 
-  .columns-feature .columns-feature-text,
+  .columns-feature .columns-feature-text {
+    flex: 1 1 auto;
+    order: 0;
+  }
+
   .columns-feature .columns-feature-media {
-    flex: 1;
-    order: unset;
+    flex: 0 0 540px;
+    max-width: 540px;
+    order: 1;
+  }
+
+  .columns-feature .columns-feature-eyebrow,
+  .columns-feature .columns-feature-text .columns-feature-eyebrow {
+    font-size: 18px;
+    line-height: 30px;
+  }
+
+  .columns-feature .columns-feature-text h2 {
+    font-size: 40px;
+    line-height: 56px;
+  }
+
+  .columns-feature .columns-feature-text p {
+    font-size: 18px;
+    line-height: 30px;
   }
 
   /* image-left option: media column rendered first */
