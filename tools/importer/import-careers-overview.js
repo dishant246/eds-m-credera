@@ -58,7 +58,9 @@ const PAGE_TEMPLATE = {
     },
     {
       name: 'cards-case-study',
-      instances: ["div[class*='our-impact__OurImpactContainer']"],
+      // Target just the two-card POV wrapper; the preceding intro title-set
+      // ("Careers at Credera" / "Start your Credera journey.") stays as default content.
+      instances: ["div[class*='our-impact__POVWrapper']"],
     },
     {
       name: 'carousel-awards',

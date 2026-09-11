@@ -551,7 +551,7 @@
         {
           "name": "cards-case-study",
           "instances": [
-            "div[class*=\"our-impact__OurImpactContainer\"]"
+            "div[class*=\"our-impact__POVWrapper\"]"
           ]
         },
         {

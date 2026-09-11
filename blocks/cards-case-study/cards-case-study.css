@@ -1,11 +1,8 @@
-/* Block: cards-case-study -- case-study card grid (image + title + category) */
-
-/* Full-bleed: the two-up case-study grid spans the whole viewport width on the
-   source, so break out of the section's max-width/padding. */
-.cards-case-study-wrapper {
-  max-width: 100% !important;
-  padding: 0 !important;
-}
+/* Block: cards-case-study -- POV/case-study cards.
+   Careers layout: large landscape photo on top, then heading, description and a
+   bold uppercase "Read on" text link with a right arrow. Two cards side-by-side
+   on desktop, stacking on mobile. Values extracted from the source careers page
+   computed styles. Kept resilient: cards may lack an image or a category. */
 
 .cards-case-study > ul {
   list-style: none;
@@ -13,19 +10,24 @@
   padding: 0;
   display: grid;
   grid-template-columns: 1fr;
-  gap: 2px;
+  gap: 40px;
 }
 
 .cards-case-study > ul > li {
   display: flex;
   flex-direction: column;
+  gap: 24px;
   background-color: transparent;
   color: var(--text-color);
 }
 
-/* image */
+/* image (photo on top) */
 .cards-case-study .cards-case-study-card-image {
   line-height: 0;
+}
+
+.cards-case-study .cards-case-study-card-image p {
+  margin: 0;
 }
 
 .cards-case-study .cards-case-study-card-image picture {
@@ -35,7 +37,7 @@
 .cards-case-study .cards-case-study-card-image img {
   display: block;
   width: 100%;
-  aspect-ratio: 16 / 9;
+  aspect-ratio: 620 / 380;
   object-fit: cover;
 }
 
@@ -43,81 +45,79 @@
 .cards-case-study .cards-case-study-card-body {
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  padding: 24px 24px 8px;
+  gap: 12px;
 }
 
 .cards-case-study .cards-case-study-card-body h3 {
   margin: 0;
   font-family: var(--heading-font-family);
-  font-size: 20px;
-  font-weight: 700;
-  line-height: 28px;
+  font-size: 26px;
+  font-weight: 500;
+  line-height: 36px;
   color: var(--text-color);
 }
 
-/* category tag */
 .cards-case-study .cards-case-study-card-body p {
   margin: 0;
-  font-size: 14px;
-  font-weight: 500;
-  line-height: 1.2;
-  text-transform: uppercase;
+  font-family: var(--body-font-family);
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 26px;
   color: var(--text-color);
 }
 
-/* "Read on" link (featured / footer) */
+/* "Read on" link: bold uppercase text link with a right arrow.
+   Overrides the global default-content / button-decoration link styling. */
+.cards-case-study .cards-case-study-card-body p:has(a:only-child) {
+  line-height: 0;
+}
+
 .cards-case-study .cards-case-study-card-body a:any-link {
   display: inline-flex;
   align-items: center;
   gap: 4px;
+  padding: 8px 0;
+  font-family: var(--body-font-family);
   font-size: 14px;
   font-weight: 900;
+  line-height: 1.2;
   text-transform: uppercase;
+  text-decoration: underline;
   color: var(--text-color);
-  text-decoration: none;
 }
 
-.cards-case-study .cards-case-study-card-body a:hover {
+.cards-case-study .cards-case-study-card-body a:any-link::after {
+  content: "";
+  flex: 0 0 auto;
+  width: 20px;
+  height: 20px;
+  background-color: currentcolor;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 12h15M13 6l6 6-6 6'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+
+.cards-case-study .cards-case-study-card-body a:hover,
+.cards-case-study .cards-case-study-card-body a:focus-visible {
   color: var(--brand-orange);
-  text-decoration: none;
-}
-
-/* Featured card (the lone card in its own block): full width, and its footer
-   places the category tag on the left and "Read on" on the right of one row,
-   matching the source featured case study. */
-.cards-case-study > ul > li:only-child .cards-case-study-card-body {
-  display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 16px 24px;
-  align-items: center;
-}
-
-.cards-case-study > ul > li:only-child .cards-case-study-card-body h3 {
-  grid-column: 1 / -1;
-}
-
-.cards-case-study > ul > li:only-child .cards-case-study-card-body p:not(:has(a)) {
-  grid-column: 1;
-  justify-self: start;
-}
-
-.cards-case-study > ul > li:only-child .cards-case-study-card-body p:has(a) {
-  grid-column: 2;
-  justify-self: end;
+  text-decoration: underline;
 }
 
 @media (width >= 900px) {
   .cards-case-study > ul {
     grid-template-columns: 1fr 1fr;
+    gap: 40px;
   }
 
-  .cards-case-study .cards-case-study-card-body {
-    padding: 28px 40px 8px;
+  .cards-case-study > ul > li {
+    gap: 32px;
   }
 
-  /* featured card spans the full width (its ul has a single card) */
-  .cards-case-study > ul > li:only-child {
-    grid-column: 1 / -1;
+  .cards-case-study .cards-case-study-card-body h3 {
+    font-size: 36px;
+    line-height: 48px;
+  }
+
+  .cards-case-study .cards-case-study-card-body p {
+    font-size: 18px;
+    line-height: 30px;
   }
 }
