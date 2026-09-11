@@ -1,0 +1,13 @@
+{
+  "status": "success",
+  "url": "https://credera.com/en-us/careers/experienced-professionals",
+  "path": "en-us/careers/experienced-professionals",
+  "timestamp": "2026-09-11T07:38:28.545Z",
+  "title": "Experienced Professionals | Credera",
+  "template": "careers-overview",
+  "blocks": [
+    "columns-feature",
+    "columns-feature",
+    "hero-cta"
+  ]
+}

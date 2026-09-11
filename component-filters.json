@@ -16,7 +16,10 @@
       "cards",
       "columns",
       "fragment",
-      "cards-industry"
+      "cards-industry",
+      "columns-feature",
+      "carousel-awards",
+      "cards-office"
     ]
   },
   {
@@ -38,6 +41,12 @@
     ]
   },
   {
+    "id": "cards-office",
+    "components": [
+      "cards-office-item"
+    ]
+  },
+  {
     "id": "cards-partner",
     "components": [
       "card"
@@ -47,6 +56,27 @@
     "id": "cards",
     "components": [
       "card"
+    ]
+  },
+  {
+    "id": "carousel-awards",
+    "components": [
+      "carousel-awards-item"
+    ]
+  },
+  {
+    "id": "columns-feature",
+    "components": [
+      "column"
+    ]
+  },
+  {
+    "id": "column",
+    "components": [
+      "text",
+      "image",
+      "button",
+      "title"
     ]
   },
   {
