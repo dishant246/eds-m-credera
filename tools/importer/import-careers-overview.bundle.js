@@ -323,6 +323,28 @@ var CustomImportScript = (() => {
       if (footer) footer.remove();
       return;
     }
+    const povCards = Array.from(element.querySelectorAll('[class*="ContentWrapper"]')).filter((c) => c.querySelector("img") && c.querySelector("h1, h2, h3, h4"));
+    if (povCards.length) {
+      const povCells = [];
+      povCards.forEach((card) => {
+        const img = card.querySelector("img");
+        const titleEl = card.querySelector('h1, h2, h3, h4, [class*="TitleSetHeading"]');
+        const descEl = card.querySelector('p[class*="TitleSetText"], p[class*="StyledText"], p');
+        const linkEl = card.querySelector('a[class*="ReadMoreLink"], a[class*="StyledLink"], a[href]');
+        const ctaHref = linkEl && linkEl.getAttribute("href") || "";
+        const ctaLabel = linkEl ? clean(linkEl) : "";
+        const row = buildCardRow(img, clean(titleEl), clean(descEl), ctaHref, ctaLabel);
+        if (row) povCells.push(row);
+      });
+      if (povCells.length) {
+        const block2 = WebImporter.Blocks.createBlock(document2, {
+          name: "cards-case-study",
+          cells: povCells
+        });
+        element.replaceWith(block2);
+        return;
+      }
+    }
     const cards = Array.from(
       element.querySelectorAll('a[class*="CaseStudyWrapper"], a[class*="CaseStudyContent"]')
     );
@@ -649,7 +671,9 @@ var CustomImportScript = (() => {
       },
       {
         name: "cards-case-study",
-        instances: ["div[class*='our-impact__OurImpactContainer']"]
+        // Target just the two-card POV wrapper; the preceding intro title-set
+        // ("Careers at Credera" / "Start your Credera journey.") stays as default content.
+        instances: ["div[class*='our-impact__POVWrapper']"]
       },
       {
         name: "carousel-awards",

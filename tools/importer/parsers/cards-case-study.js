@@ -111,6 +111,34 @@ export default function parse(element, { document }) {
     return;
   }
 
+  // ---- Careers "journey" cards (our-impact POV wrapper) ----
+  // Careers page shape: the matched element is a wrapper of ContentWrapper cards,
+  // each = image + TextWrapper (h3 title + description paragraph) + "Read On" link.
+  // Different DOM from the homepage case-study grid, so handle it explicitly.
+  const povCards = Array.from(element.querySelectorAll('[class*="ContentWrapper"]'))
+    .filter((c) => c.querySelector('img') && c.querySelector('h1, h2, h3, h4'));
+  if (povCards.length) {
+    const povCells = [];
+    povCards.forEach((card) => {
+      const img = card.querySelector('img');
+      const titleEl = card.querySelector('h1, h2, h3, h4, [class*="TitleSetHeading"]');
+      const descEl = card.querySelector('p[class*="TitleSetText"], p[class*="StyledText"], p');
+      const linkEl = card.querySelector('a[class*="ReadMoreLink"], a[class*="StyledLink"], a[href]');
+      const ctaHref = (linkEl && linkEl.getAttribute('href')) || '';
+      const ctaLabel = linkEl ? clean(linkEl) : '';
+      const row = buildCardRow(img, clean(titleEl), clean(descEl), ctaHref, ctaLabel);
+      if (row) povCells.push(row);
+    });
+    if (povCells.length) {
+      const block = WebImporter.Blocks.createBlock(document, {
+        name: 'cards-case-study',
+        cells: povCells,
+      });
+      element.replaceWith(block);
+      return;
+    }
+  }
+
   // ---- Grid section (one well-formed anchor per card) ----
   const cards = Array.from(
     element.querySelectorAll('a[class*="CaseStudyWrapper"], a[class*="CaseStudyContent"]'),
