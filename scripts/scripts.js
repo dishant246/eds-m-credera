@@ -115,6 +115,52 @@ function buildHeroVideo(main) {
 }
 
 /**
+ * Extracts a YouTube video id from a watch / short / embed URL.
+ * @param {string} href
+ * @returns {string|null}
+ */
+function youtubeId(href) {
+  if (!href) return null;
+  let m = href.match(/[?&]v=([\w-]{6,})/);
+  if (m) return m[1];
+  m = href.match(/(?:youtu\.be\/|youtube(?:-nocookie)?\.com\/embed\/)([\w-]{6,})/);
+  return m ? m[1] : null;
+}
+
+/**
+ * Auto-block for YouTube videos.
+ *
+ * The video import transformer converts source YouTube <iframe> players into a
+ * bare watch link on its own line (e.g. <p><a href="https://www.youtube.com/watch?v=ID">…</a></p>).
+ * This turns each such lone link into a responsive 16:9 embedded player.
+ * @param {Element} main The container element
+ */
+function buildYouTube(main) {
+  main.querySelectorAll('a[href*="youtube.com/watch"], a[href*="youtu.be/"]').forEach((a) => {
+    const p = a.closest('p');
+    // only auto-embed a link that is the sole content of its paragraph
+    if (!p || p.textContent.trim() !== a.textContent.trim() || p.querySelector('img')) return;
+    const id = youtubeId(a.getAttribute('href'));
+    if (!id) return;
+
+    const frame = document.createElement('div');
+    frame.className = 'youtube-frame';
+    const iframe = document.createElement('iframe');
+    iframe.setAttribute('src', `https://www.youtube-nocookie.com/embed/${id}?rel=0&modestbranding=1`);
+    iframe.setAttribute('title', a.textContent.trim() || 'YouTube video');
+    iframe.setAttribute('frameborder', '0');
+    iframe.setAttribute('loading', 'lazy');
+    iframe.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture');
+    iframe.setAttribute('allowfullscreen', '');
+    frame.append(iframe);
+
+    p.classList.add('youtube');
+    p.textContent = '';
+    p.append(frame);
+  });
+}
+
+/**
  * Auto-block for section header rows: an eyebrow label paragraph directly
  * followed by a paragraph whose only content is a "see all" call-to-action
  * link. On the source these sit on one row (label left, CTA pill right).
@@ -207,9 +253,28 @@ function buildVideoPoster(main) {
  * Builds all synthetic blocks in a container element.
  * @param {Element} main The container element
  */
+/**
+ * Removes gatsby blur-up placeholder images left by the import: inline
+ * `data:image/svg+xml` images with empty alt are never real content. Any
+ * paragraph left empty after the image is removed is dropped too.
+ * @param {Element} main The container element
+ */
+function removeImagePlaceholders(main) {
+  main.querySelectorAll('img[src^="data:image/svg+xml"]').forEach((img) => {
+    if ((img.getAttribute('alt') || '').trim() !== '') return;
+    const p = img.closest('p');
+    (img.closest('picture') || img).remove();
+    if (p && p.textContent.trim() === '' && !p.querySelector('img, iframe, video, a, picture')) {
+      p.remove();
+    }
+  });
+}
+
 function buildAutoBlocks(main) {
   try {
+    removeImagePlaceholders(main);
     buildHeroVideo(main);
+    buildYouTube(main);
   } catch (error) {
     // eslint-disable-next-line no-console
     console.error('Auto Blocking failed', error);
