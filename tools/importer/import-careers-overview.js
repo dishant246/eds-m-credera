@@ -11,6 +11,7 @@ import cardsOfficeParser from './parsers/cards-office.js';
 import heroCtaParser from './parsers/hero-cta.js';
 
 // TRANSFORMER IMPORTS
+import videosTransformer from './transformers/credera-videos.js';
 import cleanupTransformer from './transformers/credera-cleanup.js';
 import sectionsTransformer from './transformers/credera-sections.js';
 
@@ -89,6 +90,8 @@ const PAGE_TEMPLATE = {
 // TRANSFORMER REGISTRY
 // Section transformer runs after cleanup; include it only when the template has 2+ sections.
 const transformers = [
+  // videos first: convert YouTube iframes → watch links BEFORE cleanup strips iframes.
+  videosTransformer,
   cleanupTransformer,
   ...(PAGE_TEMPLATE.sections && PAGE_TEMPLATE.sections.length > 1 ? [sectionsTransformer] : []),
 ];

@@ -549,13 +549,54 @@ var CustomImportScript = (() => {
     element.replaceWith(block);
   }
 
-  // tools/importer/transformers/credera-cleanup.js
+  // tools/importer/transformers/credera-videos.js
   var TransformHook = {
     beforeTransform: "beforeTransform",
     afterTransform: "afterTransform"
   };
+  function youtubeIdFromSrc(src) {
+    if (!src) return null;
+    let m = src.match(/(?:youtube(?:-nocookie)?\.com\/embed\/|youtu\.be\/)([\w-]{6,})/);
+    if (m) return m[1];
+    m = src.match(/[?&]v=([\w-]{6,})/);
+    return m ? m[1] : null;
+  }
+  function removeSvgPlaceholders(element) {
+    element.querySelectorAll('img[src^="data:image/svg+xml"]').forEach((img) => {
+      if ((img.getAttribute("alt") || "").trim() !== "") return;
+      (img.closest("picture") || img).remove();
+    });
+  }
   function transform(hookName, element, payload) {
-    if (hookName === TransformHook.beforeTransform) {
+    if (hookName === TransformHook.afterTransform) {
+      removeSvgPlaceholders(element);
+      return;
+    }
+    if (hookName !== TransformHook.beforeTransform) return;
+    const iframes = element.querySelectorAll('iframe[src*="youtube"], iframe[src*="youtu.be"]');
+    iframes.forEach((iframe) => {
+      const id = youtubeIdFromSrc(iframe.getAttribute("src"));
+      if (!id) return;
+      const watchUrl = `https://www.youtube.com/watch?v=${id}`;
+      const doc = iframe.ownerDocument;
+      const p = doc.createElement("p");
+      const a = doc.createElement("a");
+      a.setAttribute("href", watchUrl);
+      a.textContent = watchUrl;
+      p.appendChild(a);
+      const wrapper = iframe.closest('[class*="video__IframeWrapper"], [class*="VideoContainer"], [class*="VideoCarouselEmbed"]') || iframe;
+      wrapper.replaceWith(p);
+    });
+    removeSvgPlaceholders(element);
+  }
+
+  // tools/importer/transformers/credera-cleanup.js
+  var TransformHook2 = {
+    beforeTransform: "beforeTransform",
+    afterTransform: "afterTransform"
+  };
+  function transform2(hookName, element, payload) {
+    if (hookName === TransformHook2.beforeTransform) {
       WebImporter.DOMUtils.remove(element, [
         "#onetrust-consent-sdk",
         // Responsive DUPLICATES: the careers page renders both a desktop AND a
@@ -568,7 +609,7 @@ var CustomImportScript = (() => {
         '[class*="award-carousel__MobileCarousel"]'
       ]);
     }
-    if (hookName === TransformHook.afterTransform) {
+    if (hookName === TransformHook2.afterTransform) {
       WebImporter.DOMUtils.remove(element, [
         // Site header + top/desktop/mobile navigation.
         // Found in cleaned.html: <header class="header__HeaderWrapper..."> (line 5).
@@ -596,7 +637,7 @@ var CustomImportScript = (() => {
     }
     return null;
   }
-  function transform2(hookName, element, payload) {
+  function transform3(hookName, element, payload) {
     const sections = payload.template && payload.template.sections || [];
     if (hookName === "beforeTransform") {
       for (let i = sections.length - 1; i >= 0; i -= 1) {
@@ -699,8 +740,10 @@ var CustomImportScript = (() => {
     ]
   };
   var transformers = [
+    // videos first: convert YouTube iframes → watch links BEFORE cleanup strips iframes.
     transform,
-    ...PAGE_TEMPLATE.sections && PAGE_TEMPLATE.sections.length > 1 ? [transform2] : []
+    transform2,
+    ...PAGE_TEMPLATE.sections && PAGE_TEMPLATE.sections.length > 1 ? [transform3] : []
   ];
   function executeTransformers(hookName, element, payload) {
     const enhancedPayload = __spreadProps(__spreadValues({}, payload), {
