@@ -545,7 +545,7 @@
         {
           "name": "cards-insight",
           "instances": [
-            "div[class*=\"video-carousel__CarouselContainer\"]"
+            "div[class*=\"video-carousel__VideoList\"]"
           ]
         },
         {

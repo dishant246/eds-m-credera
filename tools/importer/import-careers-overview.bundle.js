@@ -262,6 +262,65 @@ var CustomImportScript = (() => {
 
   // tools/importer/parsers/cards-insight.js
   function parse3(element, { document: document2 }) {
+    const realImgSrc = (scope) => {
+      const imgs = Array.from(scope.querySelectorAll("picture img, img"));
+      for (const i of imgs) {
+        const s = i.getAttribute("src") || "";
+        if (s && !s.startsWith("data:")) return { src: s, alt: i.getAttribute("alt") || "" };
+      }
+      for (const src of scope.querySelectorAll("picture source")) {
+        const first = (src.getAttribute("srcset") || "").split(",")[0].trim().split(/\s+/)[0];
+        if (first && !first.startsWith("data:")) return { src: first, alt: "" };
+      }
+      return null;
+    };
+    const videoCards = Array.from(element.querySelectorAll('[class*="VideoCard"]'));
+    if (videoCards.length) {
+      const vcells = [];
+      videoCards.forEach((card) => {
+        var _a, _b;
+        const hit = realImgSrc(card);
+        const title = ((_a = card.querySelector("p")) == null ? void 0 : _a.textContent.replace(/\s+/g, " ").trim()) || "";
+        let date = ((_b = card.querySelector("span")) == null ? void 0 : _b.textContent.replace(/\s+/g, " ").trim()) || "";
+        if (!date) {
+          const DATE_RE = /\b(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*\.?\s+\d{1,2},?\s+\d{4}\b/;
+          const leaves = Array.from(card.querySelectorAll("span, time, small, div, p")).filter((el) => el.children.length === 0);
+          for (const el of leaves) {
+            const t = el.textContent.replace(/\s+/g, " ").trim();
+            if (t && t !== title && DATE_RE.test(t)) {
+              date = t;
+              break;
+            }
+          }
+        }
+        let imageCell = "";
+        if (hit) {
+          const image = document2.createElement("img");
+          image.setAttribute("src", hit.src);
+          image.setAttribute("alt", hit.alt || title);
+          imageCell = [document2.createComment(" field:image "), image];
+        }
+        const textCell = [document2.createComment(" field:text ")];
+        if (title) {
+          const h3 = document2.createElement("h3");
+          h3.textContent = title;
+          textCell.push(h3);
+        }
+        if (date) {
+          const p = document2.createElement("p");
+          p.textContent = date;
+          textCell.push(p);
+        }
+        if (textCell.length > 1 || Array.isArray(imageCell)) {
+          vcells.push([imageCell, textCell.length > 1 ? textCell : ""]);
+        }
+      });
+      if (vcells.length) {
+        const block2 = WebImporter.Blocks.createBlock(document2, { name: "cards-insight", cells: vcells });
+        element.replaceWith(block2);
+        return;
+      }
+    }
     const cards = Array.from(
       element.querySelectorAll('a[class*="InsightCard"]')
     );
@@ -765,7 +824,10 @@ var CustomImportScript = (() => {
       },
       {
         name: "cards-insight",
-        instances: ["div[class*='video-carousel__CarouselContainer']"]
+        // Target just the VideoList (the 7 thumbnail cards); the main video player
+        // (video__IframeWrapper) stays separate and is rendered by the youtube
+        // auto-block, matching the source's player-left / list-right layout.
+        instances: ["div[class*='video-carousel__VideoList']"]
       },
       {
         name: "cards-case-study",

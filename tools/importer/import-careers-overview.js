@@ -55,7 +55,10 @@ const PAGE_TEMPLATE = {
     },
     {
       name: 'cards-insight',
-      instances: ["div[class*='video-carousel__CarouselContainer']"],
+      // Target just the VideoList (the 7 thumbnail cards); the main video player
+      // (video__IframeWrapper) stays separate and is rendered by the youtube
+      // auto-block, matching the source's player-left / list-right layout.
+      instances: ["div[class*='video-carousel__VideoList']"],
     },
     {
       name: 'cards-case-study',
