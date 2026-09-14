@@ -159,3 +159,130 @@
     margin-top: 8px;
   }
 }
+
+/* =========================================================================
+   Careers variant: full-width hero image with a white content panel
+   overlapping its bottom-left corner. Scoped to :has(.hero-home-media img)
+   so the imageless homepage hero above is left completely unchanged.
+   ========================================================================= */
+
+.hero-home.block:has(.hero-home-media img) {
+  padding: 0;
+  background-color: var(--light-color);
+}
+
+/* Image band: full width, fixed-height cover strip (mobile) */
+.hero-home:has(.hero-home-media img) .hero-home-media,
+.hero-home:has(.hero-home-media img) .hero-home-media > div,
+.hero-home:has(.hero-home-media img) .hero-home-media p {
+  margin: 0;
+  padding: 0;
+  line-height: 0;
+}
+
+.hero-home:has(.hero-home-media img) .hero-home-media picture {
+  display: block;
+}
+
+.hero-home:has(.hero-home-media img) .hero-home-media img {
+  display: block;
+  width: 100%;
+  height: 300px; /* mobile banner strip */
+  object-fit: cover;
+}
+
+/* White content panel */
+.hero-home:has(.hero-home-media img) .hero-home-content {
+  position: relative;
+  z-index: 1;
+  background-color: var(--background-color); /* #fff */
+  box-sizing: border-box;
+}
+
+/* Reset the homepage grid/flex layout inside the panel */
+.hero-home:has(.hero-home-media img) .hero-home-content > div {
+  display: block;
+  max-width: none;
+  margin: 0;
+  padding: 32px 24px; /* mobile */
+}
+
+.hero-home:has(.hero-home-media img) .hero-home-content > div::before {
+  content: none;
+}
+
+/* Title: 48px/500/lh64, no transform (careers uses sentence case) */
+.hero-home:has(.hero-home-media img) h1 {
+  grid-column: auto;
+  grid-row: auto;
+  margin: 0 0 20px;
+  font-size: 36px; /* mobile */
+  font-weight: 500;
+  line-height: 1.2;
+  text-transform: none;
+}
+
+/* Intro paragraph: 16px/400/lh26 */
+.hero-home:has(.hero-home-media img)
+  .hero-home-content
+  p:not(.hero-home-eyebrow, .hero-home-cta-wrapper) {
+  grid-column: auto;
+  grid-row: auto;
+  max-width: none;
+  margin: 0 0 20px;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 26px;
+}
+
+/* CTA row: horizontal pills, wrapping on small screens */
+.hero-home:has(.hero-home-media img) .hero-home-cta-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 24px;
+}
+
+.hero-home:has(.hero-home-media img) .hero-home-cta-wrapper {
+  grid-column: auto;
+  grid-row: auto;
+  margin: 0;
+}
+
+/* Secondary pill: outlined (transparent bg, orange border, dark text) */
+.hero-home:has(.hero-home-media img) a.hero-home-cta.hero-home-cta-secondary:any-link {
+  background-color: transparent;
+  border-color: var(--brand-orange);
+  color: var(--text-color);
+}
+
+.hero-home:has(.hero-home-media img) a.hero-home-cta.hero-home-cta-secondary:any-link:hover,
+.hero-home:has(.hero-home-media img) a.hero-home-cta.hero-home-cta-secondary:any-link:focus-visible {
+  background-color: var(--brand-orange);
+  border-color: var(--brand-orange);
+  color: var(--background-color);
+}
+
+@media (width >= 900px) {
+  .hero-home:has(.hero-home-media img) .hero-home-media img {
+    height: 450px;
+  }
+
+  /* Panel: 840px wide, pinned to the left, overlapping the lower ~180px
+     of the image */
+  .hero-home:has(.hero-home-media img) .hero-home-content {
+    width: 840px;
+    max-width: calc(100% - 40px);
+    margin-top: -180px;
+  }
+
+  .hero-home:has(.hero-home-media img) .hero-home-content > div {
+    display: block;
+    padding: 60px 80px;
+  }
+
+  .hero-home:has(.hero-home-media img) h1 {
+    font-size: 48px;
+    line-height: 64px;
+  }
+}

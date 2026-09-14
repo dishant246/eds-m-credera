@@ -43,6 +43,57 @@ var CustomImportScript = (() => {
 
   // tools/importer/parsers/hero-home.js
   function parse(element, { document: document2 }) {
+    if (element.matches && element.matches('[class*="OverviewHeroSection"], [class*="OverviewHeroSection"] *') || element.querySelector('[class*="OverviewHeroTitleSection"], [class*="careers__Header"]')) {
+      const titleSection = element.querySelector('[class*="OverviewHeroTitleSection"]') || element;
+      const header = titleSection.querySelector('[class*="careers__Header"]') || titleSection;
+      const h1El = header.querySelector("h1");
+      const introEl = header.querySelector("p");
+      const ctaEls = Array.from(
+        (titleSection.querySelector('[class*="ButtonContainer"]') || element).querySelectorAll("a[href]")
+      );
+      const imgWrap = element.querySelector('[class*="HeroImageTop"], [class*="HeroImage"]');
+      let heroImg = null;
+      const candidates = imgWrap ? Array.from(imgWrap.querySelectorAll("img")) : [];
+      for (const c of candidates) {
+        const src = c.getAttribute("src") || "";
+        if (src && !src.startsWith("data:")) {
+          heroImg = c;
+          break;
+        }
+      }
+      if (h1El || introEl || ctaEls.length) {
+        const contentCell2 = [document2.createComment(" field:text ")];
+        if (h1El) {
+          const h1 = document2.createElement("h1");
+          h1.textContent = h1El.textContent.replace(/\s+/g, " ").trim();
+          contentCell2.push(h1);
+        }
+        if (introEl && introEl.textContent.trim()) {
+          const p = document2.createElement("p");
+          p.textContent = introEl.textContent.replace(/\s+/g, " ").trim();
+          contentCell2.push(p);
+        }
+        ctaEls.forEach((cta) => {
+          const p = document2.createElement("p");
+          const a = document2.createElement("a");
+          a.setAttribute("href", cta.getAttribute("href") || "#");
+          a.textContent = cta.textContent.replace(/\s+/g, " ").trim();
+          p.appendChild(a);
+          contentCell2.push(p);
+        });
+        let imageCell = "";
+        if (heroImg) {
+          const img = document2.createElement("img");
+          img.setAttribute("src", heroImg.getAttribute("src"));
+          img.setAttribute("alt", heroImg.getAttribute("alt") || "");
+          imageCell = [document2.createComment(" field:image "), img];
+        }
+        const cells2 = [[imageCell], [contentCell2]];
+        const block2 = WebImporter.Blocks.createBlock(document2, { name: "hero-home", cells: cells2 });
+        element.replaceWith(block2);
+        return;
+      }
+    }
     const subtitleEl = element.querySelector('.hero-section__Subtitle-sc-3sq6vd-2, [class*="Subtitle-sc"]');
     const subtitleText = subtitleEl ? subtitleEl.textContent.trim() : "";
     const titleSpans = Array.from(
