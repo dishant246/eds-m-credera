@@ -154,3 +154,105 @@
   height: 100%;
   background-color: var(--brand-orange);
 }
+
+/* -------------------------------------------------------------------------
+   Careers "video gallery" layout: this section pairs a main YouTube player
+   (default content, left) with the cards-insight list (right). Scoped to the
+   section container so the homepage insights gallery is unaffected.
+   ------------------------------------------------------------------------- */
+@media (width >= 900px) {
+  /* Two-column pairing of the main video player (a default-content-wrapper that
+     contains a .youtube-frame) with the immediately-following cards-insight list.
+     Scoped with :has() so ONLY the video wrapper + its sibling list are affected —
+     the Bailey Dunn columns-feature block sharing this section is untouched. */
+  .section.cards-insight-container > .default-content-wrapper:has(.youtube-frame) {
+    float: left;
+    width: 58%;
+    box-sizing: border-box;
+    padding-right: 32px;
+  }
+
+  .section.cards-insight-container
+    > .default-content-wrapper:has(.youtube-frame) + .cards-insight-wrapper {
+    float: right;
+    width: 42%;
+    box-sizing: border-box;
+  }
+
+  /* clear the floats after the pair so following content isn't affected */
+  .section.cards-insight-container
+    > .default-content-wrapper:has(.youtube-frame) + .cards-insight-wrapper::after {
+    content: "";
+    display: block;
+    clear: both;
+  }
+}
+
+/* Careers video-gallery card list: vertical stack of horizontal cards
+   (thumbnail left + title right), scrollable, first card highlighted dark.
+   Overrides the homepage horizontal-scroll gallery layout for this section. */
+.section.cards-insight-container .cards-insight {
+  background-color: transparent;
+  padding: 0;
+}
+
+.section.cards-insight-container .cards-insight > ul {
+  flex-direction: column;
+  gap: 0;
+  overflow: visible auto;
+  max-height: 420px;
+  padding: 0;
+  border: 1px solid rgb(228 231 235);
+}
+
+.section.cards-insight-container .cards-insight > ul > li {
+  flex-direction: row;
+  align-items: center;
+  gap: 16px;
+  width: auto;
+  max-width: none;
+  padding: 16px;
+  border-bottom: 1px solid rgb(228 231 235);
+}
+
+/* first card highlighted dark (source shows the active video card inverted) */
+.section.cards-insight-container .cards-insight > ul > li:first-child {
+  background-color: rgb(19 19 19);
+}
+
+/* thumbnail: fixed landscape on the left */
+.section.cards-insight-container .cards-insight .cards-insight-card-image {
+  flex: 0 0 128px;
+}
+
+.section.cards-insight-container .cards-insight .cards-insight-card-image img {
+  width: 128px;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+}
+
+/* body: title (and date if present) stacked to the right */
+.section.cards-insight-container .cards-insight .cards-insight-card-body {
+  display: block;
+  flex: 1 1 auto;
+  padding: 0;
+}
+
+.section.cards-insight-container .cards-insight .cards-insight-card-body h3 {
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 24px;
+}
+
+.section.cards-insight-container .cards-insight .cards-insight-card-body p {
+  margin-top: 4px;
+  font-size: 14px;
+  color: rgb(107 114 128);
+  text-transform: none;
+}
+
+/* first (active) card's title inverted to white — placed after the base h3 rule
+   to satisfy descending-specificity ordering */
+.section.cards-insight-container .cards-insight > ul > li:first-child .cards-insight-card-body h3 {
+  color: #fff;
+}
