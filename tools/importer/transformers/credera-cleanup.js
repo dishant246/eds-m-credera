@@ -28,6 +28,10 @@ export default function transform(hookName, element, payload) {
       // Remove them before parsing so each block's content appears exactly once.
       '[class*="office-carousel__MobileColumnContainer"]',
       '[class*="award-carousel__MobileCarousel"]',
+      // Bailey Dunn "featured content" callout: the mobile variant duplicates the
+      // desktop #featuredContent callout and would otherwise import as a second,
+      // raw copy below the columns-feature block.
+      '[class*="elevated-content__ElevatedContentMobile"]',
     ]);
   }
 
