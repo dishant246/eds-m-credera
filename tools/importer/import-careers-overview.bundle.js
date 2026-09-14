@@ -252,9 +252,11 @@ var CustomImportScript = (() => {
       if (realImg.getAttribute("alt")) image.setAttribute("alt", realImg.getAttribute("alt"));
       mediaCell = image;
     }
+    const isFeatured = element.id === "featuredContent" || element.closest && element.closest("#featuredContent") || element.matches && element.matches('[class*="elevated-content"], [class*="ElevatedContent"]') || !!element.querySelector('[class*="elevated-content"], [class*="ElevatedContent"]') || !!element.querySelector("h5");
+    const blockName = isFeatured ? "columns-feature (featured, image-left)" : "columns-feature";
     const cells = [];
     cells.push([textCell.length ? textCell : "", mediaCell]);
-    const block = WebImporter.Blocks.createBlock(document2, { name: "columns-feature", cells });
+    const block = WebImporter.Blocks.createBlock(document2, { name: blockName, cells });
     element.replaceWith(block);
   }
 
@@ -657,7 +659,11 @@ var CustomImportScript = (() => {
         // through as raw default content (duplicated office cards / award badges).
         // Remove them before parsing so each block's content appears exactly once.
         '[class*="office-carousel__MobileColumnContainer"]',
-        '[class*="award-carousel__MobileCarousel"]'
+        '[class*="award-carousel__MobileCarousel"]',
+        // Bailey Dunn "featured content" callout: the mobile variant duplicates the
+        // desktop #featuredContent callout and would otherwise import as a second,
+        // raw copy below the columns-feature block.
+        '[class*="elevated-content__ElevatedContentMobile"]'
       ]);
     }
     if (hookName === TransformHook2.afterTransform) {

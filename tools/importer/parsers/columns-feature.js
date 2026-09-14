@@ -123,10 +123,20 @@ export default function parse(element, { document }) {
     mediaCell = image;
   }
 
+  // --- Detect the "featured" callout shape (#featuredContent / elevated-content):
+  // grey panel with the image overlapping on the left. Tagged as an option so the
+  // block CSS can render it distinctly from the plain "Life at Credera" row. ---
+  const isFeatured = (element.id === 'featuredContent')
+    || (element.closest && element.closest('#featuredContent'))
+    || (element.matches && element.matches('[class*="elevated-content"], [class*="ElevatedContent"]'))
+    || !!element.querySelector('[class*="elevated-content"], [class*="ElevatedContent"]')
+    || !!element.querySelector('h5');
+  const blockName = isFeatured ? 'columns-feature (featured, image-left)' : 'columns-feature';
+
   const cells = [];
   // Row 2: two columns — text, then media
   cells.push([textCell.length ? textCell : '', mediaCell]);
 
-  const block = WebImporter.Blocks.createBlock(document, { name: 'columns-feature', cells });
+  const block = WebImporter.Blocks.createBlock(document, { name: blockName, cells });
   element.replaceWith(block);
 }

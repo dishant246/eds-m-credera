@@ -150,3 +150,89 @@ main .columns-feature .columns-feature-text a.button:any-link:hover {
     order: 1;
   }
 }
+
+/* -------------------------------------------------------------------------
+   "featured" variant (Bailey Dunn callout): a grey text panel with the image
+   overlapping on its left edge. Source: #featuredContent (elevated-content).
+   ------------------------------------------------------------------------- */
+.columns-feature.featured > div {
+  position: relative;
+  flex-direction: column;
+  gap: 0;
+}
+
+/* image sits on top on mobile */
+.columns-feature.featured .columns-feature-media {
+  order: 0;
+  width: 100%;
+  max-width: none;
+}
+
+.columns-feature.featured .columns-feature-media img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
+/* grey text panel */
+.columns-feature.featured .columns-feature-text {
+  order: 1;
+  gap: 12px;
+  padding: 32px 24px;
+  background-color: rgb(207 207 207);
+}
+
+/* featured heading is smaller than the plain feature row (source: 24px/500/36) */
+.columns-feature.featured .columns-feature-text h2 {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 500;
+  line-height: 36px;
+}
+
+.columns-feature.featured .columns-feature-text p {
+  margin: 0;
+  font-size: 16px;
+  line-height: 26px;
+}
+
+@media (width >= 900px) {
+  /* Desktop: image (left) overlaps the grey panel, which extends to the right. */
+  .columns-feature.featured > div {
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 0;
+    padding-left: 36px; /* room for the overlapping image */
+  }
+
+  .columns-feature.featured .columns-feature-media {
+    order: 0;
+    flex: 0 0 224px;
+    max-width: 224px;
+    margin-right: -36px; /* overlap the panel's left edge */
+    z-index: 1;
+  }
+
+  .columns-feature.featured .columns-feature-media img {
+    width: 224px;
+    height: 220px;
+    object-fit: cover;
+  }
+
+  .columns-feature.featured .columns-feature-text {
+    order: 1;
+    flex: 1 1 auto;
+    padding: 36px 32px 36px 68px; /* extra left padding clears the image overlap */
+  }
+
+  .columns-feature.featured .columns-feature-text h2 {
+    font-size: 24px;
+    line-height: 36px;
+  }
+
+  .columns-feature.featured .columns-feature-text p {
+    font-size: 16px;
+    line-height: 26px;
+  }
+}
