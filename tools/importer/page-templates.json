@@ -532,14 +532,16 @@
         {
           "name": "hero-home",
           "instances": [
-            "div[class*=\"careers__OverviewHeroSection\"]"
+            "div[class*=\"careers__OverviewHeroSection\"]",
+            "div[class*=\"hero-section__OverviewHeroTitleSection\"]"
           ]
         },
         {
           "name": "columns-feature",
           "instances": [
             "div[class*=\"image-with-titleset__SectionContainer\"]:has(img)",
-            "#featuredContent"
+            "#featuredContent",
+            "div[class*=\"featured-content-card__FeaturedContentCardContainer\"]"
           ]
         },
         {
@@ -570,6 +572,14 @@
           "name": "hero-cta",
           "instances": [
             "div[class*=\"footer-cta__FooterCtaWrapper\"]"
+          ]
+        },
+        {
+          "name": "cards-industry",
+          "instances": [
+            "div[class*=\"experienced-professionals__GridWrapper\"]",
+            "div[class*=\"grid__StyledGrid\"]:has(a[class*=\"internal-link__StyledLink\"] h5)",
+            "div[class*=\"point-of-view-section__Columns\"]"
           ]
         }
       ],

@@ -31,6 +31,120 @@ function slugFromHref(href) {
 }
 
 export default function parse(element, { document }) {
+  // Shared helper: first real (non-data/blob) image src within a scope.
+  const realSrc = (scope) => {
+    for (const i of scope.querySelectorAll('img')) {
+      const s = i.getAttribute('src') || '';
+      if (s && !s.startsWith('data:') && !s.startsWith('blob:')) return { src: s, alt: i.getAttribute('alt') || '' };
+    }
+    return null;
+  };
+  // Shared helper: build a [image, text] card row from icon + title + optional
+  // description + optional link. Text cell = h3 (linked if href) + description p.
+  const buildIconCard = (hit, title, desc, href) => {
+    let imageCell = '';
+    if (hit) {
+      const img = document.createElement('img');
+      img.setAttribute('src', hit.src);
+      if (hit.alt || title) img.setAttribute('alt', hit.alt || title);
+      imageCell = [document.createComment(' field:image '), img];
+    }
+    const textCell = [document.createComment(' field:text ')];
+    if (title) {
+      const h3 = document.createElement('h3');
+      if (href) {
+        const a = document.createElement('a');
+        a.setAttribute('href', href);
+        a.textContent = title;
+        h3.appendChild(a);
+      } else {
+        h3.textContent = title;
+      }
+      textCell.push(h3);
+    }
+    if (desc) {
+      const p = document.createElement('p');
+      p.textContent = desc;
+      textCell.push(p);
+    }
+    return (textCell.length > 1 || Array.isArray(imageCell))
+      ? [imageCell, textCell.length > 1 ? textCell : ''] : null;
+  };
+
+  // ---- Careers "Our Teams" cards (experienced-professionals: offering-card) ----
+  // Each card: icon + <h2> title + <p> description (no link). Icons are blob:/data:
+  // client-rendered, so no real src survives — cards render text-only (image cell empty).
+  const offeringCards = Array.from(element.querySelectorAll('[class*="offering-card__WrapperContainer"]'));
+  if (offeringCards.length) {
+    const oCells = [];
+    offeringCards.forEach((card) => {
+      const title = card.querySelector('h1,h2,h3,h4,h5')?.textContent.replace(/\s+/g, ' ').trim() || '';
+      const desc = card.querySelector('p')?.textContent.replace(/\s+/g, ' ').trim() || '';
+      const row = buildIconCard(realSrc(card), title, desc, null);
+      if (row) oCells.push(row);
+    });
+    if (oCells.length) {
+      element.replaceWith(WebImporter.Blocks.createBlock(document, { name: 'cards-industry', cells: oCells }));
+      return;
+    }
+  }
+
+  // ---- Careers "Find your fit" practice cards (students: internal-link cards) ----
+  // Each card: <a href> wrapping an icon + <h5> title + <p> description.
+  const practiceCards = Array.from(element.querySelectorAll('a[class*="internal-link__StyledLink"]'))
+    .filter((a) => a.querySelector('img') && a.querySelector('h1,h2,h3,h4,h5'));
+  if (practiceCards.length) {
+    const pCells = [];
+    practiceCards.forEach((card) => {
+      const title = card.querySelector('h1,h2,h3,h4,h5')?.textContent.replace(/\s+/g, ' ').trim() || '';
+      const desc = card.querySelector('p')?.textContent.replace(/\s+/g, ' ').trim() || '';
+      const row = buildIconCard(realSrc(card), title, desc, card.getAttribute('href') || '');
+      if (row) pCells.push(row);
+    });
+    if (pCells.length) {
+      element.replaceWith(WebImporter.Blocks.createBlock(document, { name: 'cards-industry', cells: pCells }));
+      return;
+    }
+  }
+
+  // ---- Careers "Recruitment process" steps (experienced: point-of-view Column) ----
+  // Each step: a number ("1".."4") + <h4> title + <p> description. No image; the
+  // number is prepended to the title so the step order survives as text.
+  // Match ONLY the innermost step card (point-of-view-section__Column), not the
+  // outer Columns grid or the ColumnWrapper — the [class*=Column] substring hits
+  // all three nesting levels, which would capture each step multiple times.
+  const stepCards = Array.from(element.querySelectorAll('[class*="point-of-view-section__Column"]'))
+    .filter((c) => {
+      if (!c.querySelector('h1,h2,h3,h4,h5')) return false;
+      const family = (c.className || '').split(' ').find((x) => x.includes('point-of-view-section__Column')) || '';
+      // keep leaf "Column-sc-..." only (exclude "Columns" and "ColumnWrapper")
+      return /point-of-view-section__Column-/.test(family);
+    });
+  if (stepCards.length) {
+    const sCells = [];
+    stepCards.forEach((card) => {
+      const title = card.querySelector('h1,h2,h3,h4,h5')?.textContent.replace(/\s+/g, ' ').trim() || '';
+      const desc = card.querySelector('p')?.textContent.replace(/\s+/g, ' ').trim() || '';
+      // The step number lives as a sibling leaf in the parent ColumnWrapper,
+      // not inside the leaf Column — scan the parent for a short numeric leaf.
+      let num = '';
+      const scope = card.parentElement || card;
+      for (const el of scope.querySelectorAll('*')) {
+        if (el.children.length === 0) {
+          const t = el.textContent.trim();
+          if (/^\d{1,2}$/.test(t)) { num = t; break; }
+        }
+      }
+      const titleText = num ? `${num}. ${title}` : title;
+      const row = buildIconCard(null, titleText, desc, null);
+      if (row) sCells.push(row);
+    });
+    if (sCells.length) {
+      element.replaceWith(WebImporter.Blocks.createBlock(document, { name: 'cards-industry', cells: sCells }));
+      return;
+    }
+  }
+
   const links = Array.from(
     element.querySelectorAll('a[class*="IndustryLinkContainer"]'),
   );

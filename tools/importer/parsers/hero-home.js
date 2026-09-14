@@ -18,14 +18,17 @@ export default function parse(element, { document }) {
     const header = titleSection.querySelector('[class*="careers__Header"]') || titleSection;
     const h1El = header.querySelector('h1');
     const introEl = header.querySelector('p');
+    // CTAs: only real links (href). The students hero's "See Open Positions" is a
+    // hrefless <button> (JS scroll) — skip it since it can't become a usable link.
     const ctaEls = Array.from(
-      (titleSection.querySelector('[class*="ButtonContainer"]') || element)
+      (titleSection.querySelector('[class*="ButtonContainer"]') || titleSection)
         .querySelectorAll('a[href]'),
     );
-    // Hero image: prefer a real (non-placeholder) src in the HeroImageTop wrapper.
-    const imgWrap = element.querySelector('[class*="HeroImageTop"], [class*="HeroImage"]');
+    // Hero image: prefer a real (non-placeholder) src. Covers HeroImageTop (main
+    // careers) and HeroImage1/HeroImage2 (students/experienced sub-pages).
+    const imgWrap = element.querySelector('[class*="HeroImageTop"], [class*="HeroImage"]') || element;
     let heroImg = null;
-    const candidates = imgWrap ? Array.from(imgWrap.querySelectorAll('img')) : [];
+    const candidates = Array.from(imgWrap.querySelectorAll('img'));
     for (const c of candidates) {
       const src = c.getAttribute('src') || '';
       if (src && !src.startsWith('data:')) { heroImg = c; break; }
