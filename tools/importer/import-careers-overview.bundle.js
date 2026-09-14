@@ -49,11 +49,11 @@ var CustomImportScript = (() => {
       const h1El = header.querySelector("h1");
       const introEl = header.querySelector("p");
       const ctaEls = Array.from(
-        (titleSection.querySelector('[class*="ButtonContainer"]') || element).querySelectorAll("a[href]")
+        (titleSection.querySelector('[class*="ButtonContainer"]') || titleSection).querySelectorAll("a[href]")
       );
-      const imgWrap = element.querySelector('[class*="HeroImageTop"], [class*="HeroImage"]');
+      const imgWrap = element.querySelector('[class*="HeroImageTop"], [class*="HeroImage"]') || element;
       let heroImg = null;
-      const candidates = imgWrap ? Array.from(imgWrap.querySelectorAll("img")) : [];
+      const candidates = Array.from(imgWrap.querySelectorAll("img"));
       for (const c of candidates) {
         const src = c.getAttribute("src") || "";
         if (src && !src.startsWith("data:")) {
@@ -624,8 +624,167 @@ var CustomImportScript = (() => {
     element.replaceWith(block);
   }
 
-  // tools/importer/parsers/hero-cta.js
+  // tools/importer/parsers/cards-industry.js
+  var ICON_BY_SLUG = {
+    "consumer": "/icons/industry-consumer.svg",
+    "energy-and-resources": "/icons/industry-energy-resources.svg",
+    "financial-services": "/icons/industry-financial-services.svg",
+    "healthcare-life-sciences": "/icons/industry-healthcare-life-sciences.svg",
+    "technology-media-telecommunications": "/icons/industry-tech-media-telecom.svg",
+    "publicsector": "/icons/industry-public-sector.svg",
+    "business-and-industrial-markets": "/icons/industry-business-industrial-markets.svg"
+  };
+  function slugFromHref(href) {
+    const m = (href || "").match(/\/industries\/([^/?#]+)/);
+    return m ? m[1] : "";
+  }
   function parse7(element, { document: document2 }) {
+    const realSrc = (scope) => {
+      for (const i of scope.querySelectorAll("img")) {
+        const s = i.getAttribute("src") || "";
+        if (s && !s.startsWith("data:") && !s.startsWith("blob:")) return { src: s, alt: i.getAttribute("alt") || "" };
+      }
+      return null;
+    };
+    const buildIconCard = (hit, title, desc, href) => {
+      let imageCell = "";
+      if (hit) {
+        const img = document2.createElement("img");
+        img.setAttribute("src", hit.src);
+        if (hit.alt || title) img.setAttribute("alt", hit.alt || title);
+        imageCell = [document2.createComment(" field:image "), img];
+      }
+      const textCell = [document2.createComment(" field:text ")];
+      if (title) {
+        const h3 = document2.createElement("h3");
+        if (href) {
+          const a = document2.createElement("a");
+          a.setAttribute("href", href);
+          a.textContent = title;
+          h3.appendChild(a);
+        } else {
+          h3.textContent = title;
+        }
+        textCell.push(h3);
+      }
+      if (desc) {
+        const p = document2.createElement("p");
+        p.textContent = desc;
+        textCell.push(p);
+      }
+      return textCell.length > 1 || Array.isArray(imageCell) ? [imageCell, textCell.length > 1 ? textCell : ""] : null;
+    };
+    const offeringCards = Array.from(element.querySelectorAll('[class*="offering-card__WrapperContainer"]'));
+    if (offeringCards.length) {
+      const oCells = [];
+      offeringCards.forEach((card) => {
+        var _a, _b;
+        const title = ((_a = card.querySelector("h1,h2,h3,h4,h5")) == null ? void 0 : _a.textContent.replace(/\s+/g, " ").trim()) || "";
+        const desc = ((_b = card.querySelector("p")) == null ? void 0 : _b.textContent.replace(/\s+/g, " ").trim()) || "";
+        const row = buildIconCard(realSrc(card), title, desc, null);
+        if (row) oCells.push(row);
+      });
+      if (oCells.length) {
+        element.replaceWith(WebImporter.Blocks.createBlock(document2, { name: "cards-industry", cells: oCells }));
+        return;
+      }
+    }
+    const practiceCards = Array.from(element.querySelectorAll('a[class*="internal-link__StyledLink"]')).filter((a) => a.querySelector("img") && a.querySelector("h1,h2,h3,h4,h5"));
+    if (practiceCards.length) {
+      const pCells = [];
+      practiceCards.forEach((card) => {
+        var _a, _b;
+        const title = ((_a = card.querySelector("h1,h2,h3,h4,h5")) == null ? void 0 : _a.textContent.replace(/\s+/g, " ").trim()) || "";
+        const desc = ((_b = card.querySelector("p")) == null ? void 0 : _b.textContent.replace(/\s+/g, " ").trim()) || "";
+        const row = buildIconCard(realSrc(card), title, desc, card.getAttribute("href") || "");
+        if (row) pCells.push(row);
+      });
+      if (pCells.length) {
+        element.replaceWith(WebImporter.Blocks.createBlock(document2, { name: "cards-industry", cells: pCells }));
+        return;
+      }
+    }
+    const stepCards = Array.from(element.querySelectorAll('[class*="point-of-view-section__Column"]')).filter((c) => {
+      if (!c.querySelector("h1,h2,h3,h4,h5")) return false;
+      const family = (c.className || "").split(" ").find((x) => x.includes("point-of-view-section__Column")) || "";
+      return /point-of-view-section__Column-/.test(family);
+    });
+    if (stepCards.length) {
+      const sCells = [];
+      stepCards.forEach((card) => {
+        var _a, _b;
+        const title = ((_a = card.querySelector("h1,h2,h3,h4,h5")) == null ? void 0 : _a.textContent.replace(/\s+/g, " ").trim()) || "";
+        const desc = ((_b = card.querySelector("p")) == null ? void 0 : _b.textContent.replace(/\s+/g, " ").trim()) || "";
+        let num = "";
+        const scope = card.parentElement || card;
+        for (const el of scope.querySelectorAll("*")) {
+          if (el.children.length === 0) {
+            const t = el.textContent.trim();
+            if (/^\d{1,2}$/.test(t)) {
+              num = t;
+              break;
+            }
+          }
+        }
+        const titleText = num ? `${num}. ${title}` : title;
+        const row = buildIconCard(null, titleText, desc, null);
+        if (row) sCells.push(row);
+      });
+      if (sCells.length) {
+        element.replaceWith(WebImporter.Blocks.createBlock(document2, { name: "cards-industry", cells: sCells }));
+        return;
+      }
+    }
+    const links = Array.from(
+      element.querySelectorAll('a[class*="IndustryLinkContainer"]')
+    );
+    const cells = [];
+    links.forEach((link) => {
+      const href = link.getAttribute("href") || "";
+      const nameParts = Array.from(link.querySelectorAll('[class*="IndustryNameText"]')).map((s) => s.textContent.replace(/\s+/g, " ").trim()).filter(Boolean);
+      const name = nameParts.join(" ").replace(/\s+/g, " ").trim();
+      const img = link.querySelector("img");
+      const slug = slugFromHref(href);
+      let src = ICON_BY_SLUG[slug] || "";
+      if (!src && img) {
+        const liveSrc = img.getAttribute("src") || "";
+        if (liveSrc && !liveSrc.startsWith("blob:")) src = liveSrc;
+      }
+      const alt = img && img.getAttribute("alt") || (name ? name + " icon" : "");
+      let imageCell = "";
+      if (src) {
+        const picture = document2.createElement("img");
+        picture.setAttribute("src", src);
+        if (alt) picture.setAttribute("alt", alt);
+        imageCell = [document2.createComment(" field:image "), picture];
+      }
+      const textCell = [document2.createComment(" field:text ")];
+      if (name) {
+        const h3 = document2.createElement("h3");
+        if (href) {
+          const a = document2.createElement("a");
+          a.setAttribute("href", href);
+          a.textContent = name;
+          h3.appendChild(a);
+        } else {
+          h3.textContent = name;
+        }
+        textCell.push(h3);
+      }
+      if (textCell.length > 1 || Array.isArray(imageCell)) {
+        cells.push([imageCell, textCell.length > 1 ? textCell : ""]);
+      }
+    });
+    if (cells.length === 0) {
+      element.replaceWith(...element.childNodes);
+      return;
+    }
+    const block = WebImporter.Blocks.createBlock(document2, { name: "cards-industry", cells });
+    element.replaceWith(block);
+  }
+
+  // tools/importer/parsers/hero-cta.js
+  function parse8(element, { document: document2 }) {
     const titleEl = element.querySelector('h1, h2, [class*="MainTitle"]');
     const bodyEl = element.querySelector('[class*="BodyText"] p, [class*="BodyText"]');
     const ctaSource = element.querySelector('[class*="ButtonContainer"] a, a[class*="StyledLink"]');
@@ -794,7 +953,8 @@ var CustomImportScript = (() => {
     "cards-case-study": parse4,
     "carousel-awards": parse5,
     "cards-office": parse6,
-    "hero-cta": parse7
+    "cards-industry": parse7,
+    "hero-cta": parse8
   };
   var PAGE_TEMPLATE = {
     name: "careers-overview",
@@ -810,7 +970,11 @@ var CustomImportScript = (() => {
     blocks: [
       {
         name: "hero-home",
-        instances: ["div[class*='careers__OverviewHeroSection']"]
+        instances: [
+          "div[class*='careers__OverviewHeroSection']",
+          // students / experienced-professionals hero (same hero-section family)
+          "div[class*='hero-section__OverviewHeroTitleSection']"
+        ]
       },
       {
         name: "columns-feature",
@@ -819,7 +983,22 @@ var CustomImportScript = (() => {
           // "Leaving a legacy" statement uses the same class but is default content
           // (no image), so scope with :has(img) to exclude it.
           "div[class*='image-with-titleset__SectionContainer']:has(img)",
-          "#featuredContent"
+          "#featuredContent",
+          // experienced-professionals Forbes award callout (featured variant —
+          // the parser auto-tags it via its <h5> heading)
+          "div[class*='featured-content-card__FeaturedContentCardContainer']"
+        ]
+      },
+      {
+        name: "cards-industry",
+        instances: [
+          // experienced-professionals "Our Teams" (7 category cards: icon + h2 + desc)
+          "div[class*='experienced-professionals__GridWrapper']",
+          // students "Find your fit" practice cards (icon + h5 + desc + link).
+          // No unique wrapper class, so scope a grid that contains practice-card links.
+          "div[class*='grid__StyledGrid']:has(a[class*='internal-link__StyledLink'] h5)",
+          // experienced-professionals recruitment process steps (number + h4 + desc)
+          "div[class*='point-of-view-section__Columns']"
         ]
       },
       {

@@ -8,6 +8,7 @@ import cardsInsightParser from './parsers/cards-insight.js';
 import cardsCaseStudyParser from './parsers/cards-case-study.js';
 import carouselAwardsParser from './parsers/carousel-awards.js';
 import cardsOfficeParser from './parsers/cards-office.js';
+import cardsIndustryParser from './parsers/cards-industry.js';
 import heroCtaParser from './parsers/hero-cta.js';
 
 // TRANSFORMER IMPORTS
@@ -23,6 +24,7 @@ const parsers = {
   'cards-case-study': cardsCaseStudyParser,
   'carousel-awards': carouselAwardsParser,
   'cards-office': cardsOfficeParser,
+  'cards-industry': cardsIndustryParser,
   'hero-cta': heroCtaParser,
 };
 
@@ -41,7 +43,11 @@ const PAGE_TEMPLATE = {
   blocks: [
     {
       name: 'hero-home',
-      instances: ["div[class*='careers__OverviewHeroSection']"],
+      instances: [
+        "div[class*='careers__OverviewHeroSection']",
+        // students / experienced-professionals hero (same hero-section family)
+        "div[class*='hero-section__OverviewHeroTitleSection']",
+      ],
     },
     {
       name: 'columns-feature',
@@ -51,6 +57,21 @@ const PAGE_TEMPLATE = {
         // (no image), so scope with :has(img) to exclude it.
         "div[class*='image-with-titleset__SectionContainer']:has(img)",
         '#featuredContent',
+        // experienced-professionals Forbes award callout (featured variant —
+        // the parser auto-tags it via its <h5> heading)
+        "div[class*='featured-content-card__FeaturedContentCardContainer']",
+      ],
+    },
+    {
+      name: 'cards-industry',
+      instances: [
+        // experienced-professionals "Our Teams" (7 category cards: icon + h2 + desc)
+        "div[class*='experienced-professionals__GridWrapper']",
+        // students "Find your fit" practice cards (icon + h5 + desc + link).
+        // No unique wrapper class, so scope a grid that contains practice-card links.
+        "div[class*='grid__StyledGrid']:has(a[class*='internal-link__StyledLink'] h5)",
+        // experienced-professionals recruitment process steps (number + h4 + desc)
+        "div[class*='point-of-view-section__Columns']",
       ],
     },
     {
