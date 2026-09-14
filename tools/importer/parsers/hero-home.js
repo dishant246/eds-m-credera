@@ -7,6 +7,67 @@
  * Fields: image (reference), imageAlt (collapsed), text (richtext).
  */
 export default function parse(element, { document }) {
+  // ---- Careers overview hero (careers__OverviewHeroSection) ----
+  // Different DOM from the homepage hero: a HeroImageTop background image, a
+  // Header with the H1 + a plain intro <p>, and a ButtonContainer with TWO CTAs
+  // ("Experienced Professionals" + "Students"). Handle it explicitly so the
+  // image, intro paragraph, and both CTAs all survive.
+  if (element.matches && element.matches('[class*="OverviewHeroSection"], [class*="OverviewHeroSection"] *')
+    || element.querySelector('[class*="OverviewHeroTitleSection"], [class*="careers__Header"]')) {
+    const titleSection = element.querySelector('[class*="OverviewHeroTitleSection"]') || element;
+    const header = titleSection.querySelector('[class*="careers__Header"]') || titleSection;
+    const h1El = header.querySelector('h1');
+    const introEl = header.querySelector('p');
+    const ctaEls = Array.from(
+      (titleSection.querySelector('[class*="ButtonContainer"]') || element)
+        .querySelectorAll('a[href]'),
+    );
+    // Hero image: prefer a real (non-placeholder) src in the HeroImageTop wrapper.
+    const imgWrap = element.querySelector('[class*="HeroImageTop"], [class*="HeroImage"]');
+    let heroImg = null;
+    const candidates = imgWrap ? Array.from(imgWrap.querySelectorAll('img')) : [];
+    for (const c of candidates) {
+      const src = c.getAttribute('src') || '';
+      if (src && !src.startsWith('data:')) { heroImg = c; break; }
+    }
+
+    if (h1El || introEl || ctaEls.length) {
+      const contentCell = [document.createComment(' field:text ')];
+      if (h1El) {
+        const h1 = document.createElement('h1');
+        h1.textContent = h1El.textContent.replace(/\s+/g, ' ').trim();
+        contentCell.push(h1);
+      }
+      if (introEl && introEl.textContent.trim()) {
+        const p = document.createElement('p');
+        p.textContent = introEl.textContent.replace(/\s+/g, ' ').trim();
+        contentCell.push(p);
+      }
+      ctaEls.forEach((cta) => {
+        const p = document.createElement('p');
+        const a = document.createElement('a');
+        a.setAttribute('href', cta.getAttribute('href') || '#');
+        a.textContent = cta.textContent.replace(/\s+/g, ' ').trim();
+        p.appendChild(a);
+        contentCell.push(p);
+      });
+
+      // Row 1: hero image (field:image) if present; else empty.
+      let imageCell = '';
+      if (heroImg) {
+        const img = document.createElement('img');
+        img.setAttribute('src', heroImg.getAttribute('src'));
+        img.setAttribute('alt', heroImg.getAttribute('alt') || '');
+        imageCell = [document.createComment(' field:image '), img];
+      }
+
+      const cells = [[imageCell], [contentCell]];
+      const block = WebImporter.Blocks.createBlock(document, { name: 'hero-home', cells });
+      element.replaceWith(block);
+      return;
+    }
+  }
+
   // --- Extract eyebrow / subtitle ---
   const subtitleEl = element.querySelector('.hero-section__Subtitle-sc-3sq6vd-2, [class*="Subtitle-sc"]');
   const subtitleText = subtitleEl ? subtitleEl.textContent.trim() : '';
