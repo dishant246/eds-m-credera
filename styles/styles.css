@@ -417,6 +417,59 @@ main .hero-video-band .hero-video-sticker {
   z-index: 2;
 }
 
+/* "Leaving a legacy" section: video + heading + paragraph laid out two-up
+   (video left ~60%, heading/paragraph right), matching the source. Scoped to a
+   default-content wrapper whose FIRST child is the youtube video, so the
+   "Learn about life" video gallery (heading first) is unaffected. */
+@media (width >= 900px) {
+  /* Two columns: video left, text right. Every text row is placed in the SAME
+     grid row as the video and vertically centered, so the heading + paragraph
+     group stays together (centered beside the video) instead of the rows
+     stretching apart across the video's height. */
+  main .default-content-wrapper:has(> p.youtube:first-child) {
+    display: grid;
+    grid-template-columns: 1.6fr 1fr;
+
+    /* two equal rows; the video spans both, the heading sits at the bottom of
+       row 1 and the paragraph at the top of row 2, so the text pair meets at
+       the video's vertical center as a tight group */
+    grid-template-rows: 1fr 1fr;
+    column-gap: 60px;
+  }
+
+  /* video: left column, spanning both rows (defines the section height) */
+  main .default-content-wrapper:has(> p.youtube:first-child) > p.youtube {
+    grid-column: 1;
+    grid-row: 1 / 3;
+    align-self: center;
+    margin: 0;
+  }
+
+  main .default-content-wrapper:has(> p.youtube:first-child) > :not(p.youtube) {
+    grid-column: 2;
+    text-align: left;
+  }
+
+  /* heading: bottom of row 1 (just above vertical center) */
+  main .default-content-wrapper:has(> p.youtube:first-child) > h2 {
+    grid-row: 1;
+    align-self: end;
+    margin: 0;
+    font-size: 40px;
+    font-weight: 500;
+    line-height: 56px;
+  }
+
+  /* paragraph: top of row 2 (just below vertical center) */
+  main .default-content-wrapper:has(> p.youtube:first-child) > p:not(.youtube) {
+    grid-row: 2;
+    align-self: start;
+    margin: 16px 0 0;
+    font-size: 16px;
+    line-height: 26px;
+  }
+}
+
 main .hero-video-band .hero-video-sticker img {
   width: 100%;
   height: 100%;
