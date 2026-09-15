@@ -9,6 +9,7 @@ import cardsCaseStudyParser from './parsers/cards-case-study.js';
 import carouselAwardsParser from './parsers/carousel-awards.js';
 import cardsOfficeParser from './parsers/cards-office.js';
 import cardsIndustryParser from './parsers/cards-industry.js';
+import cardsTestimonialParser from './parsers/cards-testimonial.js';
 import heroCtaParser from './parsers/hero-cta.js';
 
 // TRANSFORMER IMPORTS
@@ -25,6 +26,7 @@ const parsers = {
   'carousel-awards': carouselAwardsParser,
   'cards-office': cardsOfficeParser,
   'cards-industry': cardsIndustryParser,
+  'cards-testimonial': cardsTestimonialParser,
   'hero-cta': heroCtaParser,
 };
 
@@ -72,6 +74,15 @@ const PAGE_TEMPLATE = {
         "div[class*='grid__StyledGrid']:has(a[class*='internal-link__StyledLink'] h5)",
         // experienced-professionals recruitment process steps (number + h4 + desc)
         "div[class*='point-of-view-section__Columns']",
+      ],
+    },
+    {
+      name: 'cards-testimonial',
+      // students / experienced-professionals "Click to see …" quote carousel.
+      // Target the slider track that holds the QuoteWrapper cards.
+      instances: [
+        "div[class*='styles-module_sliderBase']:has([class*='quote-carousel-level-one__QuoteWrapper'])",
+        "div[class*='quote-carousel-level-one__CarouselWrapper']",
       ],
     },
     {

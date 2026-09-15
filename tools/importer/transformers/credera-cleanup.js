@@ -32,6 +32,12 @@ export default function transform(hookName, element, payload) {
       // desktop #featuredContent callout and would otherwise import as a second,
       // raw copy below the columns-feature block.
       '[class*="elevated-content__ElevatedContentMobile"]',
+      // Students / experienced-professionals testimonial quote carousel: the
+      // MobileSlider duplicates the 7 (or 5) desktop QuoteWrapper cards. The
+      // cards-testimonial parser reads the DesktopSlider; remove the mobile copy
+      // so the same testimonials don't fall through as raw default content below
+      // the block.
+      '[class*="quote-carousel-level-one__MobileSlider"]',
     ]);
   }
 

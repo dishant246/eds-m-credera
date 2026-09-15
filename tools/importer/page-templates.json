@@ -581,6 +581,13 @@
             "div[class*=\"grid__StyledGrid\"]:has(a[class*=\"internal-link__StyledLink\"] h5)",
             "div[class*=\"point-of-view-section__Columns\"]"
           ]
+        },
+        {
+          "name": "cards-testimonial",
+          "instances": [
+            "div[class*=\"styles-module_sliderBase\"]:has([class*=\"quote-carousel-level-one__QuoteWrapper\"])",
+            "div[class*=\"quote-carousel-level-one__CarouselWrapper\"]"
+          ]
         }
       ],
       "representativeUrl": "https://credera.com/en-us/careers",
