@@ -840,11 +840,28 @@ var CustomImportScript = (() => {
   // tools/importer/parsers/hero-cta.js
   function parse9(element, { document: document2 }) {
     const titleEl = element.querySelector('h1, h2, [class*="MainTitle"]');
-    const bodyEl = element.querySelector('[class*="BodyText"] p, [class*="BodyText"]');
-    const ctaSource = element.querySelector('[class*="ButtonContainer"] a, a[class*="StyledLink"]');
     const titleText = titleEl ? titleEl.textContent.trim() : "";
-    const bodyText = bodyEl ? bodyEl.textContent.replace(/\s+/g, " ").trim() : "";
-    if (!titleText && !bodyText) {
+    let bodyText = "";
+    const bodyExplicit = element.querySelector('[class*="BodyText"] p, [class*="BodyText"], [class*="TitleSetText"]');
+    if (bodyExplicit && !bodyExplicit.querySelector("a")) {
+      bodyText = bodyExplicit.textContent.replace(/\s+/g, " ").trim();
+    }
+    if (!bodyText) {
+      const p = Array.from(element.querySelectorAll("p")).find((el) => !el.querySelector("a") && el.textContent.trim());
+      if (p) bodyText = p.textContent.replace(/\s+/g, " ").trim();
+    }
+    const ctaEls = Array.from(element.querySelectorAll('[class*="ButtonContainer"] a, a[class*="StyledLink"]'));
+    const seen = /* @__PURE__ */ new Set();
+    const ctas = [];
+    ctaEls.forEach((a) => {
+      const href = a.getAttribute("href") || "";
+      const text = a.textContent.trim();
+      const key = `${href}::${text}`;
+      if (!href || !text || seen.has(key)) return;
+      seen.add(key);
+      ctas.push({ href, text });
+    });
+    if (!titleText && !bodyText && ctas.length === 0) {
       element.replaceWith(...element.childNodes);
       return;
     }
@@ -859,18 +876,20 @@ var CustomImportScript = (() => {
       p.textContent = bodyText;
       contentCell.push(p);
     }
-    if (ctaSource) {
+    ctas.forEach((cta) => {
       const a = document2.createElement("a");
-      a.setAttribute("href", ctaSource.getAttribute("href") || "#");
-      a.textContent = ctaSource.textContent.trim();
+      a.setAttribute("href", cta.href);
+      a.textContent = cta.text;
       const p = document2.createElement("p");
       p.appendChild(a);
       contentCell.push(p);
-    }
+    });
     const cells = [];
     cells.push([""]);
     cells.push([contentCell]);
-    const block = WebImporter.Blocks.createBlock(document2, { name: "hero-cta", cells });
+    const isDark = ctas.some((c) => /\/careers(\/|$)/.test(c.href));
+    const name = isDark ? "hero-cta (dark)" : "hero-cta";
+    const block = WebImporter.Blocks.createBlock(document2, { name, cells });
     element.replaceWith(block);
   }
 
