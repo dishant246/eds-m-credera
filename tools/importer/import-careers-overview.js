@@ -14,6 +14,7 @@ import heroCtaParser from './parsers/hero-cta.js';
 
 // TRANSFORMER IMPORTS
 import videosTransformer from './transformers/credera-videos.js';
+import faqTransformer from './transformers/credera-faq.js';
 import cleanupTransformer from './transformers/credera-cleanup.js';
 import sectionsTransformer from './transformers/credera-sections.js';
 
@@ -127,6 +128,8 @@ const PAGE_TEMPLATE = {
 const transformers = [
   // videos first: convert YouTube iframes → watch links BEFORE cleanup strips iframes.
   videosTransformer,
+  // faq: flatten the two-column accordion into single-column heading + paragraph.
+  faqTransformer,
   cleanupTransformer,
   ...(PAGE_TEMPLATE.sections && PAGE_TEMPLATE.sections.length > 1 ? [sectionsTransformer] : []),
 ];

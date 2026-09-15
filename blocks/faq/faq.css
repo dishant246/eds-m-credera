@@ -1,0 +1,106 @@
+/* Block: faq -- two-column accordion (source: credera.com careers).
+   Questions are clickable headings that expand to reveal their answer.
+   The first item is open by default; a caret rotates and a divider separates
+   consecutive items. Layout stacks to a single column on mobile. */
+
+.faq {
+  width: 100%;
+  max-width: 100%;
+  color: var(--text-color);
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0 64px;
+}
+
+.faq-column {
+  display: flex;
+  flex-direction: column;
+}
+
+/* one accordion item: question row + (hidden) answer panel */
+.faq-item {
+  border-top: 1px solid rgb(19 19 19 / 12%);
+}
+
+.faq-column .faq-item:first-child {
+  border-top: 0;
+}
+
+/* question row -- reset the button to look like a heading */
+.faq-question {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  width: 100%;
+  margin: 0;
+  padding: 20px 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  text-align: left;
+  color: var(--text-color);
+}
+
+.faq-question-text {
+  font-family: var(--body-font-family);
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 1.4;
+  color: var(--text-color);
+  transition: font-weight 0.1s ease;
+}
+
+/* open question is emphasised (source shows the active question in bold) */
+.faq-item.is-open .faq-question-text {
+  font-weight: 700;
+}
+
+/* caret -- chevron drawn with a border, rotates when the item is open */
+.faq-caret {
+  flex: 0 0 auto;
+  width: 12px;
+  height: 12px;
+  margin-right: 4px;
+  border-right: 2px solid var(--text-color);
+  border-bottom: 2px solid var(--text-color);
+  transform: rotate(45deg);
+  transform-origin: center;
+  transition: transform 0.25s ease;
+}
+
+.faq-item.is-open .faq-caret {
+  transform: rotate(-135deg);
+}
+
+/* answer panel */
+.faq-answer {
+  padding: 0 0 24px;
+}
+
+.faq-answer[hidden] {
+  display: none;
+}
+
+.faq-answer p {
+  margin: 0 0 12px;
+  font-family: var(--body-font-family);
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.6;
+  color: var(--text-color);
+}
+
+.faq-answer p:last-child {
+  margin-bottom: 0;
+}
+
+@media (width >= 900px) {
+  .faq {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .faq-question-text {
+    font-size: 18px;
+  }
+}

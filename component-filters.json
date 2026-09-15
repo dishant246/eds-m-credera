@@ -20,7 +20,8 @@
       "columns-feature",
       "carousel-awards",
       "cards-office",
-      "cards-testimonial"
+      "cards-testimonial",
+      "faq"
     ]
   },
   {
@@ -99,6 +100,12 @@
       "image",
       "button",
       "title"
+    ]
+  },
+  {
+    "id": "faq",
+    "components": [
+      "faq-item"
     ]
   },
   {

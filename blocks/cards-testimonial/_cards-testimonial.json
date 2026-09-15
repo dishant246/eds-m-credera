@@ -50,32 +50,11 @@
           "label": "Portrait alt text"
         },
         {
-          "component": "text",
-          "valueType": "string",
-          "name": "label",
-          "value": "",
-          "label": "Prompt label (e.g. \"Click to see …\")"
-        },
-        {
           "component": "richtext",
-          "name": "quote",
+          "name": "text",
           "value": "",
-          "label": "Quote",
+          "label": "Testimonial (prompt, quote, name, role)",
           "valueType": "string"
-        },
-        {
-          "component": "text",
-          "valueType": "string",
-          "name": "name",
-          "value": "",
-          "label": "Name"
-        },
-        {
-          "component": "text",
-          "valueType": "string",
-          "name": "role",
-          "value": "",
-          "label": "Role"
         }
       ]
     }

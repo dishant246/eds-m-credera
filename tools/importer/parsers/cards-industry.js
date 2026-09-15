@@ -102,7 +102,10 @@ export default function parse(element, { document }) {
       if (row) pCells.push(row);
     });
     if (pCells.length) {
-      element.replaceWith(WebImporter.Blocks.createBlock(document, { name: 'cards-industry', cells: pCells }));
+      // Variant "cards": these practice cards carry a real photo and render as a
+      // 3-up photo-top card grid (not the stacked hover-list used by "Our Teams"
+      // / recruitment steps). The parenthetical adds a `cards` modifier class.
+      element.replaceWith(WebImporter.Blocks.createBlock(document, { name: 'cards-industry (cards)', cells: pCells }));
       return;
     }
   }
