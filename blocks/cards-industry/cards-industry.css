@@ -105,3 +105,98 @@
     width: 96px;
   }
 }
+
+/* ------------------------------------------------------------------ *
+   Variant: cards-industry.cards -- "Find your fit" practice cards.
+   A responsive photo-top card grid (not the stacked hover-list). Each
+   card shows a landscape photo, then a serif title, then a description.
+   All rules below are scoped to `.cards` so the default stacked list
+   ("Our Teams" / recruitment steps) is unaffected.
+ * ------------------------------------------------------------------ */
+.cards-industry.cards {
+  background-color: transparent;
+}
+
+.cards-industry.cards > ul {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 40px;
+  border-bottom: 0;
+}
+
+.cards-industry.cards > ul > li {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  gap: 24px;
+  min-height: 0;
+  padding: 0;
+  border-top: 0;
+  text-align: left;
+}
+
+/* photo cell -- always visible, full-width landscape image. overflow:hidden so
+   the image can zoom-crop on hover (matching the source). */
+/* stylelint-disable-next-line no-descending-specificity */
+.cards-industry.cards .cards-industry-card-image {
+  display: block;
+  width: 100%;
+  overflow: hidden;
+}
+
+.cards-industry.cards .cards-industry-card-image picture,
+.cards-industry.cards .cards-industry-card-image img {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+}
+
+/* hover: gentle image zoom (source uses transform: scale(1.035)) */
+.cards-industry.cards .cards-industry-card-image img {
+  transition: transform 0.3s ease;
+}
+
+.cards-industry.cards > ul > li:hover .cards-industry-card-image img {
+  transform: scale(1.035);
+}
+
+.cards-industry.cards .cards-industry-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.cards-industry.cards .cards-industry-card-body h3 {
+  font-size: 34px;
+  font-weight: 300;
+  line-height: 1.15;
+  text-align: left;
+}
+
+.cards-industry.cards .cards-industry-card-body p {
+  margin: 0;
+  font-size: 18px;
+  line-height: 1.6;
+  color: var(--text-color);
+}
+
+@media (width >= 900px) {
+  .cards-industry.cards > ul {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 48px;
+  }
+
+  .cards-industry.cards > ul > li {
+    min-height: 0;
+    padding: 0;
+  }
+
+  .cards-industry.cards .cards-industry-card-body h3 {
+    font-size: 34px;
+    line-height: 1.15;
+  }
+}

@@ -700,7 +700,7 @@ var CustomImportScript = (() => {
         if (row) pCells.push(row);
       });
       if (pCells.length) {
-        element.replaceWith(WebImporter.Blocks.createBlock(document2, { name: "cards-industry", cells: pCells }));
+        element.replaceWith(WebImporter.Blocks.createBlock(document2, { name: "cards-industry (cards)", cells: pCells }));
         return;
       }
     }
@@ -915,13 +915,65 @@ var CustomImportScript = (() => {
     removeSvgPlaceholders(element);
   }
 
-  // tools/importer/transformers/credera-cleanup.js
+  // tools/importer/transformers/credera-faq.js
   var TransformHook2 = {
     beforeTransform: "beforeTransform",
     afterTransform: "afterTransform"
   };
   function transform2(hookName, element, payload) {
-    if (hookName === TransformHook2.beforeTransform) {
+    if (hookName !== TransformHook2.beforeTransform) return;
+    const { document: document2 } = payload;
+    const wrappers = Array.from(element.querySelectorAll('[class*="faq-question__QuestionWrapper"]'));
+    if (!wrappers.length) return;
+    const rows = [];
+    wrappers.forEach((wrapper) => {
+      const button = wrapper.querySelector('[class*="faq-question__Question"]') || wrapper.querySelector("button");
+      const qEl = button && button.querySelector("p") || button;
+      const question = qEl ? qEl.textContent.replace(/\s+/g, " ").trim() : "";
+      const answers = [];
+      wrapper.childNodes.forEach((node) => {
+        if (node.nodeType !== 1) return;
+        if (button && (node === button || button.contains(node))) return;
+        node.querySelectorAll ? node.querySelectorAll("p").forEach((p) => {
+          const t = p.textContent.replace(/\s+/g, " ").trim();
+          if (t) answers.push(t);
+        }) : null;
+        if (node.tagName === "P") {
+          const t = node.textContent.replace(/\s+/g, " ").trim();
+          if (t && !answers.includes(t)) answers.push(t);
+        }
+      });
+      if (!question && !answers.length) return;
+      const cell = [];
+      if (question) {
+        const h3 = document2.createElement("h3");
+        h3.textContent = question;
+        cell.push(h3);
+      }
+      answers.forEach((a) => {
+        const p = document2.createElement("p");
+        p.textContent = a;
+        cell.push(p);
+      });
+      rows.push([cell]);
+    });
+    if (!rows.length) return;
+    const block = WebImporter.Blocks.createBlock(document2, { name: "faq", cells: rows });
+    const first = wrappers[0];
+    const gridRoot = first.closest('[class*="masonry-grid"]') || first.parentElement;
+    (gridRoot || first).replaceWith(block);
+    wrappers.forEach((w) => {
+      if (w.parentNode) w.remove();
+    });
+  }
+
+  // tools/importer/transformers/credera-cleanup.js
+  var TransformHook3 = {
+    beforeTransform: "beforeTransform",
+    afterTransform: "afterTransform"
+  };
+  function transform3(hookName, element, payload) {
+    if (hookName === TransformHook3.beforeTransform) {
       WebImporter.DOMUtils.remove(element, [
         "#onetrust-consent-sdk",
         // Responsive DUPLICATES: the careers page renders both a desktop AND a
@@ -944,7 +996,7 @@ var CustomImportScript = (() => {
         '[class*="quote-carousel-level-one__MobileSlider"]'
       ]);
     }
-    if (hookName === TransformHook2.afterTransform) {
+    if (hookName === TransformHook3.afterTransform) {
       WebImporter.DOMUtils.remove(element, [
         // Site header + top/desktop/mobile navigation.
         // Found in cleaned.html: <header class="header__HeaderWrapper..."> (line 5).
@@ -972,7 +1024,7 @@ var CustomImportScript = (() => {
     }
     return null;
   }
-  function transform3(hookName, element, payload) {
+  function transform4(hookName, element, payload) {
     const sections = payload.template && payload.template.sections || [];
     if (hookName === "beforeTransform") {
       for (let i = sections.length - 1; i >= 0; i -= 1) {
@@ -1110,8 +1162,10 @@ var CustomImportScript = (() => {
   var transformers = [
     // videos first: convert YouTube iframes → watch links BEFORE cleanup strips iframes.
     transform,
+    // faq: flatten the two-column accordion into single-column heading + paragraph.
     transform2,
-    ...PAGE_TEMPLATE.sections && PAGE_TEMPLATE.sections.length > 1 ? [transform3] : []
+    transform3,
+    ...PAGE_TEMPLATE.sections && PAGE_TEMPLATE.sections.length > 1 ? [transform4] : []
   ];
   function executeTransformers(hookName, element, payload) {
     const enhancedPayload = __spreadProps(__spreadValues({}, payload), {

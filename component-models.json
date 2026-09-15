@@ -380,6 +380,22 @@
     ]
   },
   {
+    "id": "faq",
+    "fields": []
+  },
+  {
+    "id": "faq-item",
+    "fields": [
+      {
+        "component": "richtext",
+        "name": "text",
+        "value": "",
+        "label": "Question & Answer",
+        "valueType": "string"
+      }
+    ]
+  },
+  {
     "id": "fragment",
     "fields": [
       {
