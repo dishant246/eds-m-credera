@@ -156,12 +156,36 @@ export default function parse(element, { document }) {
           if (/^\d{1,2}$/.test(t)) { num = t; break; }
         }
       }
-      const titleText = num ? `${num}. ${title}` : title;
-      const row = buildIconCard(null, titleText, desc, null);
-      if (row) sCells.push(row);
+      // Build a two-cell row: [number, text]. The step number goes in the
+      // leading (field:image) cell as its own text node — NOT prefixed onto the
+      // title — so the "steps" variant can render it as a large decorative
+      // numeral above a left-aligned title, matching the source layout.
+      let numCell = '';
+      if (num) {
+        const pNum = document.createElement('p');
+        pNum.textContent = num;
+        numCell = [document.createComment(' field:image '), pNum];
+      }
+      const textCell = [document.createComment(' field:text ')];
+      if (title) {
+        const h3 = document.createElement('h3');
+        h3.textContent = title;
+        textCell.push(h3);
+      }
+      if (desc) {
+        const p = document.createElement('p');
+        p.textContent = desc;
+        textCell.push(p);
+      }
+      if (textCell.length > 1 || Array.isArray(numCell)) {
+        sCells.push([numCell, textCell.length > 1 ? textCell : '']);
+      }
     });
     if (sCells.length) {
-      element.replaceWith(WebImporter.Blocks.createBlock(document, { name: 'cards-industry', cells: sCells }));
+      // Variant "steps": numbered process cards (2-up grid, big decorative
+      // numeral + left-aligned DM Sans title). Distinct from both the default
+      // stacked hover-list and the "cards" photo grid.
+      element.replaceWith(WebImporter.Blocks.createBlock(document, { name: 'cards-industry (steps)', cells: sCells }));
       return;
     }
   }

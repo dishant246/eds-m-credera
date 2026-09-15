@@ -745,12 +745,29 @@ var CustomImportScript = (() => {
             }
           }
         }
-        const titleText = num ? `${num}. ${title}` : title;
-        const row = buildIconCard(null, titleText, desc, null);
-        if (row) sCells.push(row);
+        let numCell = "";
+        if (num) {
+          const pNum = document2.createElement("p");
+          pNum.textContent = num;
+          numCell = [document2.createComment(" field:image "), pNum];
+        }
+        const textCell = [document2.createComment(" field:text ")];
+        if (title) {
+          const h3 = document2.createElement("h3");
+          h3.textContent = title;
+          textCell.push(h3);
+        }
+        if (desc) {
+          const p = document2.createElement("p");
+          p.textContent = desc;
+          textCell.push(p);
+        }
+        if (textCell.length > 1 || Array.isArray(numCell)) {
+          sCells.push([numCell, textCell.length > 1 ? textCell : ""]);
+        }
       });
       if (sCells.length) {
-        element.replaceWith(WebImporter.Blocks.createBlock(document2, { name: "cards-industry", cells: sCells }));
+        element.replaceWith(WebImporter.Blocks.createBlock(document2, { name: "cards-industry (steps)", cells: sCells }));
         return;
       }
     }
