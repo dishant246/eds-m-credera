@@ -783,8 +783,62 @@ var CustomImportScript = (() => {
     element.replaceWith(block);
   }
 
-  // tools/importer/parsers/hero-cta.js
+  // tools/importer/parsers/cards-testimonial.js
   function parse8(element, { document: document2 }) {
+    const clean = (el) => el ? el.textContent.replace(/\s+/g, " ").trim() : "";
+    const realSrc = (scope2) => {
+      for (const i of scope2.querySelectorAll("picture img, img")) {
+        const s = i.getAttribute("src") || "";
+        if (s && !s.startsWith("data:") && !s.startsWith("blob:")) return { src: s, alt: i.getAttribute("alt") || "" };
+      }
+      for (const src of scope2.querySelectorAll("picture source")) {
+        const first = (src.getAttribute("srcset") || "").split(",")[0].trim().split(/\s+/)[0];
+        if (first && !first.startsWith("data:")) return { src: first, alt: "" };
+      }
+      return null;
+    };
+    const desktop = element.querySelector('[class*="quote-carousel-level-one__DesktopSlider"]');
+    const scope = desktop || element;
+    const cards = Array.from(scope.querySelectorAll('[class*="quote-carousel-level-one__ImageDiv"]'));
+    const cells = [];
+    const seen = /* @__PURE__ */ new Set();
+    cards.forEach((card) => {
+      const hit = realSrc(card);
+      const label = clean(card.querySelector('[class*="quote-carousel-level-one__ButtonText"]'));
+      const quote = clean(card.querySelector('[class*="quote-carousel-level-one__QuoteText"]'));
+      const name = clean(card.querySelector('[class*="quote-carousel-level-one__AuthorName"]'));
+      const role = clean(card.querySelector('[class*="quote-carousel-level-one__AuthorTitle"]'));
+      if (!name && !quote && !hit) return;
+      const key = name || label || hit && hit.src || quote.slice(0, 40);
+      if (seen.has(key)) return;
+      seen.add(key);
+      let imageCell = "";
+      if (hit) {
+        const img = document2.createElement("img");
+        img.setAttribute("src", hit.src);
+        img.setAttribute("alt", hit.alt || name || "");
+        imageCell = [document2.createComment(" field:image "), img];
+      }
+      const textCell = [document2.createComment(" field:text ")];
+      [label, quote, name, role].forEach((val) => {
+        if (val) {
+          const p = document2.createElement("p");
+          p.textContent = val;
+          textCell.push(p);
+        }
+      });
+      cells.push([imageCell, textCell.length > 1 ? textCell : ""]);
+    });
+    if (cells.length === 0) {
+      element.replaceWith(...element.childNodes);
+      return;
+    }
+    const block = WebImporter.Blocks.createBlock(document2, { name: "cards-testimonial", cells });
+    element.replaceWith(block);
+  }
+
+  // tools/importer/parsers/hero-cta.js
+  function parse9(element, { document: document2 }) {
     const titleEl = element.querySelector('h1, h2, [class*="MainTitle"]');
     const bodyEl = element.querySelector('[class*="BodyText"] p, [class*="BodyText"]');
     const ctaSource = element.querySelector('[class*="ButtonContainer"] a, a[class*="StyledLink"]');
@@ -881,7 +935,13 @@ var CustomImportScript = (() => {
         // Bailey Dunn "featured content" callout: the mobile variant duplicates the
         // desktop #featuredContent callout and would otherwise import as a second,
         // raw copy below the columns-feature block.
-        '[class*="elevated-content__ElevatedContentMobile"]'
+        '[class*="elevated-content__ElevatedContentMobile"]',
+        // Students / experienced-professionals testimonial quote carousel: the
+        // MobileSlider duplicates the 7 (or 5) desktop QuoteWrapper cards. The
+        // cards-testimonial parser reads the DesktopSlider; remove the mobile copy
+        // so the same testimonials don't fall through as raw default content below
+        // the block.
+        '[class*="quote-carousel-level-one__MobileSlider"]'
       ]);
     }
     if (hookName === TransformHook2.afterTransform) {
@@ -954,7 +1014,8 @@ var CustomImportScript = (() => {
     "carousel-awards": parse5,
     "cards-office": parse6,
     "cards-industry": parse7,
-    "hero-cta": parse8
+    "cards-testimonial": parse8,
+    "hero-cta": parse9
   };
   var PAGE_TEMPLATE = {
     name: "careers-overview",
@@ -999,6 +1060,15 @@ var CustomImportScript = (() => {
           "div[class*='grid__StyledGrid']:has(a[class*='internal-link__StyledLink'] h5)",
           // experienced-professionals recruitment process steps (number + h4 + desc)
           "div[class*='point-of-view-section__Columns']"
+        ]
+      },
+      {
+        name: "cards-testimonial",
+        // students / experienced-professionals "Click to see …" quote carousel.
+        // Target the slider track that holds the QuoteWrapper cards.
+        instances: [
+          "div[class*='styles-module_sliderBase']:has([class*='quote-carousel-level-one__QuoteWrapper'])",
+          "div[class*='quote-carousel-level-one__CarouselWrapper']"
         ]
       },
       {

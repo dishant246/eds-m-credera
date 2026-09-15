@@ -19,7 +19,8 @@
       "cards-industry",
       "columns-feature",
       "carousel-awards",
-      "cards-office"
+      "cards-office",
+      "cards-testimonial"
     ]
   },
   {
@@ -50,6 +51,12 @@
     "id": "cards-partner",
     "components": [
       "card"
+    ]
+  },
+  {
+    "id": "cards-testimonial",
+    "components": [
+      "cards-testimonial-item"
     ]
   },
   {

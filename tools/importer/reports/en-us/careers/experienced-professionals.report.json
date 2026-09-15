@@ -2,7 +2,7 @@
   "status": "success",
   "url": "https://credera.com/en-us/careers/experienced-professionals",
   "path": "en-us/careers/experienced-professionals",
-  "timestamp": "2026-09-14T16:18:14.381Z",
+  "timestamp": "2026-09-15T04:54:05.960Z",
   "title": "Experienced Professionals | Credera",
   "template": "careers-overview",
   "blocks": [
@@ -12,6 +12,7 @@
     "columns-feature",
     "cards-industry",
     "cards-industry",
+    "cards-testimonial",
     "hero-cta"
   ]
 }

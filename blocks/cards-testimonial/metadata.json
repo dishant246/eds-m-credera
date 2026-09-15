@@ -1,0 +1,45 @@
+{
+  "variantName": "cards-testimonial",
+  "baseBlock": "cards",
+  "canonicalModel": "collection",
+  "version": "1.0.0",
+  "created": "2026-09-15T00:00:00.000Z",
+  "sourceContext": {
+    "originUrl": "https://credera.com/en-us/careers/students",
+    "originPage": "Students / Experienced Professionals",
+    "blockPosition": "mid"
+  },
+  "visualCharacteristics": {
+    "colorScheme": "dark-overlay",
+    "density": "compact",
+    "purpose": "testimonial",
+    "imagePattern": "oneimg-per-card"
+  },
+  "contentPattern": {
+    "structure": "container + repeating testimonial cards (portrait + prompt label + quote + name + role), horizontal scroll, click-to-reveal",
+    "buttonCount": 0,
+    "imageCount": 7
+  },
+  "options": [],
+  "memberVariantIds": [
+    "cards-testimonial"
+  ],
+  "reuseGuidance": {
+    "suitableFor": [
+      "employee/customer testimonial carousels with a click-to-reveal quote",
+      "portrait cards with an overlaid prompt bar"
+    ],
+    "notSuitableFor": [
+      "award/logo rotators (use carousel-awards)",
+      "icon+label category grids (use cards-industry)"
+    ]
+  },
+  "usage": {
+    "pagesUsing": [
+      "/en-us/careers/students",
+      "/en-us/careers/experienced-professionals"
+    ],
+    "reuseCount": 2,
+    "lastUsed": "2026-09-15T00:00:00.000Z"
+  }
+}
