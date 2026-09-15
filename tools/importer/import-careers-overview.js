@@ -229,7 +229,7 @@ export default {
       ['src', 'srcset'].forEach((attr) => {
         const val = el.getAttribute(attr);
         if (!val) return;
-        const m = val.match(/^https?:\/\/[^/]+(\/icons\/[^/?#]+\.svg)(?:[?#].*)?$/i);
+        const m = val.match(/^https?:\/\/[^/]+(\/icons\/[^/?#]+\.(?:svg|png|jpg|jpeg|webp))(?:[?#].*)?$/i);
         if (m) el.setAttribute(attr, m[1]);
       });
     });

@@ -145,6 +145,7 @@
   overflow: hidden;
 }
 
+
 .cards-industry.cards .cards-industry-card-image picture,
 .cards-industry.cards .cards-industry-card-image img {
   display: block;
@@ -164,10 +165,65 @@
   transform: scale(1.035);
 }
 
+/* "Our Teams" icon cards: the media cell holds a small 80px brand icon (from
+   /icons/team-*), not a full-bleed photo. Render it as an icon — natural size,
+   left-aligned, no 4:3 crop or hover zoom — while the students "Find your fit"
+   photo cards keep the cover behaviour above. */
+.cards-industry.cards .cards-industry-card-image:has(img[src*="/icons/"]) {
+  overflow: visible;
+}
+
+.cards-industry.cards .cards-industry-card-image img[src*="/icons/"] {
+  width: 80px;
+  height: 80px;
+  max-width: 80px;
+  aspect-ratio: auto;
+  object-fit: contain;
+}
+
+/* Icon cards have NO hover effect at all (source is static). Kill the icon-zoom
+   transition and the base stacked-list width-reveal that otherwise cascades in
+   (it has higher specificity than the .cards full-width rule and would shrink
+   the media cell on hover). */
+/* stylelint-disable-next-line no-descending-specificity */
+.cards-industry.cards .cards-industry-card-image:has(img[src*="/icons/"]) img {
+  transition: none;
+}
+
+.cards-industry.cards > ul > li:hover .cards-industry-card-image:has(img[src*="/icons/"]) {
+  width: 100%;
+}
+
+.cards-industry.cards > ul > li:hover .cards-industry-card-image img[src*="/icons/"] {
+  transform: none;
+}
+
+/* "Our Teams" icon cards sit on a solid white panel with generous padding (the
+   source card style), unlike the students "Find your fit" photo cards which are
+   flush/transparent. Scope to list items that contain an /icons/ media image. */
+.cards-industry.cards > ul > li:has(.cards-industry-card-image img[src*="/icons/"]) {
+  padding: 48px 40px;
+  gap: 12px;
+  background-color: var(--background-color); /* #fff */
+}
+
 .cards-industry.cards .cards-industry-card-body {
   display: flex;
   flex-direction: column;
   gap: 16px;
+}
+
+/* text-only cards ("Our Teams" — icons are client-rendered blobs that don't
+   survive import): the leading media cell is empty and the block JS labels it
+   card-body (no picture to trigger card-image). Collapse any empty cell so it
+   doesn't add a stray gap above the heading. */
+.cards-industry.cards .cards-industry-card-body:empty {
+  display: none;
+}
+
+/* stylelint-disable-next-line no-descending-specificity */
+.cards-industry.cards .cards-industry-card-image:not(:has(img)) {
+  display: none;
 }
 
 .cards-industry.cards .cards-industry-card-body h3 {

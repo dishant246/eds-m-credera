@@ -13,6 +13,10 @@ function isOptimizable(src) {
   if (src.startsWith('data:')) return false;
   // SVGs (e.g. the industry icons) can't be raster-optimized; leave them as-is.
   if (/\.svg($|[?#])/i.test(src)) return false;
+  // Repo-committed icons under /icons/ (e.g. the "Our Teams" team icons) are
+  // already sized static assets, not EDS-pipeline images — the optimizer's
+  // ?width=&format= params 404 against them. Leave them as-is.
+  if (/(^|\/)icons\//i.test(src)) return false;
   if (src.startsWith('/') || src.startsWith('./')) return true;
   try {
     return new URL(src, window.location.href).origin === window.location.origin;
