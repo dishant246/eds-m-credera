@@ -69,7 +69,10 @@
 body {
   display: none;
   margin: 0;
-  background-color: var(--background-color);
+
+  /* Credera renders the whole page on a uniform light blue-grey band, not white.
+     Match that site-wide so sections don't show up as white bands. */
+  background-color: var(--light-color);
   color: var(--text-color);
   font-family: var(--body-font-family);
   font-size: var(--body-font-size-m);
@@ -600,5 +603,56 @@ main .video-poster .video-poster-play:hover {
     width: 104px;
     height: 104px;
     font-size: 14px;
+  }
+}
+
+/* "Explore our entry level jobs" + FAQ section default content.
+   Source uses centered 40px / weight-500 section headings (not the default
+   left-aligned 52px), and renders the "Open Roles" line as a bold, uppercase
+   eyebrow label above the contact list. Scoped to the faq-container section so
+   other default content is unaffected. */
+
+/* Section vertical padding (the light-grey page background is set globally on
+   body, matching the source's uniform band). */
+main .faq-container {
+  padding-top: 80px;
+  padding-bottom: 80px;
+}
+
+main .faq-container .default-content-wrapper h2 {
+  font-size: 40px;
+  font-weight: 500;
+  line-height: 1.4;
+  text-align: center;
+}
+
+/* Space the intro heading tightly from its subtext (the generous gap before the
+   "Open Roles" block is handled by that block's top margin). */
+main .faq-container .default-content-wrapper h2:first-child {
+  margin-bottom: 16px;
+}
+
+/* "Open Roles" eyebrow: the paragraph immediately followed by the contact list.
+   The large top margin separates it from the intro block above. */
+main .faq-container .default-content-wrapper p:has(+ ul) {
+  margin-top: 96px;
+  margin-bottom: 8px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+@media (width < 900px) {
+  main .faq-container .default-content-wrapper h2 {
+    font-size: 32px;
+  }
+
+  main .faq-container {
+    padding-top: 48px;
+    padding-bottom: 48px;
+  }
+
+  main .faq-container .default-content-wrapper p:has(+ ul) {
+    margin-top: 56px;
   }
 }
