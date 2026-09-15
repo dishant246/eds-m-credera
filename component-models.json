@@ -161,6 +161,27 @@
     ]
   },
   {
+    "id": "cards-industry",
+    "fields": [
+      {
+        "component": "select",
+        "name": "classes",
+        "value": "",
+        "label": "Style",
+        "options": [
+          {
+            "name": "Default (stacked list)",
+            "value": ""
+          },
+          {
+            "name": "Cards (photo grid)",
+            "value": "cards"
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": "card",
     "fields": [
       {
