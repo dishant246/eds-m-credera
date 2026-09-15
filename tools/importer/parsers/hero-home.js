@@ -24,15 +24,25 @@ export default function parse(element, { document }) {
       (titleSection.querySelector('[class*="ButtonContainer"]') || titleSection)
         .querySelectorAll('a[href]'),
     );
-    // Hero image: prefer a real (non-placeholder) src. Covers HeroImageTop (main
-    // careers) and HeroImage1/HeroImage2 (students/experienced sub-pages).
-    const imgWrap = element.querySelector('[class*="HeroImageTop"], [class*="HeroImage"]') || element;
-    let heroImg = null;
-    const candidates = Array.from(imgWrap.querySelectorAll('img'));
-    for (const c of candidates) {
+    // Hero images: the students/experienced sub-page heroes are a two-column
+    // layout — the OverviewHeroSection holds a HeroImageSection (HeroImage1 +
+    // HeroImage2, stacked) beside the title section. The block instance selector
+    // targets the *title* section, so the images live in a SIBLING under the
+    // shared OverviewHeroSection ancestor; climb to it before searching. Also
+    // covers HeroImageTop (main careers hero). Collect ALL real images so both
+    // stacked photos survive into the media cell (previously only one was taken,
+    // and both actually fell through as loose default content).
+    const heroScope = (element.closest && element.closest('[class*="OverviewHeroSection"]'))
+      || (element.matches && element.matches('[class*="OverviewHeroSection"]') ? element : element);
+    const imgWrap = heroScope.querySelector('[class*="HeroImageSection"], [class*="HeroImageTop"]') || heroScope;
+    const heroImgs = [];
+    const seenSrc = new Set();
+    Array.from(imgWrap.querySelectorAll('img')).forEach((c) => {
       const src = c.getAttribute('src') || '';
-      if (src && !src.startsWith('data:')) { heroImg = c; break; }
-    }
+      if (!src || src.startsWith('data:') || seenSrc.has(src)) return;
+      seenSrc.add(src);
+      heroImgs.push({ src, alt: c.getAttribute('alt') || '' });
+    });
 
     if (h1El || introEl || ctaEls.length) {
       const contentCell = [document.createComment(' field:text ')];
@@ -55,13 +65,29 @@ export default function parse(element, { document }) {
         contentCell.push(p);
       });
 
-      // Row 1: hero image (field:image) if present; else empty.
+      // Row 1: hero image(s) (field:image). The students/experienced hero stacks
+      // TWO photos; the field:image is a single richtext value, so both <img>
+      // must live inside ONE <p> (two separate <p>s break md2jcr's single-value
+      // image-field mapping during JCR sync). The block JS reads every <img> in
+      // the media cell, so a single wrapping paragraph still renders both.
       let imageCell = '';
-      if (heroImg) {
-        const img = document.createElement('img');
-        img.setAttribute('src', heroImg.getAttribute('src'));
-        img.setAttribute('alt', heroImg.getAttribute('alt') || '');
-        imageCell = [document.createComment(' field:image '), img];
+      if (heroImgs.length) {
+        const p = document.createElement('p');
+        heroImgs.forEach((h) => {
+          const img = document.createElement('img');
+          img.setAttribute('src', h.src);
+          img.setAttribute('alt', h.alt);
+          p.appendChild(img);
+        });
+        imageCell = [document.createComment(' field:image '), p];
+      }
+
+      // Detach the source image column BEFORE swapping the title section, so the
+      // two stacked photos (now copied into field:image) don't also survive as
+      // loose full-width default content above the block. imgWrap is the sibling
+      // HeroImageSection when present (guard against it being `element` itself).
+      if (imgWrap && imgWrap !== element && imgWrap.parentNode && !imgWrap.contains(element)) {
+        imgWrap.remove();
       }
 
       const cells = [[imageCell], [contentCell]];

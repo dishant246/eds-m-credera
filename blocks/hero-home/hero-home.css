@@ -180,8 +180,18 @@
   line-height: 0;
 }
 
+/* Two hero photos: lay them out side by side (source is a flex row with a gap).
+   On mobile they stay in one row but share the width evenly. */
+.hero-home:has(.hero-home-media img) .hero-home-media p {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+}
+
 .hero-home:has(.hero-home-media img) .hero-home-media picture {
   display: block;
+  flex: 1 1 0;
+  min-width: 0;
 }
 
 .hero-home:has(.hero-home-media img) .hero-home-media img {
@@ -266,6 +276,16 @@
 @media (width >= 900px) {
   .hero-home:has(.hero-home-media img) .hero-home-media img {
     height: 450px;
+  }
+
+  /* Source proportions: the first photo is roughly twice as wide as the second
+     (≈970 / ≈450). Give the two pictures that 2:1 ratio instead of 50/50. */
+  .hero-home:has(.hero-home-media img) .hero-home-media picture:first-child {
+    flex: 2 1 0;
+  }
+
+  .hero-home:has(.hero-home-media img) .hero-home-media picture:nth-child(2) {
+    flex: 1 1 0;
   }
 
   /* Panel: 840px wide, pinned to the left, overlapping the lower ~180px

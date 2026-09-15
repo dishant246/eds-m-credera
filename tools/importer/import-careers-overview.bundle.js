@@ -51,16 +51,16 @@ var CustomImportScript = (() => {
       const ctaEls = Array.from(
         (titleSection.querySelector('[class*="ButtonContainer"]') || titleSection).querySelectorAll("a[href]")
       );
-      const imgWrap = element.querySelector('[class*="HeroImageTop"], [class*="HeroImage"]') || element;
-      let heroImg = null;
-      const candidates = Array.from(imgWrap.querySelectorAll("img"));
-      for (const c of candidates) {
+      const heroScope = element.closest && element.closest('[class*="OverviewHeroSection"]') || (element.matches && element.matches('[class*="OverviewHeroSection"]') ? element : element);
+      const imgWrap = heroScope.querySelector('[class*="HeroImageSection"], [class*="HeroImageTop"]') || heroScope;
+      const heroImgs = [];
+      const seenSrc = /* @__PURE__ */ new Set();
+      Array.from(imgWrap.querySelectorAll("img")).forEach((c) => {
         const src = c.getAttribute("src") || "";
-        if (src && !src.startsWith("data:")) {
-          heroImg = c;
-          break;
-        }
-      }
+        if (!src || src.startsWith("data:") || seenSrc.has(src)) return;
+        seenSrc.add(src);
+        heroImgs.push({ src, alt: c.getAttribute("alt") || "" });
+      });
       if (h1El || introEl || ctaEls.length) {
         const contentCell2 = [document2.createComment(" field:text ")];
         if (h1El) {
@@ -82,11 +82,18 @@ var CustomImportScript = (() => {
           contentCell2.push(p);
         });
         let imageCell = "";
-        if (heroImg) {
-          const img = document2.createElement("img");
-          img.setAttribute("src", heroImg.getAttribute("src"));
-          img.setAttribute("alt", heroImg.getAttribute("alt") || "");
-          imageCell = [document2.createComment(" field:image "), img];
+        if (heroImgs.length) {
+          const p = document2.createElement("p");
+          heroImgs.forEach((h) => {
+            const img = document2.createElement("img");
+            img.setAttribute("src", h.src);
+            img.setAttribute("alt", h.alt);
+            p.appendChild(img);
+          });
+          imageCell = [document2.createComment(" field:image "), p];
+        }
+        if (imgWrap && imgWrap !== element && imgWrap.parentNode && !imgWrap.contains(element)) {
+          imgWrap.remove();
         }
         const cells2 = [[imageCell], [contentCell2]];
         const block2 = WebImporter.Blocks.createBlock(document2, { name: "hero-home", cells: cells2 });
@@ -1007,6 +1014,12 @@ var CustomImportScript = (() => {
         // desktop #featuredContent callout and would otherwise import as a second,
         // raw copy below the columns-feature block.
         '[class*="elevated-content__ElevatedContentMobile"]',
+        // Breadcrumb band above the careers sub-page heroes (Careers / Students).
+        // It's site chrome, not authorable content — without removing it, it (and
+        // the adjacent stray "Careers" back-link) leak into the hero section as
+        // loose default content above the hero-home block.
+        '[class*="breadcrumbs__BandWrapper"]',
+        'nav[aria-label="Breadcrumb"]',
         // Students / experienced-professionals testimonial quote carousel: the
         // MobileSlider duplicates the 7 (or 5) desktop QuoteWrapper cards. The
         // cards-testimonial parser reads the DesktopSlider; remove the mobile copy
