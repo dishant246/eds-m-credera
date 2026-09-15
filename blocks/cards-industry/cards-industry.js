@@ -26,14 +26,19 @@ function isOptimizable(src) {
 }
 
 export default function decorate(block) {
+  // The "steps" variant (Recruitment Process) has no picture — its leading cell
+  // holds the step number as text and must still be treated as the media cell
+  // so the large decorative-numeral styling applies.
+  const isSteps = block.classList.contains('steps');
   /* change to ul, li */
   const ul = document.createElement('ul');
   [...block.children].forEach((row) => {
     const li = document.createElement('li');
     moveInstrumentation(row, li);
     while (row.firstElementChild) li.append(row.firstElementChild);
-    [...li.children].forEach((div) => {
-      if (div.children.length === 1 && div.querySelector('picture')) div.className = 'cards-industry-card-image';
+    [...li.children].forEach((div, i) => {
+      if (isSteps) div.className = i === 0 ? 'cards-industry-card-image' : 'cards-industry-card-body';
+      else if (div.children.length === 1 && div.querySelector('picture')) div.className = 'cards-industry-card-image';
       else div.className = 'cards-industry-card-body';
     });
     ul.append(li);

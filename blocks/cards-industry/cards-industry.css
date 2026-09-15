@@ -256,3 +256,96 @@
     line-height: 1.15;
   }
 }
+
+/* ------------------------------------------------------------------ *
+   Variant: cards-industry.steps -- "Recruitment Process" numbered steps.
+   A responsive grid of process cards: each card = a large decorative
+   numeral (the leading "image" cell holds the number as text) above a
+   left-aligned DM Sans title + description. No dividers, no hover, no
+   icons. Fully scoped to `.steps` so the default stacked list (homepage
+   industries + insights pages) and the `.cards` photo grid are untouched.
+ * ------------------------------------------------------------------ */
+.cards-industry.steps {
+  background-color: transparent;
+}
+
+.cards-industry.steps > ul {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 40px;
+  border-bottom: 0;
+}
+
+/* stylelint-disable-next-line no-descending-specificity */
+.cards-industry.steps > ul > li {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  gap: 4px;
+  min-height: 0;
+  padding: 0;
+  border-top: 0;
+  text-align: left;
+  background-color: transparent;
+}
+
+/* number cell: large decorative numeral, always visible (no hover reveal) */
+/* stylelint-disable-next-line no-descending-specificity */
+.cards-industry.steps .cards-industry-card-image {
+  display: block;
+  width: auto;
+  overflow: visible;
+  line-height: 1;
+}
+
+.cards-industry.steps .cards-industry-card-image p {
+  margin: 0;
+  font-family: var(--body-font-family);
+  font-size: 90px;
+  font-weight: 500;
+  line-height: 1;
+  color: rgb(207 207 207);
+}
+
+/* text cell: left-aligned title + description */
+/* stylelint-disable-next-line no-descending-specificity */
+.cards-industry.steps .cards-industry-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* stylelint-disable-next-line no-descending-specificity */
+.cards-industry.steps .cards-industry-card-body h3 {
+  margin: 0;
+  font-family: var(--body-font-family);
+  font-size: 28px;
+  font-weight: 500;
+  line-height: 1.2;
+  text-align: left;
+  color: var(--text-color);
+}
+
+.cards-industry.steps .cards-industry-card-body p {
+  margin: 0;
+  font-size: 18px;
+  line-height: 1.6;
+  color: var(--text-color);
+}
+
+@media (width >= 900px) {
+  .cards-industry.steps > ul {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 40px;
+  }
+
+  .cards-industry.steps .cards-industry-card-image p {
+    font-size: 120px;
+  }
+
+  .cards-industry.steps .cards-industry-card-body h3 {
+    font-size: 32px;
+    line-height: 1.375;
+  }
+}
