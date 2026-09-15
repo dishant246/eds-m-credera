@@ -12,6 +12,12 @@
   color: var(--text-color);
 }
 
+/* dark variant: careers "Ready to start your next chapter?" — maroon band.
+   Scoped to .hero-cta.dark so the homepage orange band is unaffected. */
+.hero-cta.dark {
+  background-color: rgb(99 47 60);
+}
+
 /* first row holds decorative blobs in the source -- authored empty here, hide it */
 .hero-cta > div:first-child {
   display: none;
@@ -71,6 +77,28 @@
   background-color: var(--background-color);
   color: rgb(255 83 44);
   text-decoration: none;
+}
+
+/* dark variant hover fills white, text turns maroon (matches its band) */
+.hero-cta.dark a:any-link:hover {
+  color: rgb(99 47 60);
+}
+
+/* dark variant, second CTA onward: plain white text link (not a pill),
+   matching the source's secondary cross-link next to the primary button */
+/* stylelint-disable-next-line no-descending-specificity */
+.hero-cta.dark p:has(a) ~ p:has(a) a:any-link {
+  border: 0;
+  border-radius: 0;
+  padding: 0;
+  background-color: transparent;
+  color: var(--background-color);
+  text-decoration: underline;
+}
+
+.hero-cta.dark p:has(a) ~ p:has(a) a:any-link:hover {
+  background-color: transparent;
+  color: var(--background-color);
 }
 
 @media (width >= 900px) {
