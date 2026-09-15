@@ -681,6 +681,16 @@ var CustomImportScript = (() => {
       }
       return textCell.length > 1 || Array.isArray(imageCell) ? [imageCell, textCell.length > 1 ? textCell : ""] : null;
     };
+    const TEAM_ICON_BY_SLUG = {
+      "ai-data": "/icons/team-ai-data.png",
+      "management-consulting": "/icons/team-management-consulting.svg",
+      "technology-solutions": "/icons/team-technology-solutions.svg",
+      "experience-design": "/icons/team-experience-design.svg",
+      "digital-solutions": "/icons/team-digital-solutions.svg",
+      "marketing-technology": "/icons/team-marketing-technology.svg",
+      "business-enablement": "/icons/team-business-enablement.svg"
+    };
+    const teamSlug = (t) => t.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
     const offeringCards = Array.from(element.querySelectorAll('[class*="offering-card__WrapperContainer"]'));
     if (offeringCards.length) {
       const oCells = [];
@@ -688,11 +698,13 @@ var CustomImportScript = (() => {
         var _a, _b;
         const title = ((_a = card.querySelector("h1,h2,h3,h4,h5")) == null ? void 0 : _a.textContent.replace(/\s+/g, " ").trim()) || "";
         const desc = ((_b = card.querySelector("p")) == null ? void 0 : _b.textContent.replace(/\s+/g, " ").trim()) || "";
-        const row = buildIconCard(realSrc(card), title, desc, null);
+        const iconSrc = TEAM_ICON_BY_SLUG[teamSlug(title)] || "";
+        const hit = iconSrc ? { src: iconSrc, alt: title ? `${title} icon` : "" } : realSrc(card);
+        const row = buildIconCard(hit, title, desc, null);
         if (row) oCells.push(row);
       });
       if (oCells.length) {
-        element.replaceWith(WebImporter.Blocks.createBlock(document2, { name: "cards-industry", cells: oCells }));
+        element.replaceWith(WebImporter.Blocks.createBlock(document2, { name: "cards-industry (cards)", cells: oCells }));
         return;
       }
     }
@@ -1266,7 +1278,7 @@ var CustomImportScript = (() => {
         ["src", "srcset"].forEach((attr) => {
           const val = el.getAttribute(attr);
           if (!val) return;
-          const m = val.match(/^https?:\/\/[^/]+(\/icons\/[^/?#]+\.svg)(?:[?#].*)?$/i);
+          const m = val.match(/^https?:\/\/[^/]+(\/icons\/[^/?#]+\.(?:svg|png|jpg|jpeg|webp))(?:[?#].*)?$/i);
           if (m) el.setAttribute(attr, m[1]);
         });
       });

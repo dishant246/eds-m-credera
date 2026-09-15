@@ -72,19 +72,37 @@ export default function parse(element, { document }) {
   };
 
   // ---- Careers "Our Teams" cards (experienced-professionals: offering-card) ----
-  // Each card: icon + <h2> title + <p> description (no link). Icons are blob:/data:
-  // client-rendered, so no real src survives — cards render text-only (image cell empty).
+  // Source renders these as a multi-column card GRID: each card = icon + <h2>
+  // title + <p> description (no link). The source icons are inline data: URIs
+  // (base64 SVG/PNG) that don't survive import, so we recovered them and
+  // committed them to /icons/ (team-<slug>.svg|png); map each team by its title
+  // slug. Use the "cards" grid variant (same 3-up grid as the students "Find
+  // your fit" section), NOT the default stacked hover-list.
+  const TEAM_ICON_BY_SLUG = {
+    'ai-data': '/icons/team-ai-data.png',
+    'management-consulting': '/icons/team-management-consulting.svg',
+    'technology-solutions': '/icons/team-technology-solutions.svg',
+    'experience-design': '/icons/team-experience-design.svg',
+    'digital-solutions': '/icons/team-digital-solutions.svg',
+    'marketing-technology': '/icons/team-marketing-technology.svg',
+    'business-enablement': '/icons/team-business-enablement.svg',
+  };
+  const teamSlug = (t) => t.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
   const offeringCards = Array.from(element.querySelectorAll('[class*="offering-card__WrapperContainer"]'));
   if (offeringCards.length) {
     const oCells = [];
     offeringCards.forEach((card) => {
       const title = card.querySelector('h1,h2,h3,h4,h5')?.textContent.replace(/\s+/g, ' ').trim() || '';
       const desc = card.querySelector('p')?.textContent.replace(/\s+/g, ' ').trim() || '';
-      const row = buildIconCard(realSrc(card), title, desc, null);
+      // Prefer the recovered committed icon (real src won't exist — source is a
+      // data: URI); fall back to any real src the card happens to expose.
+      const iconSrc = TEAM_ICON_BY_SLUG[teamSlug(title)] || '';
+      const hit = iconSrc ? { src: iconSrc, alt: title ? `${title} icon` : '' } : realSrc(card);
+      const row = buildIconCard(hit, title, desc, null);
       if (row) oCells.push(row);
     });
     if (oCells.length) {
-      element.replaceWith(WebImporter.Blocks.createBlock(document, { name: 'cards-industry', cells: oCells }));
+      element.replaceWith(WebImporter.Blocks.createBlock(document, { name: 'cards-industry (cards)', cells: oCells }));
       return;
     }
   }
