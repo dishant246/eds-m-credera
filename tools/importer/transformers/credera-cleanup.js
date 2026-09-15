@@ -44,6 +44,11 @@ export default function transform(hookName, element, payload) {
       // so the same testimonials don't fall through as raw default content below
       // the block.
       '[class*="quote-carousel-level-one__MobileSlider"]',
+      // Students / experienced-professionals video section: the source ships a
+      // DesktopVideoSection (visible) AND a hidden MobileVideoSection with the
+      // same "See how we're creating…" heading + YouTube embed. Remove the
+      // mobile copy so the video section isn't duplicated as default content.
+      '[class*="students__MobileVideoSection"]',
     ]);
   }
 
