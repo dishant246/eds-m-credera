@@ -32,6 +32,12 @@ export default function transform(hookName, element, payload) {
       // desktop #featuredContent callout and would otherwise import as a second,
       // raw copy below the columns-feature block.
       '[class*="elevated-content__ElevatedContentMobile"]',
+      // Breadcrumb band above the careers sub-page heroes (Careers / Students).
+      // It's site chrome, not authorable content — without removing it, it (and
+      // the adjacent stray "Careers" back-link) leak into the hero section as
+      // loose default content above the hero-home block.
+      '[class*="breadcrumbs__BandWrapper"]',
+      'nav[aria-label="Breadcrumb"]',
       // Students / experienced-professionals testimonial quote carousel: the
       // MobileSlider duplicates the 7 (or 5) desktop QuoteWrapper cards. The
       // cards-testimonial parser reads the DesktopSlider; remove the mobile copy
