@@ -262,8 +262,8 @@ var CustomImportScript = (() => {
     const isCardCallout = element.matches && element.matches('[class*="featured-content-card"], [class*="FeaturedContentCard"]') || !!element.querySelector('[class*="featured-content-card"], [class*="FeaturedContentCard"]') || element.closest && element.closest('[class*="featured-content-card"], [class*="FeaturedContentCard"]');
     const isFeatured = element.id === "featuredContent" || element.closest && element.closest("#featuredContent") || element.matches && element.matches('[class*="elevated-content"], [class*="ElevatedContent"]') || !!element.querySelector('[class*="elevated-content"], [class*="ElevatedContent"]') || !!element.querySelector("h5");
     let blockName = "columns-feature";
-    if (isCardCallout) blockName = "columns-feature (card-callout, image-left)";
-    else if (isFeatured) blockName = "columns-feature (featured, image-left)";
+    if (isCardCallout) blockName = "columns-feature (callout)";
+    else if (isFeatured) blockName = "columns-feature (featured)";
     const cells = [];
     cells.push([textCell.length ? textCell : "", mediaCell]);
     const block = WebImporter.Blocks.createBlock(document2, { name: blockName, cells });

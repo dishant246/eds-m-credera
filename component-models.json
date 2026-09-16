@@ -359,6 +359,14 @@
           {
             "name": "Image right",
             "value": "image-right"
+          },
+          {
+            "name": "Featured (grey panel)",
+            "value": "featured"
+          },
+          {
+            "name": "Callout (white card)",
+            "value": "callout"
           }
         ]
       }

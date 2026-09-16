@@ -8,6 +8,8 @@
           "page": {
             "resourceType": "core/franklin/components/columns/v1/columns",
             "template": {
+              "name": "Columns Feature",
+              "model": "columns-feature",
               "columns": "2",
               "rows": "1"
             }
@@ -51,6 +53,14 @@
             {
               "name": "Image right",
               "value": "image-right"
+            },
+            {
+              "name": "Featured (grey panel)",
+              "value": "featured"
+            },
+            {
+              "name": "Callout (white card)",
+              "value": "callout"
             }
           ]
         }

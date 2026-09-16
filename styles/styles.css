@@ -642,6 +642,45 @@ main .faq-container .default-content-wrapper p:has(+ ul) {
   letter-spacing: 0.02em;
 }
 
+/* "Explore our entry level jobs & internships" default content (students page).
+   It lands in a columns-feature-container section (alongside the Internships
+   block), not a faq-container, so the rules above don't reach it. Match it by
+   its unique "Open Roles" list pattern (a default-content-wrapper that contains
+   a p immediately followed by a ul) and give it the same centered treatment.
+   The :has() guard keeps every other columns-feature default-content block
+   (which never contains that list) untouched. */
+main .columns-feature-container .default-content-wrapper:has(p + ul) {
+  text-align: center;
+}
+
+/* stylelint-disable-next-line no-descending-specificity */
+main .columns-feature-container .default-content-wrapper:has(p + ul) h2 {
+  font-size: 40px;
+  font-weight: 500;
+  line-height: 1.4;
+  text-align: center;
+}
+
+main .columns-feature-container .default-content-wrapper:has(p + ul) h2:first-child {
+  margin-bottom: 16px;
+}
+
+main .columns-feature-container .default-content-wrapper:has(p + ul) p:has(+ ul) {
+  margin-top: 96px;
+  margin-bottom: 8px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+/* the Open Roles list itself: centered, no bullets/indent (source is a plain
+   centered line, not a bulleted list). */
+main .columns-feature-container .default-content-wrapper:has(p + ul) ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
 @media (width < 900px) {
   main .faq-container .default-content-wrapper h2 {
     font-size: 32px;
@@ -653,6 +692,14 @@ main .faq-container .default-content-wrapper p:has(+ ul) {
   }
 
   main .faq-container .default-content-wrapper p:has(+ ul) {
+    margin-top: 56px;
+  }
+
+  main .columns-feature-container .default-content-wrapper:has(p + ul) h2 {
+    font-size: 32px;
+  }
+
+  main .columns-feature-container .default-content-wrapper:has(p + ul) p:has(+ ul) {
     margin-top: 56px;
   }
 }
