@@ -123,15 +123,24 @@ export default function parse(element, { document }) {
     mediaCell = image;
   }
 
-  // --- Detect the "featured" callout shape (#featuredContent / elevated-content):
-  // grey panel with the image overlapping on the left. Tagged as an option so the
-  // block CSS can render it distinctly from the plain "Life at Credera" row. ---
+  // --- Detect callout shape. Two distinct card designs both use an <h5>:
+  //   * "featured" (#featuredContent / elevated-content): grey panel with a small
+  //     image overlapping its left edge, plain "Learn more" text link. (Bailey Dunn)
+  //   * "card-callout" (featured-content-card): a large photo with a WHITE card
+  //     overlapping its right edge — icon + heading + description + an orange
+  //     "READ NOW" pill. (Forbes award callout on experienced-professionals)
+  // Match the card-callout FIRST since it's the more specific container. ---
+  const isCardCallout = (element.matches && element.matches('[class*="featured-content-card"], [class*="FeaturedContentCard"]'))
+    || !!element.querySelector('[class*="featured-content-card"], [class*="FeaturedContentCard"]')
+    || (element.closest && element.closest('[class*="featured-content-card"], [class*="FeaturedContentCard"]'));
   const isFeatured = (element.id === 'featuredContent')
     || (element.closest && element.closest('#featuredContent'))
     || (element.matches && element.matches('[class*="elevated-content"], [class*="ElevatedContent"]'))
     || !!element.querySelector('[class*="elevated-content"], [class*="ElevatedContent"]')
     || !!element.querySelector('h5');
-  const blockName = isFeatured ? 'columns-feature (featured, image-left)' : 'columns-feature';
+  let blockName = 'columns-feature';
+  if (isCardCallout) blockName = 'columns-feature (card-callout, image-left)';
+  else if (isFeatured) blockName = 'columns-feature (featured, image-left)';
 
   const cells = [];
   // Row 2: two columns — text, then media
