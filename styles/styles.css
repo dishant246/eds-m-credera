@@ -954,4 +954,22 @@ main .columns-feature-wrapper:has(.columns-feature.callout)::before {
   width: 100vw;
   background-color: var(--background-color); /* #fff */
 }
+
+/* Gap before the FAQ heading: the source leaves a generous space (~210px)
+   between the "Our Teams" cards grid and the "Frequently asked questions"
+   heading. The migrated FAQ heading (a default-content-wrapper directly
+   following the cards-industry grid) only gets the small default section gap —
+   add the shortfall as top margin so the sections breathe like the source. */
+main .cards-industry-wrapper + .default-content-wrapper:has(> h2:only-child) {
+  margin-top: 162px;
+}
+
+/* Gap before the "Our Teams" header: the source leaves ~96px between the "Our
+   Work" columns-feature block and the "Our Teams" eyebrow/heading. The migrated
+   header (a centered default-content-wrapper that precedes the cards grid and
+   follows the columns-feature block) only gets the small default gap — add the
+   shortfall as top margin. */
+main .columns-feature-wrapper + .default-content-wrapper:has(+ .cards-industry-wrapper) {
+  margin-top: 96px;
+}
 /* stylelint-enable no-descending-specificity */
