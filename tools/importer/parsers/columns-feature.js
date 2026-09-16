@@ -138,9 +138,15 @@ export default function parse(element, { document }) {
     || (element.matches && element.matches('[class*="elevated-content"], [class*="ElevatedContent"]'))
     || !!element.querySelector('[class*="elevated-content"], [class*="ElevatedContent"]')
     || !!element.querySelector('h5');
+  // Use SINGLE-WORD variant tokens. The block name's parenthetical round-trips
+  // through html2md (which humanizes hyphens to spaces) and md2jcr (which splits
+  // on commas), so a multi-word/hyphenated variant like "card-callout, image-left"
+  // is corrupted into broken class tokens in JCR. A single word survives intact.
+  // The variant CSS (.callout / .featured) sets its own image-left layout, so the
+  // separate image-left class isn't needed.
   let blockName = 'columns-feature';
-  if (isCardCallout) blockName = 'columns-feature (card-callout, image-left)';
-  else if (isFeatured) blockName = 'columns-feature (featured, image-left)';
+  if (isCardCallout) blockName = 'columns-feature (callout)';
+  else if (isFeatured) blockName = 'columns-feature (featured)';
 
   const cells = [];
   // Row 2: two columns — text, then media
