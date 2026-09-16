@@ -7,6 +7,20 @@
   padding: 0;
 }
 
+/* The dark closing CTA is the last block on the page and sits flush against the
+   footer in the source (no gap below), but keeps a grey gap ABOVE it separating
+   it from the FAQ content that shares its section (~123px in the source). Zero
+   the section's bottom spacing so the maroon band meets the footer directly, then
+   restore the top gap as margin on the band's wrapper. */
+main .section.hero-cta-container:has(.hero-cta.dark) {
+  padding-bottom: 0;
+  margin-bottom: 0;
+}
+
+main .hero-cta-wrapper:has(.hero-cta.dark) {
+  margin-top: 123px;
+}
+
 .hero-cta {
   background-color: rgb(255 83 44);
   color: var(--text-color);

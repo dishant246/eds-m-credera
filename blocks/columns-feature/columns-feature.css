@@ -25,7 +25,12 @@
   display: block;
   width: 100%;
   height: auto;
-  aspect-ratio: 3 / 2;
+
+  /* Render at the image's own aspect ratio rather than forcing 3:2 — the two
+     plain columns-feature instances use different source shapes (Life at
+     Credera is 3:2, the students Internships photo is 1:1 square) and there's
+     no variant class to tell them apart, so a fixed ratio would wrongly crop
+     one of them. */
   object-fit: cover;
 }
 
@@ -47,9 +52,12 @@
   color: var(--text-color);
 }
 
-/* the eyebrow is authored as emphasis; render it upright like the source */
+/* the eyebrow is authored as emphasis; render it upright and bold like the
+   source (900). The <em> carries the text, so set weight/style on it directly
+   so it isn't left at the default 400. */
 .columns-feature .columns-feature-eyebrow em {
   font-style: normal;
+  font-weight: 900;
 }
 
 .columns-feature .columns-feature-text h2 {

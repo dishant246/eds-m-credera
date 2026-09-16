@@ -650,11 +650,12 @@ main .faq-container .default-content-wrapper p:has(+ ul) {
    the block by its unique, grouping-independent signal: a default-content-wrapper
    that holds both an <h2> and the "Open Roles" list (a <p> immediately followed
    by a <ul>). Only the students Explore section has this pattern (verified across
-   all imported pages), so other default content stays untouched. */
-main .default-content-wrapper:has(h2):has(p + ul) {
-  text-align: center;
-}
+   all imported pages), so other default content stays untouched.
 
+   The source CENTERS the heading + intro subtext, but the "Open Roles" label
+   and the form line below it stay LEFT-aligned (and the form line is grey).
+   So don't center the whole wrapper — center only the heading and the intro
+   paragraph (the <p> that is directly followed by the "Open Roles" <p>). */
 /* stylelint-disable-next-line no-descending-specificity */
 main .default-content-wrapper:has(h2):has(p + ul) h2 {
   font-size: 40px;
@@ -665,24 +666,79 @@ main .default-content-wrapper:has(h2):has(p + ul) h2 {
 
 /* stylelint-disable-next-line no-descending-specificity */
 main .default-content-wrapper:has(h2):has(p + ul) h2:first-child {
-  margin-bottom: 16px;
+  margin-bottom: 20px;
 }
 
+/* intro subtext: the paragraph before the "Open Roles" label — centered */
+/* stylelint-disable-next-line no-descending-specificity */
+main .default-content-wrapper:has(h2):has(p + ul) h2 + p {
+  text-align: center;
+}
+
+/* "Open Roles" eyebrow: bold uppercase, LEFT-aligned, with a large top gap
+   separating it from the centered intro above. */
 /* stylelint-disable-next-line no-descending-specificity */
 main .default-content-wrapper:has(h2):has(p + ul) p:has(+ ul) {
-  margin-top: 96px;
-  margin-bottom: 8px;
+  margin-top: 120px;
+  margin-bottom: 32px;
   font-weight: 900;
   text-transform: uppercase;
   letter-spacing: 0.02em;
+  text-align: left;
 }
 
-/* the Open Roles list itself: centered, no bullets/indent (source is a plain
-   centered line, not a bulleted list). */
+/* the Open Roles list: left-aligned, no bullets/indent; the form line is grey
+   in the source. */
 main .default-content-wrapper:has(h2):has(p + ul) ul {
   list-style: none;
   margin: 0;
   padding: 0;
+  font-size: 18px;
+  line-height: 30px;
+  text-align: left;
+  color: rgb(155 155 155);
+}
+
+/* the inline "form" link stands out from the grey sentence: dark and bold in
+   the source (700), no underline. */
+/* stylelint-disable-next-line no-descending-specificity */
+main .default-content-wrapper:has(h2):has(p + ul) ul a {
+  font-weight: 700;
+  color: var(--text-color);
+  text-decoration: none;
+}
+
+/* Section background: in the source the Explore block sits on a WHITE band,
+   distinct from the grey "Internships" above (same section) and grey FAQ below
+   (the migrated body is uniformly grey). Paint a full-bleed white band behind
+   the whole Explore wrapper, extending into the mid-point of the gaps on each
+   side so the grey→white transitions land between the sections. */
+main .default-content-wrapper:has(h2):has(p + ul) {
+  position: relative;
+
+  /* the source leaves a large gap (~280px) between the form line and the FAQ
+     section below — considerably more than the migrated section margins
+     provide; add the shortfall as margin (sits outside the white ::before band,
+     so the extra space stays grey). The wrapper's bottom margin collapses with
+     the section's 40px margin, so this is sized to net the ~280px source gap
+     after collapsing. */
+  margin-bottom: 168px;
+}
+
+main .default-content-wrapper:has(h2):has(p + ul)::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+
+  /* The source white band is tall: it starts just above the heading and extends
+     well past the form line (~60px below it), so the white area is considerably
+     taller than the text alone. Match those offsets — a small cap above the
+     heading and a generous run below the form. */
+  top: -16px;
+  bottom: -74px;
+  left: calc(50% - 50vw);
+  width: 100vw;
+  background-color: var(--background-color); /* #fff */
 }
 
 @media (width < 900px) {

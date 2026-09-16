@@ -237,6 +237,7 @@
    survive import): the leading media cell is empty and the block JS labels it
    card-body (no picture to trigger card-image). Collapse any empty cell so it
    doesn't add a stray gap above the heading. */
+/* stylelint-disable-next-line no-descending-specificity */
 .cards-industry.cards .cards-industry-card-body:empty {
   display: none;
 }
@@ -344,6 +345,7 @@
   line-height: 1;
 }
 
+/* stylelint-disable-next-line no-descending-specificity */
 .cards-industry.steps .cards-industry-card-image p {
   margin: 0;
   font-family: var(--body-font-family);
@@ -372,6 +374,7 @@
   color: var(--text-color);
 }
 
+/* stylelint-disable-next-line no-descending-specificity */
 .cards-industry.steps .cards-industry-card-body p {
   margin: 0;
   font-size: 18px;
