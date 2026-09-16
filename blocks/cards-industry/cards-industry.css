@@ -152,7 +152,7 @@
   width: 100%;
   height: auto;
   max-width: 100%;
-  aspect-ratio: 4 / 3;
+  aspect-ratio: 3 / 2; /* source photos are ~3:2, not 4:3 */
   object-fit: cover;
 }
 
@@ -213,6 +213,26 @@
   gap: 16px;
 }
 
+/* "Find your fit" PHOTO cards (students): a white card panel with a subtle
+   drop shadow, photo flush at the top and the text (heading + description)
+   inset with 28px padding. Scoped to non-icon list items so the "Our Teams"
+   icon cards keep their own styling. */
+/* stylelint-disable-next-line no-descending-specificity */
+.cards-industry.cards > ul > li:not(:has(img[src*="/icons/"])) {
+  gap: 0;
+  background-color: var(--background-color); /* #fff */
+  box-shadow: 0 0 40px rgb(0 0 0 / 6%);
+  overflow: hidden;
+}
+
+/* stylelint-disable-next-line no-descending-specificity */
+.cards-industry.cards
+  > ul
+  > li:not(:has(img[src*="/icons/"]))
+  .cards-industry-card-body {
+  padding: 28px;
+}
+
 /* text-only cards ("Our Teams" — icons are client-rendered blobs that don't
    survive import): the leading media cell is empty and the block JS labels it
    card-body (no picture to trigger card-image). Collapse any empty cell so it
@@ -240,6 +260,27 @@
   color: var(--text-color);
 }
 
+/* "Find your fit" PHOTO-card typography (source: 24px/500 DM Sans heading,
+   16px/26px description). Scoped to non-icon cards so "Our Teams" icon cards
+   keep their heading size. */
+.cards-industry.cards
+  > ul
+  > li:not(:has(img[src*="/icons/"]))
+  .cards-industry-card-body h3 {
+  font-size: 24px;
+  font-weight: 500;
+  line-height: 1.3;
+}
+
+/* stylelint-disable-next-line no-descending-specificity */
+.cards-industry.cards
+  > ul
+  > li:not(:has(img[src*="/icons/"]))
+  .cards-industry-card-body p {
+  font-size: 16px;
+  line-height: 26px;
+}
+
 @media (width >= 900px) {
   .cards-industry.cards > ul {
     grid-template-columns: repeat(3, 1fr);
@@ -251,9 +292,13 @@
     padding: 0;
   }
 
-  .cards-industry.cards .cards-industry-card-body h3 {
-    font-size: 34px;
-    line-height: 1.15;
+  /* photo cards keep the 24px heading at desktop too (only non-icon cards) */
+  .cards-industry.cards
+    > ul
+    > li:not(:has(img[src*="/icons/"]))
+    .cards-industry-card-body h3 {
+    font-size: 24px;
+    line-height: 1.3;
   }
 }
 
