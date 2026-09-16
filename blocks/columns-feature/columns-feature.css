@@ -25,13 +25,18 @@
   display: block;
   width: 100%;
   height: auto;
-
-  /* Render at the image's own aspect ratio rather than forcing 3:2 — the two
-     plain columns-feature instances use different source shapes (Life at
-     Credera is 3:2, the students Internships photo is 1:1 square) and there's
-     no variant class to tell them apart, so a fixed ratio would wrongly crop
-     one of them. */
   object-fit: cover;
+}
+
+/* Plain columns-feature media renders as a SQUARE in the source (both current
+   instances — the experienced "Our Work" photo and the students "Internships"
+   photo — are 1:1, 500x500). Crop to a square so a landscape source image (e.g.
+   the imported Our Work photo, natural 3:2) matches the source instead of
+   rendering short/wide. Scoped to plain instances so the callout (5:4) and
+   featured (fixed 224x220) variants keep their own image dimensions. */
+/* stylelint-disable-next-line no-descending-specificity */
+.columns-feature:not(.callout, .featured) .columns-feature-media img {
+  aspect-ratio: 1 / 1;
 }
 
 /* --- Text column --- */

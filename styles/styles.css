@@ -875,3 +875,83 @@ main .default-content-wrapper:has(> p.youtube):not(:has(> p.youtube:first-child)
     font-size: 32px;
   }
 }
+
+/* Section header preceding a cards-industry grid (e.g. "Recruitment Process" +
+   "Let's start your Credera journey.", and "Our Teams" on the experienced page).
+   The source CENTERS these headers, renders the eyebrow as a bold uppercase
+   label, and uses a 40px/500 heading (not the default left-aligned 52px). Target
+   a default-content-wrapper that is immediately followed by a cards-industry
+   grid so only these intro headers are affected. */
+/* stylelint-disable no-descending-specificity */
+main .default-content-wrapper:has(+ .cards-industry-wrapper) {
+  text-align: center;
+}
+
+main .default-content-wrapper:has(+ .cards-industry-wrapper) h2 {
+  margin-top: 8px;
+  font-size: 40px;
+  font-weight: 500;
+  line-height: 1.4;
+  text-align: center;
+}
+
+/* eyebrow: the short paragraph directly above the heading */
+main .default-content-wrapper:has(+ .cards-industry-wrapper) p:has(+ h2) {
+  margin-bottom: 8px;
+  font-size: 20px;
+  font-weight: 900;
+  line-height: 1.2;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  text-align: center;
+}
+
+/* intro subtext below the heading: centered, capped width, 18px */
+main .default-content-wrapper:has(+ .cards-industry-wrapper) h2 + p {
+  max-width: 820px;
+  margin-inline: auto;
+  margin-top: 16px;
+  font-size: 18px;
+  line-height: 30px;
+  text-align: center;
+}
+
+/* Background: on the experienced-professionals page the source puts the whole
+   "Recruitment Process" section AND the Forbes callout that follows it on a
+   single WHITE band, distinct from the grey testimonials above and grey "Our
+   Work" below (the migrated body is uniformly grey). The recruitment steps are
+   their own standalone section (cards-industry only, no faq/hero-cta/columns
+   containers); paint a full-bleed white band behind it that extends down into
+   the gap before the Forbes callout. */
+main .section.cards-industry-container:not(.faq-container, .hero-cta-container, .hero-home-container, .columns-feature-container) {
+  position: relative;
+}
+
+main .section.cards-industry-container:not(.faq-container, .hero-cta-container, .hero-home-container, .columns-feature-container)::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  top: -20px;
+  bottom: -60px;
+  left: calc(50% - 50vw);
+  width: 100vw;
+  background-color: var(--background-color); /* #fff */
+}
+
+/* the Forbes callout (columns-feature.callout) continues the same white band —
+   paint behind its wrapper, extending up to meet the recruitment band mid-gap. */
+main .columns-feature-wrapper:has(.columns-feature.callout) {
+  position: relative;
+}
+
+main .columns-feature-wrapper:has(.columns-feature.callout)::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  top: -60px;
+  bottom: 0;
+  left: calc(50% - 50vw);
+  width: 100vw;
+  background-color: var(--background-color); /* #fff */
+}
+/* stylelint-enable no-descending-specificity */
