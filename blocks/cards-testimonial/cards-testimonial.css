@@ -3,15 +3,58 @@
    clicking reveals the quote + name + role over the photo.
    Structural/functional CSS only. */
 
+/* On the students/experienced hero pages the testimonial carousel shares a
+   section with the hero block and renders flush against it (0 gap). The source
+   leaves a generous gap between the hero's white panel and the cards — restore
+   it when this block's wrapper directly follows the hero's wrapper. */
+.hero-home-wrapper + .cards-testimonial-wrapper {
+  margin-top: 64px;
+}
+
+@media (width >= 900px) {
+  .hero-home-wrapper + .cards-testimonial-wrapper {
+    margin-top: 144px;
+  }
+}
+
+/* Full-bleed carousel: the source lets the scrolling row span the whole viewport
+   width — cards start at the content's left margin and run off the right edge
+   (no right cap). Break the wrapper out of the section's centered 1200px column
+   to the full viewport, then re-inset the track's left padding so the first card
+   still lines up with the page content. Scoped to when the block breaks out of a
+   constrained section wrapper. */
+
+/* Scoped with `.section >` so it outranks the global `main > .section > div`
+   1200px cap (otherwise the wrapper stays constrained and the row can't bleed). */
+/* stylelint-disable-next-line no-descending-specificity */
+main .section > .cards-testimonial-wrapper {
+  width: 100vw;
+  max-width: 100vw;
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
+  padding: 0;
+}
+
 .cards-testimonial .cards-testimonial-track {
   list-style: none;
   margin: 0;
-  padding: 0 0 16px;
+  padding: 0 24px 16px; /* mobile: match section gutter, no right cap handled below */
   display: flex;
   gap: 32px;
   overflow-x: auto;
   scroll-snap-type: x mandatory;
+  scroll-padding-left: 24px; /* snap respects the leading inset (padding alone doesn't) */
   scroll-behavior: smooth;
+}
+
+/* Left inset aligns the first card with the page content; keep a small right
+   pad so the last card isn't clipped hard against the edge while still bleeding. */
+@media (width >= 900px) {
+  .cards-testimonial .cards-testimonial-track {
+    padding-left: max(24px, calc((100vw - 1200px) / 2 + 32px));
+    padding-right: 24px;
+    scroll-padding-left: max(24px, calc((100vw - 1200px) / 2 + 32px));
+  }
 }
 
 .cards-testimonial .cards-testimonial-track::-webkit-scrollbar {
