@@ -18,12 +18,24 @@ export default function parse(element, { document }) {
     const header = titleSection.querySelector('[class*="careers__Header"]') || titleSection;
     const h1El = header.querySelector('h1');
     const introEl = header.querySelector('p');
-    // CTAs: only real links (href). The students hero's "See Open Positions" is a
-    // hrefless <button> (JS scroll) — skip it since it can't become a usable link.
-    const ctaEls = Array.from(
-      (titleSection.querySelector('[class*="ButtonContainer"]') || titleSection)
-        .querySelectorAll('a[href]'),
-    );
+    // CTAs live in a ButtonContainer. Most are real <a href> links (e.g.
+    // experienced-professionals "Apply Now" -> /careers/jobs). The students hero
+    // renders "See Open Positions" as a hrefless <button> (JS scroll) instead of
+    // a link — capture it too and route it to the open-roles page (/careers/jobs,
+    // the same destination the site uses for that label elsewhere) so the CTA
+    // survives import as a usable pill instead of being dropped.
+    const btnScope = titleSection.querySelector('[class*="ButtonContainer"]') || titleSection;
+    const ctaEls = [];
+    Array.from(btnScope.querySelectorAll('a[href], button')).forEach((el) => {
+      const label = el.textContent.replace(/\s+/g, ' ').trim();
+      if (!label) return;
+      let href = el.getAttribute('href');
+      if (!href) {
+        // hrefless button — infer destination from the label.
+        href = /open position/i.test(label) ? '/en-us/careers/jobs' : '';
+      }
+      if (href) ctaEls.push({ label, href });
+    });
     // Hero images: the students/experienced sub-page heroes are a two-column
     // layout — the OverviewHeroSection holds a HeroImageSection (HeroImage1 +
     // HeroImage2, stacked) beside the title section. The block instance selector
@@ -59,8 +71,8 @@ export default function parse(element, { document }) {
       ctaEls.forEach((cta) => {
         const p = document.createElement('p');
         const a = document.createElement('a');
-        a.setAttribute('href', cta.getAttribute('href') || '#');
-        a.textContent = cta.textContent.replace(/\s+/g, ' ').trim();
+        a.setAttribute('href', cta.href || '#');
+        a.textContent = cta.label;
         p.appendChild(a);
         contentCell.push(p);
       });

@@ -48,9 +48,17 @@ var CustomImportScript = (() => {
       const header = titleSection.querySelector('[class*="careers__Header"]') || titleSection;
       const h1El = header.querySelector("h1");
       const introEl = header.querySelector("p");
-      const ctaEls = Array.from(
-        (titleSection.querySelector('[class*="ButtonContainer"]') || titleSection).querySelectorAll("a[href]")
-      );
+      const btnScope = titleSection.querySelector('[class*="ButtonContainer"]') || titleSection;
+      const ctaEls = [];
+      Array.from(btnScope.querySelectorAll("a[href], button")).forEach((el) => {
+        const label = el.textContent.replace(/\s+/g, " ").trim();
+        if (!label) return;
+        let href = el.getAttribute("href");
+        if (!href) {
+          href = /open position/i.test(label) ? "/en-us/careers/jobs" : "";
+        }
+        if (href) ctaEls.push({ label, href });
+      });
       const heroScope = element.closest && element.closest('[class*="OverviewHeroSection"]') || (element.matches && element.matches('[class*="OverviewHeroSection"]') ? element : element);
       const imgWrap = heroScope.querySelector('[class*="HeroImageSection"], [class*="HeroImageTop"]') || heroScope;
       const heroImgs = [];
@@ -76,8 +84,8 @@ var CustomImportScript = (() => {
         ctaEls.forEach((cta) => {
           const p = document2.createElement("p");
           const a = document2.createElement("a");
-          a.setAttribute("href", cta.getAttribute("href") || "#");
-          a.textContent = cta.textContent.replace(/\s+/g, " ").trim();
+          a.setAttribute("href", cta.href || "#");
+          a.textContent = cta.label;
           p.appendChild(a);
           contentCell2.push(p);
         });

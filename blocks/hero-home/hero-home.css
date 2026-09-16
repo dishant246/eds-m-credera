@@ -305,4 +305,12 @@
     font-size: 48px;
     line-height: 64px;
   }
+
+  /* Intro paragraph matches the source at desktop: 18px / 30px (not 16 / 26). */
+  .hero-home:has(.hero-home-media img)
+    .hero-home-content
+    p:not(.hero-home-eyebrow, .hero-home-cta-wrapper) {
+    font-size: 18px;
+    line-height: 30px;
+  }
 }
