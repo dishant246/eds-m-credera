@@ -716,3 +716,106 @@ main .default-content-wrapper:has(h2):has(p + ul) ul {
     margin-top: 56px;
   }
 }
+
+/* "See how we're creating the next generation of leaders" video section
+   (students page). A default-content-wrapper holding an eyebrow label, heading,
+   description and a YouTube embed (the video is NOT the first child, which
+   distinguishes it from the two-column `p.youtube:first-child` layout above).
+   The source centers this whole block — including the "Our Practices / Find
+   your fit" intro EDS merges into the same wrapper — so center it and render the
+   short all-caps labels (a <p> directly before an <h2>) as bold uppercase
+   eyebrows. Placed last so its :has()/:not() specificity doesn't trip the
+   descending-specificity rule against later simpler selectors. */
+main .default-content-wrapper:has(> p.youtube):not(:has(> p.youtube:first-child)) {
+  position: relative;
+  text-align: center;
+
+  /* generous gap above the video block (source leaves ~190px between the
+     testimonial carousel and the "Careers At Credera" eyebrow) */
+  margin-top: 190px;
+}
+
+/* Section background: the source puts the video block on a WHITE band, distinct
+   from the grey testimonials above and grey "Our Practices" below (the migrated
+   body is uniformly grey). Paint a full-bleed white band behind the whole merged
+   wrapper, starting mid-way up the top gap so the grey→white transition sits in
+   the gap after the testimonials. */
+main .default-content-wrapper:has(> p.youtube):not(:has(> p.youtube:first-child))::before {
+  content: "";
+  position: absolute;
+  z-index: -2;
+  top: -95px;
+  bottom: 0;
+  left: calc(50% - 50vw);
+  width: 100vw;
+  background-color: var(--background-color); /* #fff */
+}
+
+main .default-content-wrapper:has(> p.youtube):not(:has(> p.youtube:first-child)) h2 {
+  margin-inline: auto;
+  font-size: 40px;
+  font-weight: 500;
+  line-height: 1.4;
+  text-align: center;
+}
+
+main .default-content-wrapper:has(> p.youtube):not(:has(> p.youtube:first-child)) p {
+  max-width: 680px;
+  margin-inline: auto;
+  font-size: 18px;
+  line-height: 30px;
+  text-align: center;
+}
+
+/* eyebrow label: a short paragraph sitting directly above a heading */
+main .default-content-wrapper:has(> p.youtube):not(:has(> p.youtube:first-child)) p:has(+ h2) {
+  margin-bottom: 8px;
+  font-size: 20px;
+  font-weight: 900;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+/* the YouTube embed spans the full content column, not the 680px text cap, and
+   sits ~40px below the description text above it (source spacing). */
+main .default-content-wrapper:has(> p.youtube):not(:has(> p.youtube:first-child)) p.youtube {
+  max-width: none;
+  margin-top: 40px;
+}
+
+/* the last paragraph in the block ("Each of our practices…", the intro that
+   precedes the practice cards) needs ~40px below it before the cards, matching
+   the source. */
+main .default-content-wrapper:has(> p.youtube):not(:has(> p.youtube:first-child)) > p:last-child {
+  margin-bottom: 40px;
+}
+
+/* large gap between the video and the "Our Practices" intro that follows it
+   (source leaves ~240px). Target the eyebrow paragraph immediately after the
+   video embed. */
+/* stylelint-disable-next-line no-descending-specificity */
+main .default-content-wrapper:has(> p.youtube):not(:has(> p.youtube:first-child)) p.youtube + p {
+  position: relative;
+  margin-top: 240px;
+}
+
+/* Repaint the "Our Practices" intro (the portion after the video, merged into
+   the same wrapper) back to grey so it blends into the grey practice-cards
+   section below. The band starts mid-way down the video→practices gap and
+   overshoots downward (harmless — it only sits behind already-grey content). */
+main .default-content-wrapper:has(> p.youtube):not(:has(> p.youtube:first-child)) p.youtube + p::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  top: -120px;
+  left: calc(50% - 50vw);
+  width: 100vw;
+  height: 1200px;
+  background-color: var(--light-color); /* rgb(242 245 246) */
+}
+
+@media (width < 900px) {
+  main .default-content-wrapper:has(> p.youtube):not(:has(> p.youtube:first-child)) h2 {
+    font-size: 32px;
+  }
+}
