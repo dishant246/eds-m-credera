@@ -84,21 +84,48 @@
   color: rgb(99 47 60);
 }
 
-/* dark variant, second CTA onward: plain white text link (not a pill),
-   matching the source's secondary cross-link next to the primary button */
-/* stylelint-disable-next-line no-descending-specificity */
-.hero-cta.dark p:has(a) ~ p:has(a) a:any-link {
-  border: 0;
-  border-radius: 0;
-  padding: 0;
-  background-color: transparent;
-  color: var(--background-color);
-  text-decoration: underline;
+/* Dark variant (careers "Ready to start your next chapter?") is a CENTERED
+   single-column callout — NOT the homepage's two-column left-aligned layout.
+   Heading, description and BOTH CTA pills are centered, with the two pills
+   sharing one row. flex-wrap plus full-width heading/description forces the
+   buttons onto their own centered line. Scoped to .dark so the orange homepage
+   "Let's talk!" band keeps its two-column design. */
+.hero-cta.dark > div:last-child > div {
+  flex-flow: row wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 16px 24px;
+  text-align: center;
 }
 
-.hero-cta.dark p:has(a) ~ p:has(a) a:any-link:hover {
-  background-color: transparent;
+.hero-cta.dark h2 {
+  flex: 0 0 100%;
+  font-size: 32px;
+  font-weight: 500;
+  line-height: 1.2;
+  text-align: center;
+}
+
+/* description occupies a full flex row (so BOTH CTA pills wrap onto the next
+   line together, matching the source), while its text stays visually capped at
+   ~680px and centered via inline padding. */
+.hero-cta.dark p {
+  flex: 0 0 100%;
+  width: 100%;
+  margin: 0;
+  padding-inline: max(0px, calc((100% - 680px) / 2));
   color: var(--background-color);
+  font-size: 16px;
+  line-height: 26px;
+  text-align: center;
+}
+
+/* the two CTA paragraphs (each wraps one link) sit side-by-side, centered */
+.hero-cta.dark p:has(a) {
+  flex: 0 0 auto;
+  width: auto;
+  padding-inline: 0;
+  margin: 8px 0 0;
 }
 
 @media (width >= 900px) {
@@ -106,10 +133,12 @@
     padding: 120px 160px;
   }
 
-  /* Two-column layout: large headline on the left, body copy + CTAs stacked in
-     the right column. Both columns use minmax(0, …) so the big display headline
-     can't overflow its track and collapse the right column to zero width. */
-  .hero-cta > div:last-child > div {
+  /* Two-column layout (homepage orange "Let's talk!" band only): large headline
+     on the left, body copy + CTAs stacked in the right column. Both columns use
+     minmax(0, …) so the big display headline can't overflow its track and
+     collapse the right column to zero width. Excluded for .dark, which is a
+     centered single-column callout. */
+  .hero-cta:not(.dark) > div:last-child > div {
     display: grid;
     grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
     gap: 24px 96px;
@@ -117,7 +146,7 @@
   }
 
   /* Left column: headline spans the full height of the right-column stack. */
-  .hero-cta h2 {
+  .hero-cta:not(.dark) h2 {
     grid-column: 1;
     grid-row: 1 / -1;
     align-self: center;
@@ -127,7 +156,7 @@
   }
 
   /* Right column: every paragraph (body copy + each CTA) stacks vertically. */
-  .hero-cta p {
+  .hero-cta:not(.dark) p {
     grid-column: 2;
     margin: 0;
     font-size: 20px;
@@ -135,7 +164,13 @@
   }
 
   /* remove the mobile-only top gap; row-gap handles vertical spacing now */
-  .hero-cta a:any-link {
+  .hero-cta:not(.dark) a:any-link {
     margin-top: 0;
+  }
+
+  /* dark variant keeps its centered single-column layout at desktop, with a
+     slightly larger heading matching the source (40px). */
+  .hero-cta.dark h2 {
+    font-size: 40px;
   }
 }
