@@ -259,8 +259,11 @@ var CustomImportScript = (() => {
       if (realImg.getAttribute("alt")) image.setAttribute("alt", realImg.getAttribute("alt"));
       mediaCell = image;
     }
+    const isCardCallout = element.matches && element.matches('[class*="featured-content-card"], [class*="FeaturedContentCard"]') || !!element.querySelector('[class*="featured-content-card"], [class*="FeaturedContentCard"]') || element.closest && element.closest('[class*="featured-content-card"], [class*="FeaturedContentCard"]');
     const isFeatured = element.id === "featuredContent" || element.closest && element.closest("#featuredContent") || element.matches && element.matches('[class*="elevated-content"], [class*="ElevatedContent"]') || !!element.querySelector('[class*="elevated-content"], [class*="ElevatedContent"]') || !!element.querySelector("h5");
-    const blockName = isFeatured ? "columns-feature (featured, image-left)" : "columns-feature";
+    let blockName = "columns-feature";
+    if (isCardCallout) blockName = "columns-feature (card-callout, image-left)";
+    else if (isFeatured) blockName = "columns-feature (featured, image-left)";
     const cells = [];
     cells.push([textCell.length ? textCell : "", mediaCell]);
     const block = WebImporter.Blocks.createBlock(document2, { name: blockName, cells });
