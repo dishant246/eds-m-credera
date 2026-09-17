@@ -31,3 +31,154 @@
     order: unset;
   }
 }
+
+/* -------------------------------------------------------------------------
+   "callout" variant (Forbes award callout): a large landscape photo with a
+   WHITE card overlapping its right edge, a document icon above the heading,
+   and an orange "READ NOW" pill.
+
+   This mirrors the .columns-feature.callout styling, but is authored on the
+   BASE columns block. On the local preview the block renders as
+   `columns-feature` (styled by columns-feature.css); when synced through JCR
+   the block reverts to the base `columns` block (div.columns.callout with a
+   .columns-img-col image column), so columns-feature.css never loads. Duplicate
+   the callout design here, scoped to `.columns.callout` and mapped onto the base
+   columns DOM, so the section looks right in BOTH environments.
+   DOM: .columns.callout > div (row) > [ div (text card), div.columns-img-col ]
+   ------------------------------------------------------------------------- */
+.columns.callout > div {
+  position: relative;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0;
+}
+
+/* image column: photo on top on mobile */
+.columns.callout .columns-img-col {
+  order: 0;
+  width: 100%;
+  max-width: none;
+}
+
+.columns.callout .columns-img-col img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 5 / 4;
+  object-fit: cover;
+}
+
+/* white card = the non-image column */
+.columns.callout > div > div:not(.columns-img-col) {
+  order: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin: -24px 16px 0;
+  padding: 32px 28px;
+  background-color: var(--background-color);
+  box-shadow: 0 0 80px rgb(0 0 0 / 6%);
+}
+
+/* document icon rendered above the heading (inline SVG keeps it asset-free) */
+.columns.callout > div > div:not(.columns-img-col)::before {
+  content: "";
+  display: block;
+  width: 48px;
+  height: 48px;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none" stroke="%23131313" stroke-width="2"><rect x="10" y="6" width="28" height="36" rx="1"/><rect x="15" y="14" width="7" height="7" fill="%23ff532c" stroke="none"/><line x1="25" y1="16" x2="33" y2="16"/><line x1="25" y1="20" x2="33" y2="20"/><line x1="15" y1="28" x2="33" y2="28"/><line x1="15" y1="33" x2="33" y2="33"/></svg>');
+}
+
+.columns.callout > div > div:not(.columns-img-col) h2 {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 500;
+  line-height: 32px;
+}
+
+.columns.callout > div > div:not(.columns-img-col) p {
+  margin: 0;
+  font-size: 16px;
+  line-height: 26px;
+}
+
+.columns.callout > div > div:not(.columns-img-col) p:last-child {
+  margin-top: 8px;
+}
+
+/* orange "READ NOW" pill */
+.columns.callout > div > div:not(.columns-img-col) a:any-link {
+  display: inline-block;
+  align-self: flex-start;
+  padding: 16px 28px;
+  border: 0;
+  border-radius: 30px;
+  background-color: var(--brand-orange);
+  color: #fff;
+  font-family: var(--body-font-family);
+  font-size: 14px;
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: uppercase;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.columns.callout > div > div:not(.columns-img-col) a:any-link:hover {
+  background-color: var(--brand-orange);
+  color: #fff;
+  opacity: 0.9;
+  text-decoration: none;
+}
+
+@media (width >= 900px) {
+  /* Desktop: photo left, white card overlaps its right edge. The callout band
+     is narrower than the page content width (source: 1024px centered) and the
+     image is a fixed 400x320 that bottom-aligns with the taller card. */
+  .columns.callout > div {
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 0;
+    max-width: 1024px;
+    margin-inline: auto;
+  }
+
+  .columns.callout .columns-img-col {
+    order: 0;
+    flex: 0 0 400px;
+    max-width: 400px;
+    z-index: 0;
+  }
+
+  .columns.callout .columns-img-col img {
+    aspect-ratio: 5 / 4; /* 400 x 320 */
+  }
+
+  .columns.callout > div > div:not(.columns-img-col) {
+    order: 1;
+    flex: 1 1 auto;
+    margin: 0 0 0 -24px;
+    padding: 40px 80px 40px 40px;
+    z-index: 1;
+  }
+
+  .columns.callout > div > div:not(.columns-img-col)::before {
+    width: 60px;
+    height: 60px;
+  }
+
+  .columns.callout > div > div:not(.columns-img-col) h2 {
+    font-size: 24px;
+    line-height: 36px;
+  }
+
+  .columns.callout > div > div:not(.columns-img-col) p {
+    font-size: 16px;
+    line-height: 26px;
+  }
+}
