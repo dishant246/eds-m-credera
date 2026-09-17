@@ -324,6 +324,17 @@ main > .section:first-of-type {
   margin-top: 0;
 }
 
+/* Empty sections add no spacing. The JCR/published render can emit a trailing
+   empty <div class="section"> after the last real section (an authoring
+   artifact that doesn't exist in the local preview). With the global 40px
+   section margin it would otherwise inject a stray grey gap — e.g. between the
+   maroon closing CTA and the footer. Collapse any section with no children so
+   it contributes zero height and zero margin in both environments. */
+main > .section:empty {
+  margin: 0;
+  padding: 0;
+}
+
 @media (width >= 900px) {
   main > .section > div {
     padding: 0 32px;
@@ -730,12 +741,12 @@ main .default-content-wrapper:has(h2):has(p + ul)::before {
   position: absolute;
   z-index: -1;
 
-  /* The source white band is tall: it starts just above the heading and extends
-     well past the form line (~60px below it), so the white area is considerably
-     taller than the text alone. Match those offsets — a small cap above the
-     heading and a generous run below the form. */
+  /* The source white band starts just above the heading and ends ~30px below the
+     form line — the remaining space before the FAQ section is grey. Match those
+     offsets so the white→grey transition lands where the source has it (the
+     total form→FAQ gap already matches; this only fixes the white/grey split). */
   top: -16px;
-  bottom: -74px;
+  bottom: -30px;
   left: calc(50% - 50vw);
   width: 100vw;
   background-color: var(--background-color); /* #fff */
