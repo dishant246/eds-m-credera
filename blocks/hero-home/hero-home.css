@@ -181,11 +181,22 @@
 }
 
 /* Two hero photos: lay them out side by side (source is a flex row with a gap).
-   On mobile they stay in one row but share the width evenly. */
+   The two images may be authored as EITHER one paragraph holding both pictures
+   (local preview) OR two separate paragraphs each holding one picture (the
+   published/JCR render splits the single image field into two <p>s). Make BOTH
+   the media container and each paragraph a flex row so, whichever level holds
+   the two images, they render side by side instead of stacking full-width. */
+.hero-home:has(.hero-home-media img) .hero-home-media > div,
 .hero-home:has(.hero-home-media img) .hero-home-media p {
   display: flex;
   flex-direction: row;
   gap: 20px;
+}
+
+/* Each paragraph is also a flex item (matters in the two-paragraph case). */
+.hero-home:has(.hero-home-media img) .hero-home-media p {
+  flex: 1 1 0;
+  min-width: 0;
 }
 
 .hero-home:has(.hero-home-media img) .hero-home-media picture {
@@ -279,12 +290,16 @@
   }
 
   /* Source proportions: the first photo is roughly twice as wide as the second
-     (≈970 / ≈450). Give the two pictures that 2:1 ratio instead of 50/50. */
-  .hero-home:has(.hero-home-media img) .hero-home-media picture:first-child {
+     (≈970 / ≈450). Give the two images that 2:1 ratio instead of 50/50. Applied
+     at whichever level holds the two images — the two paragraphs (published
+     two-<p> render) or the two pictures inside one paragraph (local render). */
+  .hero-home:has(.hero-home-media img) .hero-home-media > div > p:first-child,
+  .hero-home:has(.hero-home-media img) .hero-home-media p picture:first-child {
     flex: 2 1 0;
   }
 
-  .hero-home:has(.hero-home-media img) .hero-home-media picture:nth-child(2) {
+  .hero-home:has(.hero-home-media img) .hero-home-media > div > p:nth-child(2),
+  .hero-home:has(.hero-home-media img) .hero-home-media p picture:nth-child(2) {
     flex: 1 1 0;
   }
 
@@ -307,6 +322,7 @@
   }
 
   /* Intro paragraph matches the source at desktop: 18px / 30px (not 16 / 26). */
+  /* stylelint-disable-next-line no-descending-specificity */
   .hero-home:has(.hero-home-media img)
     .hero-home-content
     p:not(.hero-home-eyebrow, .hero-home-cta-wrapper) {
