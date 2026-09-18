@@ -41,10 +41,17 @@
       "id": "faq-item",
       "fields": [
         {
-          "component": "richtext",
-          "name": "text",
+          "component": "text",
+          "name": "question",
           "value": "",
-          "label": "Question & Answer",
+          "label": "Question",
+          "valueType": "string"
+        },
+        {
+          "component": "richtext",
+          "name": "answer",
+          "value": "",
+          "label": "Answer",
           "valueType": "string"
         }
       ]
